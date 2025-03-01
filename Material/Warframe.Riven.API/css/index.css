@@ -1,0 +1,9 @@
+section {
+    display: block;
+    border-top: solid 1px gray;
+    & Article{
+        margin-top: 40px;
+        display: inline-block;
+        width: 250px; height: 250px;
+    }
+}

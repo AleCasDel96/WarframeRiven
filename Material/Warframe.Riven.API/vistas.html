@@ -1,0 +1,33 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-16">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Warframe Riven API</title>
+</head>
+<body>
+    <header>
+        <div>
+            <a onclick="CargarVista('./Vistas/index.html');">Inicio</a>
+            <a onclick="CargarVista('./Vistas/inventory.html')">Inventario</a>
+            <a onclick="CargarVista('./Vistas/add.html')">Añadir agrietado</a>
+            <a onclick="CargarVista('./Vistas/config.html')">Editar agrietado</a>
+            <a onclick="CargarVista('./Vistas/market.html')">Mercado de agrietados</a>
+        </div>
+    </header>
+    <main></main>
+    <footer>
+        <ul>
+            <p>Otras páginas:</p>
+            <li><a href="https://warframe.market/">Warframe Market</a></li>
+            <li><a href="https://rivenmarket.com/">Riven Market</a></li>
+            <li><a href="https://overframe.gg/">Overframe</a></li>
+            <li><a href="https://warframe.fandom.com/">Wikia</a></li>
+        </ul>
+    </footer>
+    <script src="./js/script.js" defer>
+        CargarVista('./Vistas/index.html');
+    </script>
+</body>
+</html>

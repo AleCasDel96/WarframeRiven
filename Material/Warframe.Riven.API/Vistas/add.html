@@ -1,0 +1,109 @@
+<div id="Add">
+    <section class="formAdd">
+        <table>
+            <tr>
+                <td>
+                    <label for="Tipo">Categoría:</label>
+                    <select name="Tipo" class="selector" id="TypeWeapon">
+                        <option value="pred">Selecciona una categoría</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="Arma">Arma:</label>
+                    <select name="Arma" class="selector" id="Weapon"></select>
+                </td>
+            </tr>
+        </table>
+    </section>
+    <section id="WeaponStats">
+        <table>
+            <tbody>
+                <tr id="labels">
+                    <td><label for="polaridad">Polaridad</label></td>
+                    <td><label for="Maestry">Rango de maestría</label></td>
+                    <td><label for="ModRank">Rango de mod</label></td>
+                    <td><label for="Rolls">Rolls</label></td>
+                    <td><label for="user">Propietario</label></td>
+                </tr>
+                <tr id="inputs">
+                    <td><select name="polaridad" id="Polaridad">
+                        <option value="Vazarin">Vazarin</option>
+                        <option value="Naramon">Naramon</option>
+                        <option value="Madurai">Madurai</option>
+                    </select></td>
+                    <td><input type="number" class="ud" id="MaestryValue" min="8" max="34"></td>
+                    <td><input type="number" name="ModRank" class="dc" id="ModRankValue" min="0" max="8"></td>
+                    <td><input type="number" name="Rolls" class="ud" id="RollsValue" min="0"></td>
+                    <td><input type="text" name="user" id="user"></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <section class="buff">
+        <table>
+            <tbody>
+                <tr id="b1">
+                    <td><input type="checkbox" id="ch1" onchange="ActivarZona(1);"></td>
+                    <td></td>
+                    <td>
+                        <label for="Buff">Aumento:</label>
+                        <select name="Buff" class="selector" id="sb1" disabled>
+                            <option value="pred">Selecciona un aumento</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label>Valores:</label>
+                        <input type="number" class="ud" id="ud1" disabled>.
+                        <input type="number" class="dc" id="dc1" disabled>
+                    </td>
+                    <td id="submit" rowspan="4"><button>Enviar</button></td>
+                </tr>
+                <tr id="b2">
+                    <td><input type="checkbox" id="ch2" onchange="ActivarZona(2);"></td>
+                    <td></td>
+                    <td>
+                        <label for="Buff">Aumento:</label>
+                        <select name="Buff" class="selector" id="sb2" disabled>
+                            <option value="pred">Selecciona un aumento</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label>Valores:</label>
+                        <input type="number" class="ud" id="ud2" disabled>.
+                        <input type="number" class="dc" id="dc2" disabled>
+                    </td>
+                </tr>
+                <tr id="b3">
+                    <td><input type="checkbox" id="ch3" onchange="ActivarZona(3);"></td>
+                    <td></td>
+                    <td>
+                        <label for="Buff">Aumento:</label>
+                        <select name="Buff" class="selector" id="sb3" disabled>
+                            <option value="pred">Selecciona un aumento</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label>Valores:</label>
+                        <input type="number" class="ud" id="ud3" disabled>.
+                        <input type="number" class="dc" id="dc3" disabled>
+                    </td>
+                </tr>
+                <tr id="db">
+                    <td><input type="checkbox" id="ch4" onchange="ActivarZona(4);"></td>
+                    <td></td>
+                    <td>
+                        <label for="Buff">Negativo:</label>
+                        <select name="Buff" class="selector" id="sb4" disabled>
+                            <option value="pred">Selecciona un negativo</option>
+                        </select>
+                    </td>
+                    <td>
+                        <label>Valores:</label> 
+                        <input type="number" class="ud" id="ud4" disabled>.
+                        <input type="number" class="dc" id="dc4" disabled>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>

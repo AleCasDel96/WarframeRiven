@@ -1,0 +1,322 @@
+{
+    "Dmg": [
+        {
+            "Nombre": "Daño",
+            "Pre": "Visi",
+            "Nucleo": "visi",
+            "Su": "ata",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "CorpusDmg": [
+        {
+            "Nombre": "Daño contra Corpus",
+            "Pre": "Manti",
+            "Nucleo": "manti",
+            "Su": "tron",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "GrinnerDmg": [
+        {
+            "Nombre": "Daño contra Grinner",
+            "Pre": "Argi",
+            "Nucleo": "argi",
+            "Su": "con",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "InfestadosDmg": [
+        {
+            "Nombre": "Daño contra Infestados",
+            "Pre": "Pura",
+            "Nucleo": "pura",
+            "Su": "ada",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "Frio": [
+        {
+            "Nombre": "Frío",
+            "Pre": "Geli",
+            "Nucleo": "geli",
+            "Su": "do",
+            "use": 0,
+            "db": false
+        }
+    ],
+    "Calor": [
+        {
+            "Nombre": "Calor",
+            "Pre": "Igni",
+            "Nucleo": "igni",
+            "Su": "pha",
+            "use": 0,
+            "db": false
+        }
+    ],
+    "Toxico": [
+        {
+            "Nombre": "Tóxico",
+            "Pre": "Toxi",
+            "Nucleo": "toxi",
+            "Su": "tox",
+            "use": 0,
+            "db": false
+        }
+    ],
+    "Electrico": [
+        {
+            "Nombre": "Eléctrico",
+            "Pre": "Vexi",
+            "Nucleo": "vexi",
+            "Su": "tio",
+            "use": 0,
+            "db": false
+        }
+    ],
+    "CritDmg": [
+        {
+            "Nombre": "Daño crítico",
+            "Pre": "Acri",
+            "Nucleo": "acri",
+            "Su": "tis",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "CritProb": [
+        {
+            "Nombre": "Probabilidad crítica",
+            "Pre": "Crita",
+            "Nucleo": "crita",
+            "Su": "cron",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "Impacto": [
+        {
+            "Nombre": "Impacto",
+            "Pre": "Magna",
+            "Nucleo": "magna",
+            "Su": "ton",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "Cortante": [
+        {
+            "Nombre": "Cortante",
+            "Pre": "Sci",
+            "Nucleo": "sci",
+            "Su": "sus",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "StatusDur": [
+        {
+            "Nombre": "Duración de estado",
+            "Pre": "Deci",
+            "Nucleo": "deci",
+            "Su": "des",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "StatusProb": [
+        {
+            "Nombre": "Probabilidad de estado",
+            "Pre": "Hexa",
+            "Nucleo": "hexa",
+            "Su": "dex",
+            "use": 0,
+            "db": true
+        }
+    ],
+    "Perforacion": [
+        {
+            "Nombre": "Perforación",
+            "Pre": "Insi",
+            "Nucleo": "insi",
+            "Su": "cak",
+            "use": 1,
+            "db": false
+        }
+    ],
+    "MaxAmmo": [
+        {
+            "Nombre": "Munición máxima",
+            "Pre": "Ampi",
+            "Nucleo": "ampi",
+            "Su": "bin",
+            "use": 1,
+            "db": true
+        }
+    ],
+    "Cadencia": [
+        {
+            "Nombre": "Cadencia",
+            "Pre": "Croni",
+            "Nucleo": "croni",
+            "Su": "dra",
+            "use": 1,
+            "db": true
+        }
+    ],
+    "VeloProy": [
+        {
+            "Nombre": "Velocidad de proyectil",
+            "Pre": "Conci",
+            "Nucleo": "conci",
+            "Su": "nak",
+            "use": 1,
+            "db": true
+        }
+    ],
+    "Magazine": [
+        {
+            "Nombre": "Tamaño de cargador",
+            "Pre": "Arma",
+            "Nucleo": "arma",
+            "Su": "tin",
+            "use": 1,
+            "db": true
+        }
+    ],
+    "Multidisparo": [
+        {
+            "Nombre": "Multidisparo",
+            "Pre": "Sati",
+            "Nucleo": "sati",
+            "Su": "can",
+            "use": 1,
+            "db": true
+        }
+    ],
+    "Reload": [
+        {
+            "Nombre": "Velocidad de recarga",
+            "Pre": "Feva",
+            "Nucleo": "feva",
+            "Su": "tak",
+            "use": 1,
+            "db": true
+        }
+    ],
+    "Retroceso": [
+        {
+            "Nombre": "Retroceso",
+            "Pre": "Zeti",
+            "Nucleo": "zeti",
+            "Su": "mag",
+            "use": 1,
+            "db": true
+        }
+    ],
+    "Zoom": [
+        {
+            "Nombre": "Zoom",
+            "Pre": "Hera",
+            "Nucleo": "hera",
+            "Su": "lis",
+            "use": 1,
+            "db": true
+        }
+    ],
+    "Rango": [
+        {
+            "Nombre": "Rango",
+            "Pre": "Locti",
+            "Nucleo": "locti",
+            "Su": "tor",
+            "use": 2,
+            "db": true
+        }
+    ],
+    "ComboAdicional": [
+        {
+            "Nombre": "Contador de combo adicional",
+            "Pre": "Laci",
+            "Nucleo": "laci",
+            "Su": "nus",
+            "use": 2,
+            "db": true
+        }
+    ],
+    "ProbComboAdicional": [
+        {
+            "Nombre": "Probabilidad de combo adicional",
+            "Pre": "Laci",
+            "Nucleo": "laci",
+            "Su": "nus",
+            "use": 2,
+            "db": true
+        }
+    ],
+    "DurCombo": [
+        {
+            "Nombre": "Duración de combo",
+            "Pre": "Tempi",
+            "Nucleo": "tempi",
+            "Su": "nem",
+            "use": 2,
+            "db": true
+        }
+    ],
+    "ProbCritDeslizante": [
+        {
+            "Nombre": "Probabilidad crítica en ataque deslizante",
+            "Pre": "Pleci",
+            "Nucleo": "pleci",
+            "Su": "nent",
+            "use": 2,
+            "db": true
+        }
+    ],
+    "DmgRemate": [
+        {
+            "Nombre": "Daño en remate",
+            "Pre": "Exi",
+            "Nucleo": "exi",
+            "Su": "cta",
+            "use": 2,
+            "db": false
+        }
+    ],
+    "VeloAtaque": [
+        {
+            "Nombre": "Velocidad de ataque",
+            "Pre": "Croni",
+            "Nucleo": "croni",
+            "Su": "dra",
+            "use": 2,
+            "db": true
+        }
+    ],
+    "CombInicial": [
+        {
+            "Nombre": "Combo inicial",
+            "Pre": "Para",
+            "Nucleo": "para",
+            "Su": "um",
+            "use": 2,
+            "db": false
+        }
+    ],
+    "EfiAtaquePesado": [
+        {
+            "Nombre": "Eficiencia de ataque pesado",
+            "Pre": "Forti",
+            "Nucleo": "forti",
+            "Su": "us",
+            "use": 2,
+            "db": false
+        }
+    ]
+}
