@@ -1,0 +1,42 @@
+<div style="max-width: 800px; margin: 2rem auto;">
+  <h2>Ofertas Disponibles</h2>
+
+  <p *ngIf="error" style="color: red;">{{ error }}</p>
+
+  <ul *ngIf="ofertas.length > 0; else sinOfertas">
+    <li *ngFor="let oferta of ofertas">
+      <span (mouseenter)="mostrarRiven(oferta.idRiven, $event)" (mouseleave)="ocultarRiven()"
+        style="cursor: pointer; text-decoration: underline;">
+        {{ rivenSeleccionado?.nombre || 'Riven desconocido' }}
+      </span>
+      <br>
+      Precio: {{ oferta.precioVenta }} créditos
+    </li>
+  </ul>
+
+  <ng-template #sinOfertas>
+    <p>No hay ofertas disponibles.</p>
+  </ng-template>
+  <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
+
+    <strong>{{ rivenSeleccionado.nombre }}</strong><br>
+    {{ rivenSeleccionado.arma }}<br><br>
+
+    <div *ngIf="rivenSeleccionado.stat1">
+      {{ rivenSeleccionado.stat1 }}: {{ rivenSeleccionado.valor1 }}
+    </div>
+
+    <div *ngIf="rivenSeleccionado.stat2">
+      {{ rivenSeleccionado.stat2 }}: {{ rivenSeleccionado.valor2 }}
+    </div>
+
+    <div *ngIf="rivenSeleccionado.stat3">
+      {{ rivenSeleccionado.stat3 }}: {{ rivenSeleccionado.valor3 }}
+    </div>
+
+    <div *ngIf="rivenSeleccionado.stat4">
+      {{ rivenSeleccionado.stat4 }}: {{ rivenSeleccionado.valor4 }}
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,25 @@
+<div style="max-width: 800px; margin: 2rem auto;">
+  <h2>Mis Pujas</h2>
+
+  <p *ngIf="error" style="color: red;">{{ error }}</p>
+
+  <ul *ngIf="pujas.length > 0; else sinPujas">
+    <li *ngFor="let o of pujas">
+      <strong>{{ o.nombreRiven }}</strong> – {{ o.arma }}<br>
+      Precio: {{ o.precioVenta }}<br>
+      Estado:
+      <span *ngIf="o.disponibilidad">Abierta</span>
+      <span *ngIf="!o.disponibilidad">Cerrada</span>,
+      Partida: {{ o.partida }},
+      Destino: {{ o.destino }}
+      <hr>
+      <button *ngIf="!o.disponibilidad && !o.destino" (click)="confirmarCompra(o.id)">
+        Confirmar compra
+      </button>
+    </li>
+  </ul>
+
+  <ng-template #sinPujas>
+    <p>No estás participando en ninguna puja aún.</p>
+  </ng-template>
+</div>

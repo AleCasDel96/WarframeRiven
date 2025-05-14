@@ -1,0 +1,6 @@
+@WarframeRivensAPI_HostAddress = http://localhost:5065
+
+GET {{WarframeRivensAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

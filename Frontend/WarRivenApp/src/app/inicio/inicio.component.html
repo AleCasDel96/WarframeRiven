@@ -1,0 +1,26 @@
+<div style="text-align: center; margin-top: 4rem;">
+  <h1>Bienvenido a Warframe Rivens</h1>
+
+  <div style="margin-top: 2rem;">
+    <ng-container *ngIf="!estaLogueado; else logueado">
+      <a routerLink="/login">
+        <button>🔑 Iniciar sesión</button>
+      </a>
+      <a routerLink="/ofertas">
+        <button>📢 Ver ofertas públicas</button>
+      </a>
+    </ng-container>
+
+    <ng-template #logueado>
+      <a routerLink="/rivens">
+        <button>📋 Mis Rivens</button>
+      </a>
+      <a routerLink="/mis-ofertas">
+        <button>📨 Mis Ofertas</button>
+      </a>
+      <a routerLink="/ofertas">
+        <button>📢 Ver ofertas públicas</button>
+      </a>
+    </ng-template>
+  </div>
+</div>

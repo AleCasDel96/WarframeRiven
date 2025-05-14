@@ -1,0 +1,19 @@
+<nav style="background: #333; color: white; padding: 1rem; display: flex; align-items: center;">
+  <a routerLink="/login" routerLinkActive="active-link" style="margin-right: 1rem;">Login</a>
+  <a routerLink="/rivens" routerLinkActive="active-link" style="margin-right: 1rem;">Mis Rivens</a>
+  <a routerLink="/crear-riven" routerLinkActive="active-link" style="margin-right: 1rem;">Nuevo Riven</a>
+  <a routerLink="/ofertas" routerLinkActive="active-link" style="margin-right: 1rem;">Ofertas Públicas</a>
+  <a routerLink="/crear-oferta" routerLinkActive="active-link" style="margin-right: 1rem;">Nueva Oferta</a>
+  <a routerLink="/mis-ofertas" routerLinkActive="active-link" style="margin-right: 1rem;">Mis Ofertas</a>
+
+  <div *ngIf="estaLogueado" style="margin-left: auto; display: flex; align-items: center;">
+    <a routerLink="/perfil" style="margin-right: 1rem; color: white; text-decoration: underline;">
+      {{ nickname }}
+    </a>
+    <button (click)="logout()" style="color: white; background: transparent; border: 1px solid white; padding: 0.25rem 0.5rem; cursor: pointer;">
+      Cerrar sesión
+    </button>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

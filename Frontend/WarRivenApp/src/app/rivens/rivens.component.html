@@ -1,0 +1,40 @@
+<div style="max-width: 800px; margin: 2rem auto;">
+    <h2>Mis Rivens</h2>
+
+    <a routerLink="/mis-pujas"><button> Ver mis pujas</button></a>
+    <a routerLink="/ventas"><button>Ver mis ventas</button></a>
+
+    <p *ngIf="error" style="color: red;">{{ error }}</p>
+
+    <table *ngIf="rivens.length > 0; else sinRivens" border="1" cellpadding="8" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Arma</th>
+                <th>Estadisticas</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let r of rivens">
+                <td>{{ r.nombre }}</td>
+                <td>{{ r.arma }}</td>
+                <td>
+                    <div *ngIf="r.stat1">{{ r.stat1 }}: {{ r.valor1 }}</div>
+                    <div *ngIf="r.stat2">{{ r.stat2 }}: {{ r.valor2 }}</div>
+                    <div *ngIf="r.stat3">{{ r.stat3 }}: {{ r.valor3 }}</div>
+                    <div *ngIf="r.stat4">{{ r.stat4 }}: {{ r.valor4 }}</div>
+                </td>
+                <td>
+                    <button (click)="editar(r.id)">Editar</button>
+                    <button (click)="eliminar(r.id)">Eliminar</button>
+                    <button (click)="crearOferta(r)">Crear Oferta</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #sinRivens>
+        <p>No tienes ningún Riven creado aún.</p>
+    </ng-template>
+</div>

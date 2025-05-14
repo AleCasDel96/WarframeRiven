@@ -1,0 +1,43 @@
+<div style="max-width: 800px; margin: 2rem auto;">
+  <h2>Mis Ventas</h2>
+
+  <p *ngIf="error" style="color: red;">{{ error }}</p>
+
+  <table *ngIf="ventas.length > 0; else sinVentas" border="1" cellpadding="8" style="width: 100%;">
+    <thead>
+      <tr>
+        <th>ID Riven</th>
+        <th>Vendedor</th>
+        <th>Comprador</th>
+        <th>Precio</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let v of ventas">
+        <td>
+          <span (mouseenter)="mostrarRiven(v.idRiven, $event)" (mouseleave)="ocultarRiven()"
+            style="cursor: pointer; text-decoration: underline;">
+            {{ rivenSeleccionado?.nombre || '...' }}
+          </span>
+        </td>
+        <td>{{ v.nombreVendedor }}</td>
+        <td>{{ v.nombreComprador }}</td>
+        <td>{{ v.precioVenta }} créditos</td>
+        <td>{{ v.fechaVenta | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #sinVentas>
+    <p>No se han registrado ventas aún.</p>
+  </ng-template>
+
+  <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
+    <strong>{{ rivenSeleccionado.arma }}</strong><br>
+    {{ rivenSeleccionado.stat1 }}: {{ rivenSeleccionado.valor1 }}<br>
+    {{ rivenSeleccionado.stat2 }}: {{ rivenSeleccionado.valor2 }}<br>
+    {{ rivenSeleccionado.stat3 }}: {{ rivenSeleccionado.valor3 }}<br>
+    {{ rivenSeleccionado.dStat }}: {{ rivenSeleccionado.dValor }}
+  </div>
+</div>
