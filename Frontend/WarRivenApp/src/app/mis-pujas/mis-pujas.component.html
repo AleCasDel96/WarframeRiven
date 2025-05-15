@@ -1,25 +1,37 @@
 <div style="max-width: 800px; margin: 2rem auto;">
   <h2>Mis Pujas</h2>
 
-  <p *ngIf="error" style="color: red;">{{ error }}</p>
+  <input [(ngModel)]="searchText" placeholder="🔍 Buscar por nombre o arma" />
 
-  <ul *ngIf="pujas.length > 0; else sinPujas">
-    <li *ngFor="let o of pujas">
-      <strong>{{ o.nombreRiven }}</strong> – {{ o.arma }}<br>
-      Precio: {{ o.precioVenta }}<br>
-      Estado:
-      <span *ngIf="o.disponibilidad">Abierta</span>
-      <span *ngIf="!o.disponibilidad">Cerrada</span>,
-      Partida: {{ o.partida }},
-      Destino: {{ o.destino }}
-      <hr>
-      <button *ngIf="!o.disponibilidad && !o.destino" (click)="confirmarCompra(o.id)">
-        Confirmar compra
-      </button>
-    </li>
-  </ul>
+  <table border="1" cellpadding="8" style="width: 100%; margin-top: 1rem;">
+    <thead>
+      <tr>
+        <th (click)="ordenarPor('nombreRiven')" style="cursor: pointer;">Nombre</th>
+        <th (click)="ordenarPor('arma')" style="cursor: pointer;">Arma</th>
+        <th (click)="ordenarPor('precioVenta')" style="cursor: pointer;">Precio</th>
+        <th>Estado</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of pujas 
+                  | filterBy: ['nombreRiven', 'arma']: searchText 
+                  | orderBy: [sortColumn]: sortAsc 
+                  | paginate: { itemsPerPage: 5, currentPage: p }">
+        <td>{{ o.nombreRiven }}</td>
+        <td>{{ o.arma }}</td>
+        <td>{{ o.precioVenta }}</td>
+        <td>
+          <span *ngIf="!o.partida && !o.destino" style="color: red;">❌ Ninguna confirmación</span>
+          <span *ngIf="(o.partida && !o.destino) || (!o.partida && o.destino)" style="color: orange;">🟡 Confirmación parcial</span>
+          <span *ngIf="o.partida && o.destino" style="color: green;">✅ Lista para traspaso</span>
+        </td>
+        <td>
+          <button *ngIf="!o.disponibilidad && !o.destino" (click)="confirmarCompra(o.id)">Confirmar compra</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-  <ng-template #sinPujas>
-    <p>No estás participando en ninguna puja aún.</p>
-  </ng-template>
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
 </div>

@@ -3,17 +3,24 @@ import { CommonModule } from '@angular/common';
 import { OfertaService, Oferta } from '../services/oferta.service';
 import { RivenService, Riven } from '../services/riven.service';
 import { Router } from '@angular/router';
+import { NgPipesModule } from 'ngx-pipes';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-mis-ofertas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, NgPipesModule],
   templateUrl: './mis-ofertas.component.html',
   styleUrls: ['./mis-ofertas.component.css']
 })
 export class MisOfertasComponent implements OnInit {
   ofertas: Oferta[] = [];
   error = '';
+
+  searchText = '';
+  sortColumn = 'nombreRiven';
+  sortAsc = true;
+  p = 1;
 
   rivenSeleccionado: Riven | null = null;
   popupX = 0;
@@ -33,6 +40,15 @@ export class MisOfertasComponent implements OnInit {
     });
   }
 
+  ordenarPor(campo: string) {
+    if (this.sortColumn === campo) {
+      this.sortAsc = !this.sortAsc;
+    } else {
+      this.sortColumn = campo;
+      this.sortAsc = true;
+    }
+  }
+
   cerrar(id: string) {
     this.ofertaService.cerrar(id).subscribe(() => this.ngOnInit());
   }
@@ -50,11 +66,11 @@ export class MisOfertasComponent implements OnInit {
   }
 
   transpaso(id: string) {
-  this.ofertaService.transpaso(id).subscribe({
-    next: () => this.ngOnInit(),
-    error: () => this.error = 'No se pudo completar el traspaso.'
-  });
-}
+    this.ofertaService.transpaso(id).subscribe({
+      next: () => this.ngOnInit(),
+      error: () => this.error = 'No se pudo completar el traspaso.'
+    });
+  }
 
   eliminar(id: string) {
     if (confirm('¿Estás seguro de eliminar esta oferta?')) {

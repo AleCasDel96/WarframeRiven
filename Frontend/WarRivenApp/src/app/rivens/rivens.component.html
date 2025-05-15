@@ -1,40 +1,42 @@
 <div style="max-width: 800px; margin: 2rem auto;">
-    <h2>Mis Rivens</h2>
-
+  <h2>Mis Rivens</h2>
     <a routerLink="/mis-pujas"><button> Ver mis pujas</button></a>
     <a routerLink="/ventas"><button>Ver mis ventas</button></a>
+  <!-- Buscador -->
+  <input [(ngModel)]="searchText" placeholder="🔍 Buscar por nombre o arma" />
 
-    <p *ngIf="error" style="color: red;">{{ error }}</p>
+  <!-- Tabla -->
+  <table border="1" cellpadding="8" style="width: 100%; margin-top: 1rem;">
+    <thead>
+      <tr>
+        <th (click)="ordenarPor('nombre')" style="cursor: pointer;">Nombre</th>
+        <th (click)="ordenarPor('arma')" style="cursor: pointer;">Arma</th>
+        <th>Estadísticas</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of rivens 
+                  | filterBy: ['nombre', 'arma']: searchText 
+                  | orderBy: [sortColumn]: sortAsc 
+                  | paginate: { itemsPerPage: 5, currentPage: p }">
+        <td>{{ r.nombre }}</td>
+        <td>{{ r.arma }}</td>
+        <td>
+          <div *ngIf="r.stat1">{{ r.stat1 }}: {{ r.valor1 }}</div>
+          <div *ngIf="r.stat2">{{ r.stat2 }}: {{ r.valor2 }}</div>
+          <div *ngIf="r.stat3">{{ r.stat3 }}: {{ r.valor3 }}</div>
+          <div *ngIf="r.stat4">{{ r.stat4 }}: {{ r.valor4 }}</div>
+        </td>
+        <td>
+          <button (click)="editar(r.id)">Editar</button>
+          <button (click)="eliminar(r.id)">Eliminar</button>
+          <button (click)="crearOferta(r)">Crear Oferta</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <table *ngIf="rivens.length > 0; else sinRivens" border="1" cellpadding="8" style="width: 100%;">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Arma</th>
-                <th>Estadisticas</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let r of rivens">
-                <td>{{ r.nombre }}</td>
-                <td>{{ r.arma }}</td>
-                <td>
-                    <div *ngIf="r.stat1">{{ r.stat1 }}: {{ r.valor1 }}</div>
-                    <div *ngIf="r.stat2">{{ r.stat2 }}: {{ r.valor2 }}</div>
-                    <div *ngIf="r.stat3">{{ r.stat3 }}: {{ r.valor3 }}</div>
-                    <div *ngIf="r.stat4">{{ r.stat4 }}: {{ r.valor4 }}</div>
-                </td>
-                <td>
-                    <button (click)="editar(r.id)">Editar</button>
-                    <button (click)="eliminar(r.id)">Eliminar</button>
-                    <button (click)="crearOferta(r)">Crear Oferta</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ng-template #sinRivens>
-        <p>No tienes ningún Riven creado aún.</p>
-    </ng-template>
+  <!-- Paginación -->
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
 </div>

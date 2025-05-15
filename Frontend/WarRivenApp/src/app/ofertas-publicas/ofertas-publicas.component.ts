@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OfertaService, Oferta } from '../services/oferta.service';
 import { RivenService, Riven } from '../services/riven.service';
+import { FormsModule } from '@angular/forms';
+import { NgPipesModule } from 'ngx-pipes';
 
 @Component({
   selector: 'app-ofertas-publicas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, NgPipesModule],
   templateUrl: './ofertas-publicas.component.html'
 })
 export class OfertasPublicasComponent implements OnInit {
@@ -16,6 +18,10 @@ export class OfertasPublicasComponent implements OnInit {
   popupX = 0;
   popupY = 0;
   showPopup = false;
+  searchText = '';
+  sortColumn = 'nombreRiven';
+  sortAsc = true;
+  p = 1;
 
   constructor(private ofertaService: OfertaService, private rivenService: RivenService) { }
 
@@ -29,6 +35,15 @@ export class OfertasPublicasComponent implements OnInit {
       },
       error: () => this.rivenSeleccionado = null
     });
+  }
+
+  ordenarPor(col: string) {
+    if (this.sortColumn === col) {
+      this.sortAsc = !this.sortAsc;
+    } else {
+      this.sortColumn = col;
+      this.sortAsc = true;
+    }
   }
 
   ocultarRiven() {

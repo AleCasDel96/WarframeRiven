@@ -1,43 +1,36 @@
 <div style="max-width: 800px; margin: 2rem auto;">
   <h2>Mis Ventas</h2>
 
-  <p *ngIf="error" style="color: red;">{{ error }}</p>
+  <!-- Buscador -->
+  <input [(ngModel)]="searchText" placeholder="🔍 Buscar por nombre o arma" />
 
-  <table *ngIf="ventas.length > 0; else sinVentas" border="1" cellpadding="8" style="width: 100%;">
+  <!-- Tabla -->
+  <table border="1" cellpadding="8" style="width: 100%; margin-top: 1rem;">
     <thead>
       <tr>
-        <th>ID Riven</th>
+        <th (click)="ordenarPor('nombreRiven')" style="cursor: pointer;">Nombre</th>
+        <th (click)="ordenarPor('arma')" style="cursor: pointer;">Arma</th>
+        <th (click)="ordenarPor('precioVenta')" style="cursor: pointer;">Precio</th>
+        <th (click)="ordenarPor('fechaVenta')" style="cursor: pointer;">Fecha</th>
         <th>Vendedor</th>
         <th>Comprador</th>
-        <th>Precio</th>
-        <th>Fecha</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let v of ventas">
-        <td>
-          <span (mouseenter)="mostrarRiven(v.idRiven, $event)" (mouseleave)="ocultarRiven()"
-            style="cursor: pointer; text-decoration: underline;">
-            {{ rivenSeleccionado?.nombre || '...' }}
-          </span>
-        </td>
-        <td>{{ v.nombreVendedor }}</td>
-        <td>{{ v.nombreComprador }}</td>
-        <td>{{ v.precioVenta }} créditos</td>
-        <td>{{ v.fechaVenta | date:'short' }}</td>
+      <tr *ngFor="let v of ventas 
+                  | filterBy: ['nombreRiven', 'arma']: searchText 
+                  | orderBy: [sortColumn]: sortAsc 
+                  | paginate: { itemsPerPage: 5, currentPage: p }">
+        <td>{{ v.nombreRiven }}</td>
+        <td>{{ v.arma }}</td>
+        <td>{{ v.precioVenta }}</td>
+        <td>{{ v.fechaVenta | date: 'short' }}</td>
+        <td>{{ v.nickVendedor }}</td>
+        <td>{{ v.nickComprador }}</td>
       </tr>
     </tbody>
   </table>
 
-  <ng-template #sinVentas>
-    <p>No se han registrado ventas aún.</p>
-  </ng-template>
-
-  <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
-    <strong>{{ rivenSeleccionado.arma }}</strong><br>
-    {{ rivenSeleccionado.stat1 }}: {{ rivenSeleccionado.valor1 }}<br>
-    {{ rivenSeleccionado.stat2 }}: {{ rivenSeleccionado.valor2 }}<br>
-    {{ rivenSeleccionado.stat3 }}: {{ rivenSeleccionado.valor3 }}<br>
-    {{ rivenSeleccionado.dStat }}: {{ rivenSeleccionado.dValor }}
-  </div>
+  <!-- Paginación -->
+  <pagination-controls (pageChange)="p = $event"></pagination-controls>
 </div>

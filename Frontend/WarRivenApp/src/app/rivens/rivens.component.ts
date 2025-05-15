@@ -3,16 +3,23 @@ import { CommonModule } from '@angular/common';
 import { RivenService, Riven } from '../services/riven.service';
 import { Router } from '@angular/router';
 import { OfertaService } from '../services/oferta.service';
+import { FormsModule } from '@angular/forms';
+import { NgPipesModule } from 'ngx-pipes';
 
 @Component({
   selector: 'app-rivens',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, NgPipesModule],
   templateUrl: './rivens.component.html'
 })
 export class RivensComponent implements OnInit {
   rivens: Riven[] = [];
   error = '';
+
+  searchText = '';
+sortColumn = 'nombre';
+sortAsc = true;
+p = 1;
 
   constructor(
     private rivenService: RivenService,
@@ -40,6 +47,15 @@ export class RivensComponent implements OnInit {
     });
   }
 
+  
+ordenarPor(col: string) {
+  if (this.sortColumn === col) {
+    this.sortAsc = !this.sortAsc;
+  } else {
+    this.sortColumn = col;
+    this.sortAsc = true;
+  }
+}
   ngOnInit(): void {
     this.rivenService.getMisRivens().subscribe({
       next: data => this.rivens = data,

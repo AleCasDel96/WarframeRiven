@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VentaService, Venta } from '../services/venta.service';
 import { RivenService, Riven } from '../services/riven.service';
+import { FormsModule } from '@angular/forms';
+import { NgPipesModule } from 'ngx-pipes';
 
 @Component({
   selector: 'app-ventas',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, NgPipesModule],
   templateUrl: './ventas.component.html',
   styleUrls: ['./ventas.component.css']
 })
@@ -18,16 +20,30 @@ export class VentasComponent implements OnInit {
   popupY = 0;
   showPopup = false;
 
+  searchText = '';
+  sortColumn = 'fechaVenta';
+  sortAsc = false;
+  p = 1;
+
   constructor(
     private ventaService: VentaService,
     private rivenService: RivenService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.ventaService.getMisVentas().subscribe({
       next: data => this.ventas = data,
       error: () => this.error = 'No se pudieron cargar las ventas.'
     });
+  }
+
+  ordenarPor(col: string) {
+    if (this.sortColumn === col) {
+      this.sortAsc = !this.sortAsc;
+    } else {
+      this.sortColumn = col;
+      this.sortAsc = true;
+    }
   }
 
   mostrarRiven(id: string, event: MouseEvent) {
