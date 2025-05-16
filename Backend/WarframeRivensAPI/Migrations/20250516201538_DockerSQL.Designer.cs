@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WarframeRivensAPI.Data;
 
@@ -10,10 +11,12 @@ using WarframeRivensAPI.Data;
 
 namespace WarframeRivensAPI.Migrations
 {
-    [DbContext(typeof(WarUsersContext))]
-    partial class WarUsersContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(WarRivenContext))]
+    [Migration("20250516201538_DockerSQL")]
+    partial class DockerSQL
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,19 +54,19 @@ namespace WarframeRivensAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cb508939-89f5-4f40-8f35-96002bc749e7",
+                            Id = "9f1426a2-b729-4d30-99ae-b27efad1f1cd",
                             Name = "basic",
                             NormalizedName = "BASIC"
                         },
                         new
                         {
-                            Id = "6c195a77-42a9-4dd7-a65d-9e3bd2faccd3",
+                            Id = "ea2b316f-75fb-4150-a882-e7c99d52f2af",
                             Name = "confirmado",
                             NormalizedName = "CONFIRMADO"
                         },
                         new
                         {
-                            Id = "da20f131-7906-44b2-953b-e739e7aa95dc",
+                            Id = "5a3a3046-e2ab-4752-a538-712e9bd59752",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -158,18 +161,18 @@ namespace WarframeRivensAPI.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "7868fb6c-65ad-42c6-a2a6-9f9bcf01d6f4",
-                            RoleId = "cb508939-89f5-4f40-8f35-96002bc749e7"
+                            UserId = "9f79a04d-78cb-45fc-bec7-3767d5a803e5",
+                            RoleId = "9f1426a2-b729-4d30-99ae-b27efad1f1cd"
                         },
                         new
                         {
-                            UserId = "15328a7e-b31c-47e2-84be-e1ca12fe820d",
-                            RoleId = "6c195a77-42a9-4dd7-a65d-9e3bd2faccd3"
+                            UserId = "356cf89a-c1ac-488c-81eb-f91ae74ec5a9",
+                            RoleId = "ea2b316f-75fb-4150-a882-e7c99d52f2af"
                         },
                         new
                         {
-                            UserId = "3ce6779f-457f-4440-88bf-99e5722a0e50",
-                            RoleId = "da20f131-7906-44b2-953b-e739e7aa95dc"
+                            UserId = "4ca4b1f2-0053-4fa4-890f-4a0a1b4b6f7e",
+                            RoleId = "5a3a3046-e2ab-4752-a538-712e9bd59752"
                         });
                 });
 
@@ -190,6 +193,174 @@ namespace WarframeRivensAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("WarframeRivensAPI.Models.Favorito", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IdRiven")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RivenId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdUser");
+
+                    b.HasIndex("RivenId");
+
+                    b.ToTable("Favoritos");
+                });
+
+            modelBuilder.Entity("WarframeRivensAPI.Models.Oferta", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Destino")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Disponibilidad")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaVenta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdComprador")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IdRiven")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Partida")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PrecioVenta")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RivenId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdComprador");
+
+                    b.HasIndex("RivenId");
+
+                    b.ToTable("Ofertas");
+                });
+
+            modelBuilder.Entity("WarframeRivensAPI.Models.Riven", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Arma")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Atrib1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Atrib2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Atrib3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DAtrib")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("DValor")
+                        .HasPrecision(4, 1)
+                        .HasColumnType("decimal(4,1)");
+
+                    b.Property<string>("IdPropietario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Maestria")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Polaridad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Valor1")
+                        .HasPrecision(4, 1)
+                        .HasColumnType("decimal(4,1)");
+
+                    b.Property<decimal?>("Valor2")
+                        .HasPrecision(4, 1)
+                        .HasColumnType("decimal(4,1)");
+
+                    b.Property<decimal?>("Valor3")
+                        .HasPrecision(4, 1)
+                        .HasColumnType("decimal(4,1)");
+
+                    b.Property<string>("WarUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdPropietario");
+
+                    b.HasIndex("WarUserId");
+
+                    b.ToTable("Rivens");
+                });
+
+            modelBuilder.Entity("WarframeRivensAPI.Models.Venta", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("FechaVenta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IdComprador")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IdRiven")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdVendedor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PrecioVenta")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RivenId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdComprador");
+
+                    b.HasIndex("IdVendedor");
+
+                    b.HasIndex("RivenId");
+
+                    b.ToTable("Ventas");
                 });
 
             modelBuilder.Entity("WarframeRivensAPI.Models.WarUser", b =>
@@ -273,52 +444,52 @@ namespace WarframeRivensAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7868fb6c-65ad-42c6-a2a6-9f9bcf01d6f4",
+                            Id = "9f79a04d-78cb-45fc-bec7-3767d5a803e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4fc73a76-aa8b-41e3-83d7-5a2729d1d427",
+                            ConcurrencyStamp = "99c21530-a053-46a3-ad56-e2d3e3c06388",
                             Email = "visitante@warriven.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Nickname = "Usuario Visitante",
                             NormalizedEmail = "VISITANTE@WARRIVEN.COM",
                             NormalizedUserName = "VISITANTE@WARRIVEN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAENGc92FsoBBUGDjin7MsZbfB8STqvBk+XXxEZvnJo8YDdX7Bzz140M0Yb6yTMH+qAA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMIdYfOpd6h1RyCwrccvVdXntwDr0Uh6pFWfLkchi3syo7aSekku4T+Z10akSkTn2Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "379207f3-76c2-4ecf-abf6-e5766e094ad2",
+                            SecurityStamp = "fb0666f0-5022-4cb5-b555-a03e569f9f46",
                             TwoFactorEnabled = false,
                             UserName = "visitante@warriven.com"
                         },
                         new
                         {
-                            Id = "15328a7e-b31c-47e2-84be-e1ca12fe820d",
+                            Id = "356cf89a-c1ac-488c-81eb-f91ae74ec5a9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0bc2cb4f-2254-45a3-bf15-6e1727ddaccc",
+                            ConcurrencyStamp = "0a0933cc-310f-4ba4-a4b9-3242c0dad5b9",
                             Email = "confirmado@warriven.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Nickname = "Usuario confirmado",
                             NormalizedEmail = "CONFIRMADO@WARRIVEN.COM",
                             NormalizedUserName = "CONFIRMADO@WARRIVEN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIaauIa/01J8RD+GDBkvZcQU5zWnN6QYYnMj01i6bV2qSiuPZqbIIkiI5a1o8w+mzQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOlbGEbi5soF1HG+vC5qrzmLjmHm4QNCR4QUud5ocgt22ZXt9LTAQboCN6waFcX9Tg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bb0fc56c-33f4-446b-a63d-67ca30d82990",
+                            SecurityStamp = "a351dc54-f5f9-41d5-9d10-c71ab21fef79",
                             TwoFactorEnabled = false,
                             UserName = "confirmado@warriven.com"
                         },
                         new
                         {
-                            Id = "3ce6779f-457f-4440-88bf-99e5722a0e50",
+                            Id = "4ca4b1f2-0053-4fa4-890f-4a0a1b4b6f7e",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "702db232-751d-405b-ba6d-4ec6c8d21b28",
+                            ConcurrencyStamp = "30ed7f83-7426-4b17-b548-d858bcef2d5f",
                             Email = "admin@warriven.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Nickname = "Administrador",
                             NormalizedEmail = "ADMIN@WARRIVEN.COM",
                             NormalizedUserName = "ADMIN@WARRIVEN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPobwMxO3M6p5mNDjn/+lvvGJy/KAjlpxErYXan+KUkIUjpny0wMnQkvMRaVfpml3A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFyHRZIXm/Hwvj9tjJR7v4aZUX2WuRUCyqFxBAX5Xx0SbDnflSRmuSwTSWzDPmNXgA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a5b68fb2-a5ef-4ce3-8636-f54fa7a92a74",
+                            SecurityStamp = "7fd0b839-3d70-4f72-a6f8-4516ccda4999",
                             TwoFactorEnabled = false,
                             UserName = "admin@warriven.com"
                         });
@@ -373,6 +544,87 @@ namespace WarframeRivensAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WarframeRivensAPI.Models.Favorito", b =>
+                {
+                    b.HasOne("WarframeRivensAPI.Models.WarUser", "User")
+                        .WithMany()
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WarframeRivensAPI.Models.Riven", "Riven")
+                        .WithMany()
+                        .HasForeignKey("RivenId");
+
+                    b.Navigation("Riven");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WarframeRivensAPI.Models.Oferta", b =>
+                {
+                    b.HasOne("WarframeRivensAPI.Models.WarUser", "Comprador")
+                        .WithMany()
+                        .HasForeignKey("IdComprador")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WarframeRivensAPI.Models.Riven", "Riven")
+                        .WithMany()
+                        .HasForeignKey("RivenId");
+
+                    b.Navigation("Comprador");
+
+                    b.Navigation("Riven");
+                });
+
+            modelBuilder.Entity("WarframeRivensAPI.Models.Riven", b =>
+                {
+                    b.HasOne("WarframeRivensAPI.Models.WarUser", "Propietario")
+                        .WithMany()
+                        .HasForeignKey("IdPropietario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WarframeRivensAPI.Models.WarUser", null)
+                        .WithMany("Rivens")
+                        .HasForeignKey("WarUserId");
+
+                    b.Navigation("Propietario");
+                });
+
+            modelBuilder.Entity("WarframeRivensAPI.Models.Venta", b =>
+                {
+                    b.HasOne("WarframeRivensAPI.Models.WarUser", "Comprador")
+                        .WithMany()
+                        .HasForeignKey("IdComprador")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WarframeRivensAPI.Models.WarUser", "Vendedor")
+                        .WithMany()
+                        .HasForeignKey("IdVendedor")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WarframeRivensAPI.Models.Riven", "Riven")
+                        .WithMany()
+                        .HasForeignKey("RivenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comprador");
+
+                    b.Navigation("Riven");
+
+                    b.Navigation("Vendedor");
+                });
+
+            modelBuilder.Entity("WarframeRivensAPI.Models.WarUser", b =>
+                {
+                    b.Navigation("Rivens");
                 });
 #pragma warning restore 612, 618
         }

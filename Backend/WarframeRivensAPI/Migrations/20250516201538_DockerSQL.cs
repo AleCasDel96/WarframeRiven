@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WarframeRivensAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitUsers : Migration
+    public partial class DockerSQL : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -162,14 +162,140 @@ namespace WarframeRivensAPI.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Rivens",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Arma = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Polaridad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Maestria = table.Column<int>(type: "int", nullable: false),
+                    Atrib1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Valor1 = table.Column<decimal>(type: "decimal(4,1)", precision: 4, scale: 1, nullable: false),
+                    Atrib2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Valor2 = table.Column<decimal>(type: "decimal(4,1)", precision: 4, scale: 1, nullable: true),
+                    Atrib3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Valor3 = table.Column<decimal>(type: "decimal(4,1)", precision: 4, scale: 1, nullable: true),
+                    DAtrib = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DValor = table.Column<decimal>(type: "decimal(4,1)", precision: 4, scale: 1, nullable: true),
+                    IdPropietario = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    WarUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rivens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rivens_AspNetUsers_IdPropietario",
+                        column: x => x.IdPropietario,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Rivens_AspNetUsers_WarUserId",
+                        column: x => x.WarUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Favoritos",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdRiven = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RivenId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IdUser = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Favoritos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Favoritos_AspNetUsers_IdUser",
+                        column: x => x.IdUser,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Favoritos_Rivens_RivenId",
+                        column: x => x.RivenId,
+                        principalTable: "Rivens",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ofertas",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdRiven = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RivenId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PrecioVenta = table.Column<int>(type: "int", nullable: false),
+                    IdComprador = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Disponibilidad = table.Column<bool>(type: "bit", nullable: false),
+                    Partida = table.Column<bool>(type: "bit", nullable: false),
+                    Destino = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ofertas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ofertas_AspNetUsers_IdComprador",
+                        column: x => x.IdComprador,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Ofertas_Rivens_RivenId",
+                        column: x => x.RivenId,
+                        principalTable: "Rivens",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ventas",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdRiven = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RivenId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdComprador = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdVendedor = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PrecioVenta = table.Column<int>(type: "int", nullable: false),
+                    FechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ventas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ventas_AspNetUsers_IdComprador",
+                        column: x => x.IdComprador,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Ventas_AspNetUsers_IdVendedor",
+                        column: x => x.IdVendedor,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Ventas_Rivens_RivenId",
+                        column: x => x.RivenId,
+                        principalTable: "Rivens",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6c195a77-42a9-4dd7-a65d-9e3bd2faccd3", null, "confirmado", "CONFIRMADO" },
-                    { "cb508939-89f5-4f40-8f35-96002bc749e7", null, "basic", "BASIC" },
-                    { "da20f131-7906-44b2-953b-e739e7aa95dc", null, "admin", "ADMIN" }
+                    { "5a3a3046-e2ab-4752-a538-712e9bd59752", null, "admin", "ADMIN" },
+                    { "9f1426a2-b729-4d30-99ae-b27efad1f1cd", null, "basic", "BASIC" },
+                    { "ea2b316f-75fb-4150-a882-e7c99d52f2af", null, "confirmado", "CONFIRMADO" }
                 });
 
             migrationBuilder.InsertData(
@@ -177,9 +303,9 @@ namespace WarframeRivensAPI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "Icono", "LockoutEnabled", "LockoutEnd", "Nickname", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "SteamId", "TwoFactorEnabled", "UserName", "WarframeNick" },
                 values: new object[,]
                 {
-                    { "15328a7e-b31c-47e2-84be-e1ca12fe820d", 0, "0bc2cb4f-2254-45a3-bf15-6e1727ddaccc", "confirmado@warriven.com", true, null, false, null, "Usuario confirmado", "CONFIRMADO@WARRIVEN.COM", "CONFIRMADO@WARRIVEN.COM", "AQAAAAIAAYagAAAAEIaauIa/01J8RD+GDBkvZcQU5zWnN6QYYnMj01i6bV2qSiuPZqbIIkiI5a1o8w+mzQ==", null, false, "bb0fc56c-33f4-446b-a63d-67ca30d82990", null, false, "confirmado@warriven.com", null },
-                    { "3ce6779f-457f-4440-88bf-99e5722a0e50", 0, "702db232-751d-405b-ba6d-4ec6c8d21b28", "admin@warriven.com", true, null, false, null, "Administrador", "ADMIN@WARRIVEN.COM", "ADMIN@WARRIVEN.COM", "AQAAAAIAAYagAAAAEPobwMxO3M6p5mNDjn/+lvvGJy/KAjlpxErYXan+KUkIUjpny0wMnQkvMRaVfpml3A==", null, false, "a5b68fb2-a5ef-4ce3-8636-f54fa7a92a74", null, false, "admin@warriven.com", null },
-                    { "7868fb6c-65ad-42c6-a2a6-9f9bcf01d6f4", 0, "4fc73a76-aa8b-41e3-83d7-5a2729d1d427", "visitante@warriven.com", true, null, false, null, "Usuario Visitante", "VISITANTE@WARRIVEN.COM", "VISITANTE@WARRIVEN.COM", "AQAAAAIAAYagAAAAENGc92FsoBBUGDjin7MsZbfB8STqvBk+XXxEZvnJo8YDdX7Bzz140M0Yb6yTMH+qAA==", null, false, "379207f3-76c2-4ecf-abf6-e5766e094ad2", null, false, "visitante@warriven.com", null }
+                    { "356cf89a-c1ac-488c-81eb-f91ae74ec5a9", 0, "0a0933cc-310f-4ba4-a4b9-3242c0dad5b9", "confirmado@warriven.com", true, null, false, null, "Usuario confirmado", "CONFIRMADO@WARRIVEN.COM", "CONFIRMADO@WARRIVEN.COM", "AQAAAAIAAYagAAAAEOlbGEbi5soF1HG+vC5qrzmLjmHm4QNCR4QUud5ocgt22ZXt9LTAQboCN6waFcX9Tg==", null, false, "a351dc54-f5f9-41d5-9d10-c71ab21fef79", null, false, "confirmado@warriven.com", null },
+                    { "4ca4b1f2-0053-4fa4-890f-4a0a1b4b6f7e", 0, "30ed7f83-7426-4b17-b548-d858bcef2d5f", "admin@warriven.com", true, null, false, null, "Administrador", "ADMIN@WARRIVEN.COM", "ADMIN@WARRIVEN.COM", "AQAAAAIAAYagAAAAEFyHRZIXm/Hwvj9tjJR7v4aZUX2WuRUCyqFxBAX5Xx0SbDnflSRmuSwTSWzDPmNXgA==", null, false, "7fd0b839-3d70-4f72-a6f8-4516ccda4999", null, false, "admin@warriven.com", null },
+                    { "9f79a04d-78cb-45fc-bec7-3767d5a803e5", 0, "99c21530-a053-46a3-ad56-e2d3e3c06388", "visitante@warriven.com", true, null, false, null, "Usuario Visitante", "VISITANTE@WARRIVEN.COM", "VISITANTE@WARRIVEN.COM", "AQAAAAIAAYagAAAAEMIdYfOpd6h1RyCwrccvVdXntwDr0Uh6pFWfLkchi3syo7aSekku4T+Z10akSkTn2Q==", null, false, "fb0666f0-5022-4cb5-b555-a03e569f9f46", null, false, "visitante@warriven.com", null }
                 });
 
             migrationBuilder.InsertData(
@@ -187,9 +313,9 @@ namespace WarframeRivensAPI.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "6c195a77-42a9-4dd7-a65d-9e3bd2faccd3", "15328a7e-b31c-47e2-84be-e1ca12fe820d" },
-                    { "da20f131-7906-44b2-953b-e739e7aa95dc", "3ce6779f-457f-4440-88bf-99e5722a0e50" },
-                    { "cb508939-89f5-4f40-8f35-96002bc749e7", "7868fb6c-65ad-42c6-a2a6-9f9bcf01d6f4" }
+                    { "ea2b316f-75fb-4150-a882-e7c99d52f2af", "356cf89a-c1ac-488c-81eb-f91ae74ec5a9" },
+                    { "5a3a3046-e2ab-4752-a538-712e9bd59752", "4ca4b1f2-0053-4fa4-890f-4a0a1b4b6f7e" },
+                    { "9f1426a2-b729-4d30-99ae-b27efad1f1cd", "9f79a04d-78cb-45fc-bec7-3767d5a803e5" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -230,6 +356,51 @@ namespace WarframeRivensAPI.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Favoritos_IdUser",
+                table: "Favoritos",
+                column: "IdUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Favoritos_RivenId",
+                table: "Favoritos",
+                column: "RivenId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ofertas_IdComprador",
+                table: "Ofertas",
+                column: "IdComprador");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ofertas_RivenId",
+                table: "Ofertas",
+                column: "RivenId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rivens_IdPropietario",
+                table: "Rivens",
+                column: "IdPropietario");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rivens_WarUserId",
+                table: "Rivens",
+                column: "WarUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ventas_IdComprador",
+                table: "Ventas",
+                column: "IdComprador");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ventas_IdVendedor",
+                table: "Ventas",
+                column: "IdVendedor");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ventas_RivenId",
+                table: "Ventas",
+                column: "RivenId");
         }
 
         /// <inheritdoc />
@@ -251,7 +422,19 @@ namespace WarframeRivensAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Favoritos");
+
+            migrationBuilder.DropTable(
+                name: "Ofertas");
+
+            migrationBuilder.DropTable(
+                name: "Ventas");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Rivens");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

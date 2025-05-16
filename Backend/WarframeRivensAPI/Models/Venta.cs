@@ -20,7 +20,7 @@ namespace WarframeRivensAPI.Models
         public WarUser Vendedor { get; set; }
 
         [Required]
-        public decimal PrecioVenta { get; set; }
+        public int PrecioVenta { get; set; }
 
         [Required]
         public DateTime FechaVenta { get; set; }

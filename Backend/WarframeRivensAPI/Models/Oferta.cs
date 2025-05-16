@@ -12,7 +12,7 @@ namespace WarframeRivensAPI.Models
         public Riven Riven { get; set; }
 
         [Required]
-        public decimal PrecioVenta { get; set; }
+        public int PrecioVenta { get; set; }
 
         [Required]
         public string IdComprador { get; set; }

@@ -14,12 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WarRivenContext>(
         options => options.UseSqlServer(builder.Configuration.GetConnectionString("WarRivenConnection")));
 
-builder.Services.AddDbContext<WarUsersContext>(
-        options => options.UseSqlServer(builder.Configuration.GetConnectionString("UsersConnection")));
-
-
 builder.Services.AddIdentity<WarUser, IdentityRole>()
-    .AddEntityFrameworkStores<WarUsersContext>()
+    .AddEntityFrameworkStores<WarRivenContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<SignInManager<WarUser>>();

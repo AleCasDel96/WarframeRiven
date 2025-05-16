@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WarframeRivensAPI.Models
 {
@@ -12,10 +13,8 @@ namespace WarframeRivensAPI.Models
 
         [Required]
         public string Nombre { get; set; }
-
-        [Required]
-        public string IdPropietario { get; set; }
-        public WarUser Propietario { get; set; }
+        public string Polaridad { get; set; }
+        public int Maestria { get; set; }
 
         [Required]
         public string Atrib1 { get; set; }
@@ -35,6 +34,9 @@ namespace WarframeRivensAPI.Models
 
         public decimal? DValor { get; set; }
 
-
+        [Required]
+        [ForeignKey("AspNetUsers")]
+        public string IdPropietario { get; set; }
+        public WarUser Propietario { get; set; }
     }
 }
