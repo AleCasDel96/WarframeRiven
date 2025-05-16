@@ -18,7 +18,7 @@
     <tbody>
       <tr *ngFor="let oferta of ofertas 
                   | filterBy: ['nombreRiven', 'arma']: searchText 
-                  | orderBy: [sortColumn]: sortAsc 
+                  | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
                   | paginate: { itemsPerPage: 5, currentPage: p }">
         <td>
           <span
@@ -51,5 +51,7 @@
   </div>
 
   <!-- Paginación -->
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <pagination-controls (pageChange)="p = +$event"></pagination-controls>
+
+
 </div>

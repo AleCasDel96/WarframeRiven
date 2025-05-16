@@ -14,15 +14,18 @@ export class AuthService {
     return this.http.post(this.apiUrl + '/Login', { email, password }, { responseType: 'text' });
   }
 
-  register(email: string, password: string, nickname: string) {
+  register(email: string, password: string, nickname: string): Observable<any> {
     return this.http.post(this.apiUrl + '/Register', { email, password, nickname });
   }
 
-  saveToken(token: string) {
-    localStorage.setItem('jwt', token);
+  saveToken(token: string): void {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('jwt', token);
+    }
   }
 
   getToken(): string | null {
+    if (typeof window === 'undefined') return null;
     return localStorage.getItem('jwt');
   }
 
@@ -30,12 +33,23 @@ export class AuthService {
     const token = this.getToken();
     if (!token) return null;
 
-    const payload = token.split('.')[1];
-    const decoded = JSON.parse(atob(payload));
-    return decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+    try {
+      const payload = token.split('.')[1];
+      const decoded = JSON.parse(atob(payload));
+      return decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"] || null;
+    } catch (e) {
+      console.warn('Error decoding JWT:', e);
+      return null;
+    }
   }
 
   logout() {
-    localStorage.removeItem('jwt');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('jwt');
+    }
+  }
+
+  estaLogueado(): boolean {
+    return !!this.getToken();
   }
 }

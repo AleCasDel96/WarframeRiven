@@ -16,7 +16,7 @@
     <tbody>
       <tr *ngFor="let o of ofertas 
                   | filterBy: ['nombreRiven', 'arma']: searchText 
-                  | orderBy: [sortColumn]: sortAsc 
+                  | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
                   | paginate: { itemsPerPage: 5, currentPage: p }">
 
         <td>{{ o.nombreRiven }}</td>
@@ -24,18 +24,22 @@
         <td>{{ o.precioVenta }}</td>
         <td>
           <span *ngIf="!o.partida && !o.destino" style="color: red;">❌ Ninguna confirmación</span>
-          <span *ngIf="(o.partida && !o.destino) || (!o.partida && o.destino)" style="color: orange;">🟡 Confirmación parcial</span>
+          <span *ngIf="(o.partida && !o.destino) || (!o.partida && o.destino)" style="color: orange;">🟡 Confirmación
+            parcial</span>
           <span *ngIf="o.partida && o.destino" style="color: green;">✅ Lista para traspasar</span>
         </td>
         <td>
-          <button *ngIf="o.disponibilidad" (click)="cerrar(o.id)">Cerrar</button>
-          <button *ngIf="!o.disponibilidad && !o.partida" (click)="confirmarVenta(o.id)">Confirmar venta</button>
-          <button *ngIf="o.partida && o.destino" (click)="transpaso(o.id)">Traspaso</button>
-          <button (click)="eliminar(o.id)">Eliminar</button>
+          <button *ngIf="o.disponibilidad" (click)="cerrar(o.id!)">Cerrar</button>
+          <button *ngIf="!o.disponibilidad && !o.partida" (click)="confirmarVenta(o.id!)">Confirmar venta</button>
+          <button *ngIf="o.partida && o.destino" (click)="transpaso(o.id!)">Traspaso</button>
+          <button (click)="eliminar(o.id!)">Eliminar</button>
+
         </td>
       </tr>
     </tbody>
   </table>
 
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <pagination-controls (pageChange)="p = +$event"></pagination-controls>
+
+
 </div>

@@ -18,7 +18,7 @@
     <tbody>
       <tr *ngFor="let r of rivens 
                   | filterBy: ['nombre', 'arma']: searchText 
-                  | orderBy: [sortColumn]: sortAsc 
+                  | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
                   | paginate: { itemsPerPage: 5, currentPage: p }">
         <td>{{ r.nombre }}</td>
         <td>{{ r.arma }}</td>
@@ -38,5 +38,7 @@
   </table>
 
   <!-- Paginación -->
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+<pagination-controls (pageChange)="p = +$event"></pagination-controls>
+
+
 </div>

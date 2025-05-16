@@ -1,43 +1,47 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VentaService, Venta } from '../services/venta.service';
-import { RivenService, Riven } from '../services/riven.service';
 import { FormsModule } from '@angular/forms';
+
+import { VentaService } from '../services/venta.service';
+import { RivenService } from '../services/riven.service';
+import { Venta } from '../models/venta.model';
+import { Riven } from '../models/riven.model';
+
+import { NgxPaginationModule } from 'ngx-pagination';
 import { NgPipesModule } from 'ngx-pipes';
 
 @Component({
   selector: 'app-ventas',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgPipesModule],
-  templateUrl: './ventas.component.html',
-  styleUrls: ['./ventas.component.css']
+  imports: [CommonModule, FormsModule, NgxPaginationModule, NgPipesModule],
+  templateUrl: './ventas.component.html'
 })
 export class VentasComponent implements OnInit {
   ventas: Venta[] = [];
+  searchText = '';
+  sortColumn = 'fechaVenta';
+  sortAsc = false;
+  p = 1;
   error = '';
+
   rivenSeleccionado: Riven | null = null;
   popupX = 0;
   popupY = 0;
   showPopup = false;
 
-  searchText = '';
-  sortColumn = 'fechaVenta';
-  sortAsc = false;
-  p = 1;
-
   constructor(
     private ventaService: VentaService,
     private rivenService: RivenService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.ventaService.getMisVentas().subscribe({
       next: data => this.ventas = data,
-      error: () => this.error = 'No se pudieron cargar las ventas.'
+      error: () => this.error = 'No se pudo cargar el historial de ventas.'
     });
   }
 
-  ordenarPor(col: string) {
+  ordenarPor(col: string): void {
     if (this.sortColumn === col) {
       this.sortAsc = !this.sortAsc;
     } else {
@@ -46,11 +50,11 @@ export class VentasComponent implements OnInit {
     }
   }
 
-  mostrarRiven(id: string, event: MouseEvent) {
+  mostrarRiven(idRiven: string, event: MouseEvent): void {
     this.popupX = event.clientX;
     this.popupY = event.clientY;
-    this.rivenService.getRiven(id).subscribe({
-      next: r => {
+    this.rivenService.getPorId(idRiven).subscribe({
+      next: (r: Riven) => {
         this.rivenSeleccionado = r;
         this.showPopup = true;
       },
@@ -58,7 +62,7 @@ export class VentasComponent implements OnInit {
     });
   }
 
-  ocultarRiven() {
+  ocultarRiven(): void {
     this.showPopup = false;
   }
 }

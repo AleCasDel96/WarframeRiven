@@ -1,17 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Oferta } from '../models/oferta.model';
 import { Observable } from 'rxjs';
-
-
-export interface Oferta {
-  id: string;
-  idRiven: string;
-  idComprador: string;
-  precioVenta: number;
-  disponibilidad: boolean;
-  partida: boolean;
-  destino: boolean;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -21,35 +11,30 @@ export class OfertaService {
 
   constructor(private http: HttpClient) {}
 
-  // Ofertas disponibles públicamente
-  getPublicas(): Observable<Oferta[]> {
-    return this.http.get<Oferta[]>(this.apiUrl);
-  }
-
-  // Ofertas propias del usuario autenticado
   getMisOfertas(): Observable<Oferta[]> {
-    return this.http.get<Oferta[]>(`${this.apiUrl}/mias`);
+    return this.http.get<Oferta[]>(`${this.apiUrl}/MisOfertas`);
   }
 
   getMisPujas(): Observable<Oferta[]> {
-  return this.http.get<Oferta[]>(`${this.apiUrl}/mispujas`);
-}
-
-  // Crear nueva oferta
-  crear(oferta: Partial<Oferta>): Observable<Oferta> {
-    return this.http.post<Oferta>(this.apiUrl, oferta);
+    return this.http.get<Oferta[]>(`${this.apiUrl}/MisPujas`);
   }
 
-  // Abrir o cerrar una oferta
-  abrir(id: string): Observable<any> {
-    return this.http.put(`${this.apiUrl}/open/${id}`, {});
+  getPublicas(): Observable<Oferta[]> {
+    return this.http.get<Oferta[]>(`${this.apiUrl}/Publicas`);
+  }
+
+  crear(oferta: Partial<Oferta>): Observable<any> {
+    return this.http.post(this.apiUrl, oferta);
   }
 
   cerrar(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/open/${id}`);
+    return this.http.get(`${this.apiUrl}/Cerrar/${id}`);
   }
 
-  // Confirmar oferta (vendedor / comprador)
+  abrir(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/Open/${id}`); // ✅ NUEVO MÉTODO
+  }
+
   confirmarVenta(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/ComfirVen/${id}`);
   }
@@ -57,14 +42,12 @@ export class OfertaService {
   confirmarCompra(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/ComfirCom/${id}`);
   }
- 
-  // Realizar el traspaso (crear venta y transferir)
+
   transpaso(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/Transpaso/${id}`);
+    return this.http.get(`${this.apiUrl}/Traspaso/${id}`);
   }
 
-  // Eliminar una oferta
-  eliminar(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  eliminar(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

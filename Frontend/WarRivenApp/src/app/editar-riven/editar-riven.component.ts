@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RivenService, Riven } from '../services/riven.service';
+
+import { RivenService } from '../services/riven.service';
+import { Riven } from '../models/riven.model';
 
 @Component({
   selector: 'app-editar-riven',
@@ -10,7 +12,6 @@ import { RivenService, Riven } from '../services/riven.service';
   imports: [CommonModule, FormsModule],
   templateUrl: './editar-riven.component.html'
 })
-
 export class EditarRivenComponent implements OnInit {
   riven: Partial<Riven> = {};
   error = '';
@@ -20,19 +21,19 @@ export class EditarRivenComponent implements OnInit {
     private route: ActivatedRoute,
     private rivenService: RivenService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id') || '';
     if (this.id) {
-      this.rivenService.getRiven(this.id).subscribe({
-        next: r => this.riven = r,
+      this.rivenService.getPorId(this.id).subscribe({
+        next: (r: Riven) => this.riven = r,
         error: () => this.error = 'No se pudo cargar el Riven.'
       });
     }
   }
 
-  actualizar() {
+  actualizar(): void {
     if (!this.riven.nombre || !this.riven.arma || !this.riven.stat1 || this.riven.valor1 === null) {
       this.error = 'Debes introducir nombre, arma y al menos una estadística válida.';
       return;
@@ -60,9 +61,9 @@ export class EditarRivenComponent implements OnInit {
       if (!valorPresente) delete cuerpo[valorKey];
     }
 
-    this.rivenService.actualizarRiven(this.id, cuerpo).subscribe({
-      next: () => this.router.navigate(['/rivens']),
-      error: () => this.error = 'Error al actualizar el Riven'
+    this.rivenService.editar(this.id, cuerpo).subscribe({
+      next: () => this.router.navigate(['/mis-rivens']),
+      error: () => this.error = 'Error al actualizar el Riven.'
     });
   }
 }

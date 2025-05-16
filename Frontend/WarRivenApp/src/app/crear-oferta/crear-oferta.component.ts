@@ -1,49 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
+
 import { OfertaService } from '../services/oferta.service';
-import { RivenService, Riven } from '../services/riven.service';
-import { Router } from '@angular/router';
+import { Oferta } from '../models/oferta.model';
 
 @Component({
   selector: 'app-crear-oferta',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './crear-oferta.component.html'
 })
-export class CrearOfertaComponent implements OnInit {
-  rivens: Riven[] = [];
-  idRivenSeleccionado = '';
-  precioVenta = 0;
+export class CrearOfertaComponent {
+  @Input() idRivenSeleccionado?: string;
+
+  precio: number = 0;
   error = '';
 
-  constructor(
-    private rivenService: RivenService,
-    private ofertaService: OfertaService,
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
-    this.rivenService.getMisRivens().subscribe({
-      next: (data) => this.rivens = data,
-      error: () => this.error = 'No se pudieron cargar tus Rivens.'
-    });
-  }
+  constructor(private ofertaService: OfertaService, private router: Router) {}
 
   crearOferta() {
-    if (!this.idRivenSeleccionado || this.precioVenta <= 0) {
-      this.error = 'Selecciona un Riven y un precio válido.';
+    if (!this.idRivenSeleccionado) {
+      this.error = 'No se ha seleccionado un Riven válido.';
       return;
     }
 
-    this.ofertaService.crear({
+    const nuevaOferta: Partial<Oferta> = {
       idRiven: this.idRivenSeleccionado,
-      precioVenta: this.precioVenta
-    }).subscribe({
-      next: () => this.router.navigate(['/ofertas']),
-      error: (e) => {
-        this.error = e.error || 'Error al crear la oferta.';
-      }
+      precioVenta: this.precio,
+      disponibilidad: false,
+      partida: false,
+      destino: false
+    };
+
+    this.ofertaService.crear(nuevaOferta).subscribe({
+      next: () => this.router.navigate(['/mis-ofertas']),
+      error: () => this.error = 'No se pudo crear la oferta.'
     });
   }
 }
+

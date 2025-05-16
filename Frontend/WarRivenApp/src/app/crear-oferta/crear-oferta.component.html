@@ -2,18 +2,21 @@
   <h2>Crear Oferta</h2>
 
   <form (ngSubmit)="crearOferta()">
-    <label for="riven">Selecciona tu Riven:</label>
-    <select [(ngModel)]="idRivenSeleccionado" name="riven" required>
-      <option *ngFor="let riven of rivens" [value]="riven.id">
-        {{ riven.arma }} – {{ riven.stat1 }}
-      </option>
-    </select>
+    <label for="precio">Precio:</label>
+    <input
+      type="number"
+      id="precio"
+      name="precio"
+      [(ngModel)]="precio"
+      required
+      min="0"
+    />
 
-    <label for="precio">Precio de venta:</label>
-    <input type="number" [(ngModel)]="precioVenta" name="precio" required />
+    <div style="margin-top: 1rem;">
+      <button type="submit">Crear</button>
+    </div>
 
-    <button type="submit">Crear oferta</button>
+    <p *ngIf="error" style="color: red;">{{ error }}</p>
   </form>
-
-  <p *ngIf="error" style="color:red;">{{ error }}</p>
 </div>
+

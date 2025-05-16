@@ -1,46 +1,38 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Riven } from '../models/riven.model';
 import { Observable } from 'rxjs';
 
-export interface Riven {
-  id: string;
-  nombre: string;
-  arma: string;
-  stat1: string;
-  valor1: number;
-  stat2?: string;
-  valor2?: number;
-  stat3?: string;
-  valor3?: number;
-  stat4?: string;
-  valor4?: number;
-}
-
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class RivenService {
-    private apiUrl = 'https://localhost:5001/api/Rivens';
+  private apiUrl = 'https://localhost:5001/api/Rivens';
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-    crearRiven(riven: Partial<Riven>): Observable<Riven> {
-        return this.http.post<Riven>(this.apiUrl, riven);
-    }
+  // Obtener los rivens del usuario logueado
+  getMisRivens(): Observable<Riven[]> {
+    return this.http.get<Riven[]>(this.apiUrl + '/MisRivens');
+  }
 
-    getRiven(id: string): Observable<Riven> {
-        return this.http.get<Riven>(`${this.apiUrl}/${id}`);
-    }
+  // Obtener un riven por su ID
+  getPorId(id: string): Observable<Riven> {
+    return this.http.get<Riven>(`${this.apiUrl}/${id}`);
+  }
 
-    actualizarRiven(id: string, riven: Partial<Riven>): Observable<void> {
-        return this.http.put<void>(`${this.apiUrl}/${id}`, riven);
-    }
+  // Crear un riven
+  crear(riven: Partial<Riven>): Observable<any> {
+    return this.http.post(this.apiUrl, riven);
+  }
 
-    eliminarRiven(id: string): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/${id}`);
-    }
+  // Editar un riven
+  editar(id: string, riven: Partial<Riven>): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, riven);
+  }
 
-    getMisRivens(): Observable<Riven[]> {
-        return this.http.get<Riven[]>(this.apiUrl);
-    }
+  // Eliminar un riven
+  eliminar(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

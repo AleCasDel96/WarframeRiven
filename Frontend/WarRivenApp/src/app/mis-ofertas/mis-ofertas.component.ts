@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { OfertaService, Oferta } from '../services/oferta.service';
-import { RivenService, Riven } from '../services/riven.service';
+import { OfertaService } from '../services/oferta.service';
+import { RivenService } from '../services/riven.service';
+import { Oferta } from '../models/oferta.model';
+import { Riven } from '../models/riven.model';
 import { Router } from '@angular/router';
 import { NgPipesModule } from 'ngx-pipes';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-mis-ofertas',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgPipesModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgxPaginationModule,
+    NgPipesModule
+  ],
   templateUrl: './mis-ofertas.component.html',
   styleUrls: ['./mis-ofertas.component.css']
 })
@@ -31,7 +39,7 @@ export class MisOfertasComponent implements OnInit {
     private ofertaService: OfertaService,
     private rivenService: RivenService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.ofertaService.getMisOfertas().subscribe({
@@ -40,7 +48,7 @@ export class MisOfertasComponent implements OnInit {
     });
   }
 
-  ordenarPor(campo: string) {
+  ordenarPor(campo: string): void {
     if (this.sortColumn === campo) {
       this.sortAsc = !this.sortAsc;
     } else {
@@ -49,40 +57,40 @@ export class MisOfertasComponent implements OnInit {
     }
   }
 
-  cerrar(id: string) {
+  cerrar(id: string): void {
     this.ofertaService.cerrar(id).subscribe(() => this.ngOnInit());
   }
 
-  abrir(id: string) {
+  abrir(id: string): void {
     this.ofertaService.abrir(id).subscribe(() => this.ngOnInit());
   }
 
-  confirmarVenta(id: string) {
+  confirmarVenta(id: string): void {
     this.ofertaService.confirmarVenta(id).subscribe(() => this.ngOnInit());
   }
 
-  confirmarCompra(id: string) {
+  confirmarCompra(id: string): void {
     this.ofertaService.confirmarCompra(id).subscribe(() => this.ngOnInit());
   }
 
-  transpaso(id: string) {
+  transpaso(id: string): void {
     this.ofertaService.transpaso(id).subscribe({
       next: () => this.ngOnInit(),
       error: () => this.error = 'No se pudo completar el traspaso.'
     });
   }
 
-  eliminar(id: string) {
+  eliminar(id: string): void {
     if (confirm('¿Estás seguro de eliminar esta oferta?')) {
       this.ofertaService.eliminar(id).subscribe(() => this.ngOnInit());
     }
   }
 
-  mostrarRiven(id: string, event: MouseEvent) {
+  mostrarRiven(id: string, event: MouseEvent): void {
     this.popupX = event.clientX;
     this.popupY = event.clientY;
-    this.rivenService.getRiven(id).subscribe({
-      next: r => {
+    this.rivenService.getPorId(id).subscribe({
+      next: (r: Riven) => {
         this.rivenSeleccionado = r;
         this.showPopup = true;
       },
@@ -90,7 +98,7 @@ export class MisOfertasComponent implements OnInit {
     });
   }
 
-  ocultarRiven() {
+  ocultarRiven(): void {
     this.showPopup = false;
   }
 }

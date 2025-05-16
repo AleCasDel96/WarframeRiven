@@ -14,9 +14,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let o of pujas 
+      <tr *ngFor="let o of ofertas 
                   | filterBy: ['nombreRiven', 'arma']: searchText 
-                  | orderBy: [sortColumn]: sortAsc 
+                  | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
                   | paginate: { itemsPerPage: 5, currentPage: p }">
         <td>{{ o.nombreRiven }}</td>
         <td>{{ o.arma }}</td>
@@ -27,11 +27,13 @@
           <span *ngIf="o.partida && o.destino" style="color: green;">✅ Lista para traspaso</span>
         </td>
         <td>
-          <button *ngIf="!o.disponibilidad && !o.destino" (click)="confirmarCompra(o.id)">Confirmar compra</button>
+          <button *ngIf="!o.disponibilidad && !o.destino" (click)="confirmarCompra(o.id!)">Confirmar compra</button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  <pagination-controls (pageChange)="p = +$event"></pagination-controls>
+
+
 </div>

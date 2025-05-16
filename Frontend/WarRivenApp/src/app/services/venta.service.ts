@@ -1,15 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Venta } from '../models/venta.model';
 import { Observable } from 'rxjs';
-
-export interface Venta {
-  id: string;
-  idRiven: string;
-  idComprador: string;
-  idVendedor: string;
-  precioVenta: number;
-  fechaVenta: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +11,8 @@ export class VentaService {
 
   constructor(private http: HttpClient) {}
 
+  // Obtener historial de ventas del usuario logueado
   getMisVentas(): Observable<Venta[]> {
-    return this.http.get<Venta[]>(this.apiUrl);
+    return this.http.get<Venta[]>(`${this.apiUrl}/MisVentas`);
   }
 }
