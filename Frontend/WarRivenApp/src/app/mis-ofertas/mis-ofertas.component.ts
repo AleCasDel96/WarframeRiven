@@ -30,20 +30,33 @@ export class MisOfertasComponent implements OnInit {
   sortAsc = true;
   p = 1;
 
+  filtroArma: string = '';
+  armasDisponibles: string[] = [];
+
   rivenSeleccionado: Riven | null = null;
   popupX = 0;
   popupY = 0;
   showPopup = false;
 
+  pujaOferta: Oferta | null = null;
+  nuevaPuja = 0;
+  errorPuja = '';
+
   constructor(
     private ofertaService: OfertaService,
     private rivenService: RivenService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.ofertaService.getMisOfertas().subscribe({
-      next: data => this.ofertas = data,
+      next: data => {
+        this.ofertas = data;
+
+        // Extrae armas únicas para el filtro
+        const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
+        this.armasDisponibles = Array.from(armasSet) as string[];
+      },
       error: () => this.error = 'No se pudieron cargar tus ofertas.'
     });
   }
@@ -84,6 +97,33 @@ export class MisOfertasComponent implements OnInit {
     if (confirm('¿Estás seguro de eliminar esta oferta?')) {
       this.ofertaService.eliminar(id).subscribe(() => this.ngOnInit());
     }
+  }
+
+  abrirPuja(oferta: Oferta): void {
+    this.pujaOferta = oferta;
+    this.nuevaPuja = oferta.precioVenta || 0;
+    this.errorPuja = '';
+  }
+
+  cerrarPuja(): void {
+    this.pujaOferta = null;
+  }
+
+  confirmarPuja(): void {
+    if (!this.pujaOferta) return;
+
+    const id = this.pujaOferta.id!;
+    this.ofertaService.editar(id, { precioVenta: this.nuevaPuja }).subscribe({
+      next: () => {
+        this.pujaOferta = null;
+        this.ngOnInit();
+      },
+      error: () => this.errorPuja = 'No se pudo modificar la puja.'
+    });
+  }
+
+  puedeEditarPuja(oferta: Oferta): boolean {
+    return !!oferta.disponibilidad && !oferta.partida && !oferta.destino;
   }
 
   mostrarRiven(id: string, event: MouseEvent): void {

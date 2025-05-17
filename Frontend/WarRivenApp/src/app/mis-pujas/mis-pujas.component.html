@@ -1,13 +1,18 @@
-<div style="max-width: 800px; margin: 2rem auto;">
-  <h2>Mis Pujas</h2>
+<div class="contenedor">
+  <h2 class="titulo">Mis Pujas</h2>
 
-  <input [(ngModel)]="searchText" placeholder="🔍 Buscar por nombre o arma" />
+  <div class="filtros">
+    <input [(ngModel)]="searchText" placeholder="Buscar por nombre" />
+    <select [(ngModel)]="filtroArma">
+      <option value="">Todas las armas</option>
+      <option *ngFor="let arma of armasDisponibles" [value]="arma">{{ arma }}</option>
+    </select>
+  </div>
 
-  <table border="1" cellpadding="8" style="width: 100%; margin-top: 1rem;">
+  <table class="tabla">
     <thead>
       <tr>
         <th (click)="ordenarPor('nombreRiven')" style="cursor: pointer;">Nombre</th>
-        <th (click)="ordenarPor('arma')" style="cursor: pointer;">Arma</th>
         <th (click)="ordenarPor('precioVenta')" style="cursor: pointer;">Precio</th>
         <th>Estado</th>
         <th>Acción</th>
@@ -15,19 +20,29 @@
     </thead>
     <tbody>
       <tr *ngFor="let o of ofertas 
-                  | filterBy: ['nombreRiven', 'arma']: searchText 
+                  | filterBy: ['nombreRiven']: searchText 
+                  | filterBy: ['arma']: filtroArma 
                   | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
-                  | paginate: { itemsPerPage: 5, currentPage: p }">
-        <td>{{ o.nombreRiven }}</td>
-        <td>{{ o.arma }}</td>
-        <td>{{ o.precioVenta }}</td>
+                  | paginate: { itemsPerPage: 12, currentPage: p }">
         <td>
-          <span *ngIf="!o.partida && !o.destino" style="color: red;">❌ Ninguna confirmación</span>
-          <span *ngIf="(o.partida && !o.destino) || (!o.partida && o.destino)" style="color: orange;">🟡 Confirmación parcial</span>
-          <span *ngIf="o.partida && o.destino" style="color: green;">✅ Lista para traspaso</span>
+          <span class="nombre-hover" 
+                (mouseenter)="mostrarRiven(o.idRiven, $event)" 
+                (mouseleave)="ocultarRiven()">
+            {{ o.nombreRiven }}
+          </span>
+        </td>
+        <td>{{ o.precioVenta }} <img src="assets/platino-icon.png" alt="p" class="icono-inline" /></td>
+        <td>
+          <span *ngIf="!o.partida && !o.destino" class="estado rojo">Ninguna confirmación</span>
+          <span *ngIf="(o.partida && !o.destino) || (!o.partida && o.destino)" class="estado naranja">Confirmación
+            parcial</span>
+          <span *ngIf="o.partida && o.destino" class="estado verde">Lista para traspaso</span>
         </td>
         <td>
           <button *ngIf="!o.disponibilidad && !o.destino" (click)="confirmarCompra(o.id!)">Confirmar compra</button>
+          <img *ngIf="!o.disponibilidad" src="assets/chat-icon.png" alt="Copiar mensaje"
+            style="width: 24px; cursor: pointer;" (click)="copiarMensaje(o)" title="Copiar mensaje para el chat" />
+
         </td>
       </tr>
     </tbody>
@@ -35,5 +50,13 @@
 
   <pagination-controls (pageChange)="p = +$event"></pagination-controls>
 
+  <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
+    <strong>{{ rivenSeleccionado.nombre }}</strong><br>
+    {{ rivenSeleccionado.arma }}<br><br>
+    <div *ngIf="rivenSeleccionado.stat1">{{ rivenSeleccionado.stat1 }}: {{ rivenSeleccionado.valor1 }}</div>
+    <div *ngIf="rivenSeleccionado.stat2">{{ rivenSeleccionado.stat2 }}: {{ rivenSeleccionado.valor2 }}</div>
+    <div *ngIf="rivenSeleccionado.stat3">{{ rivenSeleccionado.stat3 }}: {{ rivenSeleccionado.valor3 }}</div>
+    <div *ngIf="rivenSeleccionado.stat4">{{ rivenSeleccionado.stat4 }}: {{ rivenSeleccionado.valor4 }}</div>
+  </div>
 
 </div>

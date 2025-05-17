@@ -1,39 +1,41 @@
-<div style="max-width: 600px; margin: 2rem auto;">
-  <h2>Crear nuevo Riven</h2>
+<div class="contenedor">
+  <h2 class="titulo">Crear nuevo Riven</h2>
 
-  <form (ngSubmit)="crear()">
-    <label>Nombre del Riven:</label>
+  <form (ngSubmit)="crear()" class="formulario">
+    <label class="campo-label">Nombre del Riven:</label>
     <input [(ngModel)]="riven.nombre" name="nombre" required />
 
-    <label>Arma:</label>
+    <label class="campo-label">Arma:</label>
     <input [(ngModel)]="riven.arma" name="arma" required />
 
-    <h4>Estadísticas</h4>
+    <h4 class="subtitulo">Estadísticas</h4>
 
-    <!-- Stat 1 obligatorio -->
-    <label>Stat 1:</label>
+    <label class="campo-label">Stat 1:</label>
     <input [(ngModel)]="riven.stat1" name="stat1" required />
-    <label>Valor 1:</label>
+
+    <label class="campo-label">Valor 1:</label>
     <input type="number" [(ngModel)]="riven.valor1" name="valor1" required />
 
-    <!-- Opcionales -->
-    <label>Stat 2:</label>
+    <label class="campo-label">Stat 2:</label>
     <input [(ngModel)]="riven.stat2" name="stat2" />
-    <label>Valor 2:</label>
+
+    <label class="campo-label">Valor 2:</label>
     <input type="number" [(ngModel)]="riven.valor2" name="valor2" />
 
-    <label>Stat 3:</label>
+    <label class="campo-label">Stat 3:</label>
     <input [(ngModel)]="riven.stat3" name="stat3" />
-    <label>Valor 3:</label>
+
+    <label class="campo-label">Valor 3:</label>
     <input type="number" [(ngModel)]="riven.valor3" name="valor3" />
 
-    <label>Stat 4:</label>
+    <label class="campo-label">Stat 4:</label>
     <input [(ngModel)]="riven.stat4" name="stat4" />
-    <label>Valor 4:</label>
+
+    <label class="campo-label">Valor 4:</label>
     <input type="number" [(ngModel)]="riven.valor4" name="valor4" />
 
-    <button type="submit">Crear</button>
+    <button type="submit" class="boton">Crear</button>
   </form>
 
-  <p *ngIf="error" style="color:red;">{{ error }}</p>
+  <p *ngIf="error" class="error">{{ error }}</p>
 </div>

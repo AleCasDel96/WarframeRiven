@@ -24,6 +24,9 @@ export class VentasComponent implements OnInit {
   p = 1;
   error = '';
 
+  filtroArma: string = '';
+  armasDisponibles: string[] = [];
+
   rivenSeleccionado: Riven | null = null;
   popupX = 0;
   popupY = 0;
@@ -32,11 +35,16 @@ export class VentasComponent implements OnInit {
   constructor(
     private ventaService: VentaService,
     private rivenService: RivenService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.ventaService.getMisVentas().subscribe({
-      next: data => this.ventas = data,
+      next: data => {
+        this.ventas = data;
+
+        const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
+        this.armasDisponibles = Array.from(armasSet) as string[];
+      },
       error: () => this.error = 'No se pudo cargar el historial de ventas.'
     });
   }

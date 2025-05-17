@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import { MensajeService } from './services/mensaje.service';
 import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
@@ -9,8 +10,18 @@ import { CommonModule, NgIf } from '@angular/common';
   imports: [CommonModule, RouterModule, NgIf],
   templateUrl: './app.component.html'
 })
-export class AppComponent {
-  constructor(public auth: AuthService, private router: Router) {}
+export class AppComponent implements OnInit {
+  mensaje: string | null = null;
+
+  constructor(
+    public auth: AuthService,
+    private router: Router,
+    private mensajeService: MensajeService
+  ) {}
+
+  ngOnInit(): void {
+    this.mensaje = this.mensajeService.get();
+  }
 
   logout(): void {
     this.auth.logout();

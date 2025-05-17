@@ -27,6 +27,12 @@ export class LoginComponent {
 
   constructor(private auth: AuthService, private router: Router) { }
 
+  ngOnInit(): void {
+  if (this.auth.estaLogueado()) {
+    this.auth.logout();
+  }
+}
+
   login() {
     this.auth.login(this.email, this.password).subscribe({
       next: (token) => {
@@ -49,7 +55,10 @@ export class LoginComponent {
     this.auth.register(this.emailNuevo, this.passNuevo, this.nickNuevo).subscribe({
       next: () => {
         this.mensajeRegistro = 'Usuario registrado correctamente. Ahora puedes iniciar sesión.';
-        this.mostrarRegistro = false;
+
+        setTimeout(() => {
+          this.mostrarRegistro = false;
+        }, 1500);
       },
       error: err => {
         this.mensajeRegistro = err.error || 'Error al registrar usuario.';

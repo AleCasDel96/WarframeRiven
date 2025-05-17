@@ -11,10 +11,11 @@ import { InicioComponent } from './inicio/inicio.component';
 import { PerfilComponent } from './perfil/perfil.component';
 import { VentasComponent } from './ventas/ventas.component';
 import { MisPujasComponent } from './mis-pujas/mis-pujas.component';
+import { noAuthGuard } from './guards/no-auth.guard';
 
 export const routes: Routes = [
   { path: '', component: InicioComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [noAuthGuard] },
   { path: 'rivens', component: RivensComponent, canActivate: [authGuard] },
   { path: 'crear-riven', component: CrearRivenComponent, canActivate: [authGuard] },
   { path: 'editar-riven/:id', component: EditarRivenComponent, canActivate: [authGuard] },

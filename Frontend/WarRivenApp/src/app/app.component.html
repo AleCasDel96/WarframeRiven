@@ -1,27 +1,31 @@
-<nav style="background: #333; color: white; padding: 1rem; display: flex; align-items: center;">
-  <!-- Accesibles sin login -->
-  <a routerLink="/ofertas" routerLinkActive="active-link" style="margin-right: 1rem;">Ofertas Públicas</a>
+<nav class="barra-navegacion">
+  <a routerLink="/" class="titulo-app">Warframe Rivens</a>
 
-  <!-- Solo si NO está logueado -->
+  <a routerLink="/ofertas" routerLinkActive="active-link" class="enlace">Ofertas Públicas</a>
+
   <ng-container *ngIf="!auth.estaLogueado(); else logueado">
-    <a routerLink="/login" routerLinkActive="active-link" style="margin-right: 1rem;">Login</a>
+    <a routerLink="/login" routerLinkActive="active-link" class="enlace">Login</a>
   </ng-container>
 
-  <!-- Solo si SÍ está logueado -->
   <ng-template #logueado>
-    <a routerLink="/rivens" routerLinkActive="active-link" style="margin-right: 1rem;">Mis Rivens</a>
-    <a routerLink="/mis-pujas" routerLinkActive="active-link" style="margin-right: 1rem;">Mis Pujas</a>
-    <a routerLink="/mis-ofertas" routerLinkActive="active-link" style="margin-right: 1rem;">Mis Ofertas</a>
+    <a routerLink="/rivens" routerLinkActive="active-link" class="enlace">Mis Rivens</a>
+    <a routerLink="/mis-pujas" routerLinkActive="active-link" class="enlace">Mis Pujas</a>
+    <a routerLink="/mis-ofertas" routerLinkActive="active-link" class="enlace">Mis Ofertas</a>
 
-    <div style="margin-left: auto; display: flex; align-items: center;">
-      <a routerLink="/perfil" style="margin-right: 1rem; color: white; text-decoration: underline;">
-        {{ nickname }}
-      </a>
-      <button (click)="logout()" style="color: white; background: transparent; border: 1px solid white; padding: 0.25rem 0.5rem; cursor: pointer;">
-        Cerrar sesión
-      </button>
+    <div class="usuario">
+      <a routerLink="/perfil" class="perfil">{{ nickname }}</a>
+      <button (click)="logout()" class="boton-cerrar">Cerrar sesión</button>
     </div>
   </ng-template>
 </nav>
 
+<!-- Mensaje del servicio -->
+<div *ngIf="mensaje" class="mensaje-alerta" (click)="mensaje = null">
+  {{ mensaje }}
+</div>
+
 <router-outlet></router-outlet>
+
+<footer class="footer">
+  WarRiven © 2025 - Todos los derechos reservados
+</footer>

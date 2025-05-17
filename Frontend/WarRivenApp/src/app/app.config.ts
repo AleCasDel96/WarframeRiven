@@ -7,7 +7,7 @@ import { AuthInterceptor } from './auth.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
-      withFetch(), // ✅ activa fetch API
+      withFetch(), 
       withInterceptors([AuthInterceptor])
     ),
     provideRouter(routes)

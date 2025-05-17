@@ -1,12 +1,18 @@
-<div style="max-width: 800px; margin: 2rem auto;">
-  <h2>Mis Rivens</h2>
-    <a routerLink="/mis-pujas"><button> Ver mis pujas</button></a>
-    <a routerLink="/ventas"><button>Ver mis ventas</button></a>
-  <!-- Buscador -->
-  <input [(ngModel)]="searchText" placeholder="🔍 Buscar por nombre o arma" />
+<div class="contenedor">
+  <h2 class="titulo">Mis Rivens</h2>
 
-  <!-- Tabla -->
-  <table border="1" cellpadding="8" style="width: 100%; margin-top: 1rem;">
+  <div class="filtros">
+    <a routerLink="/mis-pujas"><button>Ver mis pujas</button></a>
+    <a routerLink="/ventas"><button>Ver mis ventas</button></a>
+
+    <input [(ngModel)]="searchText" placeholder="Buscar por nombre" />
+    <select [(ngModel)]="filtroArma">
+      <option value="">Todas las armas</option>
+      <option *ngFor="let arma of armasDisponibles" [value]="arma">{{ arma }}</option>
+    </select>
+  </div>
+
+  <table class="tabla">
     <thead>
       <tr>
         <th (click)="ordenarPor('nombre')" style="cursor: pointer;">Nombre</th>
@@ -17,7 +23,8 @@
     </thead>
     <tbody>
       <tr *ngFor="let r of rivens 
-                  | filterBy: ['nombre', 'arma']: searchText 
+                  | filterBy: ['nombre']: searchText  
+                  | filterBy: ['arma']: filtroArma 
                   | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
                   | paginate: { itemsPerPage: 5, currentPage: p }">
         <td>{{ r.nombre }}</td>
@@ -37,8 +44,5 @@
     </tbody>
   </table>
 
-  <!-- Paginación -->
-<pagination-controls (pageChange)="p = +$event"></pagination-controls>
-
-
+  <pagination-controls (pageChange)="p = +$event"></pagination-controls>
 </div>
