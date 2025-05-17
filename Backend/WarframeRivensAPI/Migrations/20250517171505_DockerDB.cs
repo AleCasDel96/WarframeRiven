@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WarframeRivensAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class DockerSQL : Migration
+    public partial class DockerDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -229,20 +229,19 @@ namespace WarframeRivensAPI.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdRiven = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RivenId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IdVendedor = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PrecioVenta = table.Column<int>(type: "int", nullable: false),
-                    IdComprador = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Disponibilidad = table.Column<bool>(type: "bit", nullable: false),
-                    Partida = table.Column<bool>(type: "bit", nullable: false),
-                    Destino = table.Column<bool>(type: "bit", nullable: false)
+                    Disponibilidad = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ofertas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ofertas_AspNetUsers_IdComprador",
-                        column: x => x.IdComprador,
+                        name: "FK_Ofertas_AspNetUsers_IdVendedor",
+                        column: x => x.IdVendedor,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -260,8 +259,8 @@ namespace WarframeRivensAPI.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdRiven = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RivenId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdComprador = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdVendedor = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdComprador = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PrecioVenta = table.Column<int>(type: "int", nullable: false),
                     FechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -293,9 +292,9 @@ namespace WarframeRivensAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "5a3a3046-e2ab-4752-a538-712e9bd59752", null, "admin", "ADMIN" },
-                    { "9f1426a2-b729-4d30-99ae-b27efad1f1cd", null, "basic", "BASIC" },
-                    { "ea2b316f-75fb-4150-a882-e7c99d52f2af", null, "confirmado", "CONFIRMADO" }
+                    { "3b9b4d06-155b-4bc1-8f84-16844712cbdb", null, "confirmado", "CONFIRMADO" },
+                    { "857386d0-7bf6-421a-8d93-fcf566089fc9", null, "basic", "BASIC" },
+                    { "fdb47132-4b6c-44e1-94d9-5188a7d3b6ba", null, "admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -303,9 +302,9 @@ namespace WarframeRivensAPI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "Icono", "LockoutEnabled", "LockoutEnd", "Nickname", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "SteamId", "TwoFactorEnabled", "UserName", "WarframeNick" },
                 values: new object[,]
                 {
-                    { "356cf89a-c1ac-488c-81eb-f91ae74ec5a9", 0, "0a0933cc-310f-4ba4-a4b9-3242c0dad5b9", "confirmado@warriven.com", true, null, false, null, "Usuario confirmado", "CONFIRMADO@WARRIVEN.COM", "CONFIRMADO@WARRIVEN.COM", "AQAAAAIAAYagAAAAEOlbGEbi5soF1HG+vC5qrzmLjmHm4QNCR4QUud5ocgt22ZXt9LTAQboCN6waFcX9Tg==", null, false, "a351dc54-f5f9-41d5-9d10-c71ab21fef79", null, false, "confirmado@warriven.com", null },
-                    { "4ca4b1f2-0053-4fa4-890f-4a0a1b4b6f7e", 0, "30ed7f83-7426-4b17-b548-d858bcef2d5f", "admin@warriven.com", true, null, false, null, "Administrador", "ADMIN@WARRIVEN.COM", "ADMIN@WARRIVEN.COM", "AQAAAAIAAYagAAAAEFyHRZIXm/Hwvj9tjJR7v4aZUX2WuRUCyqFxBAX5Xx0SbDnflSRmuSwTSWzDPmNXgA==", null, false, "7fd0b839-3d70-4f72-a6f8-4516ccda4999", null, false, "admin@warriven.com", null },
-                    { "9f79a04d-78cb-45fc-bec7-3767d5a803e5", 0, "99c21530-a053-46a3-ad56-e2d3e3c06388", "visitante@warriven.com", true, null, false, null, "Usuario Visitante", "VISITANTE@WARRIVEN.COM", "VISITANTE@WARRIVEN.COM", "AQAAAAIAAYagAAAAEMIdYfOpd6h1RyCwrccvVdXntwDr0Uh6pFWfLkchi3syo7aSekku4T+Z10akSkTn2Q==", null, false, "fb0666f0-5022-4cb5-b555-a03e569f9f46", null, false, "visitante@warriven.com", null }
+                    { "39d6cfde-e971-499a-acb1-88c61bf8655b", 0, "7a5c0832-d185-4998-9dcd-c5193b1af9f9", "visitante@warriven.com", true, null, false, null, "Usuario Visitante", "VISITANTE@WARRIVEN.COM", "VISITANTE@WARRIVEN.COM", "AQAAAAIAAYagAAAAEOGKwKpToXEgbmJGe3vZbH8DLSMo8DAR8Ko+mnzgmlojYb1WPbSNB71BgYuMluc11g==", null, false, "38b7a1f5-509c-43eb-94e3-a5ed5f568ccf", null, false, "visitante@warriven.com", null },
+                    { "87c31868-6577-4930-98f6-b61e8d6d01ab", 0, "b2083ddd-43b8-4cbf-b1ee-72b72fde26ab", "admin@warriven.com", true, null, false, null, "Administrador", "ADMIN@WARRIVEN.COM", "ADMIN@WARRIVEN.COM", "AQAAAAIAAYagAAAAEAG8rsfz2wGu4U3iz6vVXeUPYgv8ylsKEaSGkVqZE9PCcSIvc6iBPi1EY7M2nCDniQ==", null, false, "d5caa715-dd7f-4f4b-a2b0-dbdad9af1aec", null, false, "admin@warriven.com", null },
+                    { "a3bf9d97-4643-4c82-8112-043b547bfeab", 0, "bbfffbd2-88e1-4239-8226-141741eba2fc", "confirmado@warriven.com", true, null, false, null, "Usuario confirmado", "CONFIRMADO@WARRIVEN.COM", "CONFIRMADO@WARRIVEN.COM", "AQAAAAIAAYagAAAAEGbdd0NuvBVSuT0D08Y4X+rWU6fIBIGG7NxKiaEmpr4CsMmHK2LruP9GFRXY6YoS0Q==", null, false, "6c463d86-de4f-4afa-8661-c47fd0e1f1b0", null, false, "confirmado@warriven.com", null }
                 });
 
             migrationBuilder.InsertData(
@@ -313,9 +312,9 @@ namespace WarframeRivensAPI.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "ea2b316f-75fb-4150-a882-e7c99d52f2af", "356cf89a-c1ac-488c-81eb-f91ae74ec5a9" },
-                    { "5a3a3046-e2ab-4752-a538-712e9bd59752", "4ca4b1f2-0053-4fa4-890f-4a0a1b4b6f7e" },
-                    { "9f1426a2-b729-4d30-99ae-b27efad1f1cd", "9f79a04d-78cb-45fc-bec7-3767d5a803e5" }
+                    { "857386d0-7bf6-421a-8d93-fcf566089fc9", "39d6cfde-e971-499a-acb1-88c61bf8655b" },
+                    { "fdb47132-4b6c-44e1-94d9-5188a7d3b6ba", "87c31868-6577-4930-98f6-b61e8d6d01ab" },
+                    { "3b9b4d06-155b-4bc1-8f84-16844712cbdb", "a3bf9d97-4643-4c82-8112-043b547bfeab" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -368,9 +367,9 @@ namespace WarframeRivensAPI.Migrations
                 column: "RivenId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ofertas_IdComprador",
+                name: "IX_Ofertas_IdVendedor",
                 table: "Ofertas",
-                column: "IdComprador");
+                column: "IdVendedor");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ofertas_RivenId",

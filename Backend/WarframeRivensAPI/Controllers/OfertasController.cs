@@ -18,9 +18,6 @@ namespace WarframeRivensAPI.Controllers
     [ApiController]
     public class OfertasController : ControllerBase
     {
-        #region
-        #endregion
-
         #region Config
         private readonly WarRivenContext _context;
         private readonly UserManager<WarUser> _userManager;
