@@ -1,36 +1,37 @@
-<div style="max-width: 600px; margin: 2rem auto;">
-  <h2>Mi perfil</h2>
+<div class="contenedor">
+  <h2 class="titulo">Mi perfil</h2>
 
-  <div>
+  <div class="campo-formulario">
     <label>Nickname:</label>
     <input [(ngModel)]="nickname" name="nickname" />
     <button (click)="cambiar('ChangeNick', nickname)">Cambiar</button>
   </div>
 
-  <div>
+  <div class="campo-formulario">
     <label>Warframe Nick:</label>
     <input [(ngModel)]="warframeNick" name="warNick" />
     <button (click)="cambiar('ChangeWarNick', warframeNick)">Cambiar</button>
   </div>
 
-  <div>
+  <div class="campo-formulario">
     <label>Icono (URL):</label>
     <input [(ngModel)]="icono" name="icono" />
     <button (click)="cambiar('ChangeIcon', icono)">Cambiar</button>
   </div>
 
-  <div>
+  <div class="campo-formulario">
     <label>Nueva contraseña:</label>
     <input [(ngModel)]="nuevaPassword" name="password" type="password" />
     <button (click)="cambiar('ChangePass', nuevaPassword)">Cambiar</button>
   </div>
 
-  <div style="margin-top: 2rem;">
+  <div class="campo-formulario">
     <p>Vincular cuenta de Steam:</p>
     <button (click)="irASteam()">
       <img src="https://community.cloudflare.steamstatic.com/public/images/signinthroughsteam/sits_small.png" alt="Login with Steam">
     </button>
   </div>
 
-  <p *ngIf="mensaje" style="color: green; margin-top: 1rem;">{{ mensaje }}</p>
+  <p *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</p>
 </div>
+

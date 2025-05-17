@@ -30,6 +30,9 @@ export class MisOfertasComponent implements OnInit {
   sortAsc = true;
   p = 1;
 
+  filtroArma: string = '';
+  armasDisponibles: string[] = [];
+
   rivenSeleccionado: Riven | null = null;
   popupX = 0;
   popupY = 0;
@@ -47,7 +50,13 @@ export class MisOfertasComponent implements OnInit {
 
   ngOnInit(): void {
     this.ofertaService.getMisOfertas().subscribe({
-      next: data => this.ofertas = data,
+      next: data => {
+        this.ofertas = data;
+
+        // Extrae armas únicas para el filtro
+        const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
+        this.armasDisponibles = Array.from(armasSet) as string[];
+      },
       error: () => this.error = 'No se pudieron cargar tus ofertas.'
     });
   }

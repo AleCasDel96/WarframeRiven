@@ -23,10 +23,13 @@ export class RivensComponent implements OnInit {
   p = 1;
   error = '';
 
+  filtroArma: string = '';
+  armasDisponibles: string[] = [];
+
   constructor(
     private rivenService: RivenService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargar();
@@ -34,8 +37,12 @@ export class RivensComponent implements OnInit {
 
   cargar(): void {
     this.rivenService.getMisRivens().subscribe({
-      next: data => this.rivens = data,
-      error: () => this.error = 'No se pudieron cargar tus rivens.'
+      next: data => {
+        this.rivens = data;
+        const armasSet = new Set(data.map(r => r.arma).filter(Boolean));
+        this.armasDisponibles = Array.from(armasSet) as string[];
+      },
+      error: () => this.error = 'No se pudieron cargar los rivens.'
     });
   }
 

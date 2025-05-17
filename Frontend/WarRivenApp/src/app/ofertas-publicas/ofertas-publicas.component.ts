@@ -23,6 +23,9 @@ export class OfertasPublicasComponent implements OnInit {
   p = 1;
   error = '';
 
+  filtroArma: string = '';
+  armasDisponibles: string[] = [];
+
   rivenSeleccionado: Riven | null = null;
   popupX = 0;
   popupY = 0;
@@ -43,7 +46,12 @@ export class OfertasPublicasComponent implements OnInit {
   ngOnInit(): void {
     this.nicknameActual = this.auth.getNickname();
     this.ofertaService.getPublicas().subscribe({
-      next: data => this.ofertas = data,
+      next: data => {
+        this.ofertas = data;
+
+        const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
+        this.armasDisponibles = Array.from(armasSet) as string[];
+      },
       error: () => this.error = 'No se pudieron cargar las ofertas públicas.'
     });
   }
@@ -57,7 +65,7 @@ export class OfertasPublicasComponent implements OnInit {
         const yaEsPujador = oferta.nickUsuario === this.nicknameActual;
 
         if (!esDueño && yaEsPujador) {
-          this.error = 'Ya eres el pujador actual.';
+          this.error = 'No puedes pujar de nuevo si ya eres el pujador actual.';
           return;
         }
 
@@ -71,12 +79,14 @@ export class OfertasPublicasComponent implements OnInit {
 
   cerrarPuja(): void {
     this.pujaOferta = null;
+    this.errorPuja = '';
   }
 
   confirmarPuja(): void {
     if (!this.pujaOferta || !this.nicknameActual) return;
 
-    const id = this.pujaOferta.id!;
+    const id = this.pujaOferta?.id;
+    if (!id) return;
     const precioActual = this.pujaOferta.precioVenta ?? 0;
 
     this.rivenService.getPorId(this.pujaOferta.idRiven).subscribe({
@@ -101,7 +111,11 @@ export class OfertasPublicasComponent implements OnInit {
   }
 
   puedePujar(oferta: Oferta): boolean {
-    return !!oferta.disponibilidad && oferta.nickUsuario !== this.nicknameActual;
+    return (
+      !!this.nicknameActual &&
+      oferta.disponibilidad === true &&
+      oferta.nickUsuario !== this.nicknameActual
+    );
   }
 
   ordenarPor(col: string): void {

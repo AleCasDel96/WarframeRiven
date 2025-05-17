@@ -7,6 +7,7 @@ import { Oferta } from '../models/oferta.model';
 import { Riven } from '../models/riven.model';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgPipesModule } from 'ngx-pipes';
+import { MensajeService } from '../services/mensaje.service';
 
 @Component({
   selector: 'app-mis-pujas',
@@ -17,10 +18,13 @@ import { NgPipesModule } from 'ngx-pipes';
 export class MisPujasComponent implements OnInit {
   ofertas: Oferta[] = [];
   searchText = '';
-  sortColumn = 'precioVenta';
+  sortColumn = 'nombreRiven';
   sortAsc = true;
   p = 1;
   error = '';
+
+  filtroArma: string = '';
+  armasDisponibles: string[] = [];
 
   rivenSeleccionado: Riven | null = null;
   popupX = 0;
@@ -29,12 +33,18 @@ export class MisPujasComponent implements OnInit {
 
   constructor(
     private ofertaService: OfertaService,
-    private rivenService: RivenService
-  ) {}
+    private rivenService: RivenService,
+    private mensajeService: MensajeService
+  ) { }
 
   ngOnInit(): void {
     this.ofertaService.getMisPujas().subscribe({
-      next: data => this.ofertas = data,
+      next: data => {
+        this.ofertas = data;
+
+        const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
+        this.armasDisponibles = Array.from(armasSet) as string[];
+      },
       error: () => this.error = 'No se pudieron cargar tus pujas.'
     });
   }
@@ -53,15 +63,20 @@ export class MisPujasComponent implements OnInit {
   }
 
   copiarMensaje(oferta: Oferta): void {
-  const nick = oferta.nickUsuario || 'vendedor';
-  const arma = oferta.arma || 'arma';
-  const nombre = oferta.nombreRiven || 'Riven';
-  const mensaje = `/w ${nick} he visto tu riven ${arma} ${nombre} en WarframeRivens`;
+    if (oferta.disponibilidad) return;
 
-  navigator.clipboard.writeText(mensaje)
-    .then(() => alert('Mensaje copiado al portapapeles.'))
-    .catch(() => alert('Error al copiar el mensaje.'));
-}
+    if (!oferta.nickUsuario || !oferta.arma || !oferta.nombreRiven) {
+      this.mensajeService.set('Faltan datos para generar el mensaje.');
+      return;
+    }
+
+    const mensaje = `/w ${oferta.nickUsuario} he visto tu riven ${oferta.arma} ${oferta.nombreRiven} en WarframeRivens`;
+    navigator.clipboard.writeText(mensaje).then(() => {
+      this.mensajeService.set('Mensaje copiado al portapapeles.');
+    }).catch(() => {
+      this.mensajeService.set('No se pudo copiar el mensaje.');
+    });
+  }
 
   mostrarRiven(idRiven: string, e: MouseEvent): void {
     this.popupX = e.clientX;
