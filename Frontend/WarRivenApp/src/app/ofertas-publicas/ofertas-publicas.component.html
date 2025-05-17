@@ -21,26 +21,25 @@
                   | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
                   | paginate: { itemsPerPage: 5, currentPage: p }">
         <td>
-          <span
-            (mouseenter)="mostrarRiven(oferta.idRiven, $event)"
-            (mouseleave)="ocultarRiven()"
+          <span (mouseenter)="mostrarRiven(oferta.idRiven, $event)" (mouseleave)="ocultarRiven()"
             style="cursor: pointer; text-decoration: underline;">
             {{ oferta.nombreRiven }}
           </span>
         </td>
         <td>{{ oferta.arma }}</td>
         <td>{{ oferta.precioVenta }} créditos</td>
-        <td>{{ oferta.disponibilidad ? 'Abierta' : 'Cerrada' }}</td>
+        <td>
+          {{ oferta.disponibilidad ? 'Abierta' : 'Cerrada' }}
+          <div *ngIf="puedePujar(oferta)">
+            <button (click)="abrirPuja(oferta)">Pujar</button>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
 
   <!-- Tarjeta flotante del Riven -->
-  <div
-    class="popup"
-    *ngIf="showPopup && rivenSeleccionado"
-    [style.top.px]="popupY + 10"
-    [style.left.px]="popupX + 10">
+  <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
     <strong>{{ rivenSeleccionado.nombre }}</strong><br>
     {{ rivenSeleccionado.arma }}<br><br>
 
@@ -53,5 +52,19 @@
   <!-- Paginación -->
   <pagination-controls (pageChange)="p = +$event"></pagination-controls>
 
+  <div *ngIf="pujaOferta" style="position: fixed; top: 20%; left: 50%; transform: translateX(-50%);
+            background: white; padding: 1.5rem; box-shadow: 0 0 15px rgba(0,0,0,0.2); z-index: 1000;
+            width: 300px; border-radius: 8px;">
 
+    <h3>Pujar por: {{ pujaOferta.nombreRiven }}</h3>
+    <p>Precio actual: {{ pujaOferta.precioVenta }}p</p>
+
+    <label>Nueva puja:</label>
+    <input type="number" [(ngModel)]="nuevaPuja" min="0" style="width: 100%; margin-bottom: 0.5rem;" />
+
+    <div *ngIf="errorPuja" style="color: red; margin-bottom: 0.5rem;">{{ errorPuja }}</div>
+
+    <button (click)="confirmarPuja()" style="margin-right: 1rem;">Confirmar</button>
+    <button (click)="cerrarPuja()">Cancelar</button>
+  </div>
 </div>

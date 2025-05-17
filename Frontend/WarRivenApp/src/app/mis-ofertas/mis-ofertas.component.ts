@@ -35,11 +35,15 @@ export class MisOfertasComponent implements OnInit {
   popupY = 0;
   showPopup = false;
 
+  pujaOferta: Oferta | null = null;
+  nuevaPuja = 0;
+  errorPuja = '';
+
   constructor(
     private ofertaService: OfertaService,
     private rivenService: RivenService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.ofertaService.getMisOfertas().subscribe({
@@ -84,6 +88,33 @@ export class MisOfertasComponent implements OnInit {
     if (confirm('¿Estás seguro de eliminar esta oferta?')) {
       this.ofertaService.eliminar(id).subscribe(() => this.ngOnInit());
     }
+  }
+
+  abrirPuja(oferta: Oferta): void {
+    this.pujaOferta = oferta;
+    this.nuevaPuja = oferta.precioVenta || 0;
+    this.errorPuja = '';
+  }
+
+  cerrarPuja(): void {
+    this.pujaOferta = null;
+  }
+
+  confirmarPuja(): void {
+    if (!this.pujaOferta) return;
+
+    const id = this.pujaOferta.id!;
+    this.ofertaService.editar(id, { precioVenta: this.nuevaPuja }).subscribe({
+      next: () => {
+        this.pujaOferta = null;
+        this.ngOnInit();
+      },
+      error: () => this.errorPuja = 'No se pudo modificar la puja.'
+    });
+  }
+
+  puedeEditarPuja(oferta: Oferta): boolean {
+    return !!oferta.disponibilidad && !oferta.partida && !oferta.destino;
   }
 
   mostrarRiven(id: string, event: MouseEvent): void {

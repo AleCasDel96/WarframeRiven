@@ -52,6 +52,17 @@ export class MisPujasComponent implements OnInit {
     this.ofertaService.confirmarCompra(id).subscribe(() => this.ngOnInit());
   }
 
+  copiarMensaje(oferta: Oferta): void {
+  const nick = oferta.nickUsuario || 'vendedor';
+  const arma = oferta.arma || 'arma';
+  const nombre = oferta.nombreRiven || 'Riven';
+  const mensaje = `/w ${nick} he visto tu riven ${arma} ${nombre} en WarframeRivens`;
+
+  navigator.clipboard.writeText(mensaje)
+    .then(() => alert('Mensaje copiado al portapapeles.'))
+    .catch(() => alert('Error al copiar el mensaje.'));
+}
+
   mostrarRiven(idRiven: string, e: MouseEvent): void {
     this.popupX = e.clientX;
     this.popupY = e.clientY;

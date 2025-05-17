@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class OfertaService {
   private apiUrl = 'https://localhost:5001/api/Ofertas';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getMisOfertas(): Observable<Oferta[]> {
     return this.http.get<Oferta[]>(`${this.apiUrl}/MisOfertas`);
@@ -21,6 +21,10 @@ export class OfertaService {
 
   getPublicas(): Observable<Oferta[]> {
     return this.http.get<Oferta[]>(`${this.apiUrl}/Publicas`);
+  }
+
+  editar(id: string, cambios: Partial<Oferta>): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, cambios);
   }
 
   crear(oferta: Partial<Oferta>): Observable<any> {

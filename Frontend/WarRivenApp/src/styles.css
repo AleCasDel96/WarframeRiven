@@ -1,1 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  background-image: url('/assets/background.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.card {
+  border: 2px solid #c5c5c5;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+}
+.borde-warframe {
+  border: 2px solid rgba(63, 169, 245, 0.6); /* azul claro */
+  border-radius: 6px;
+  box-shadow: 0 0 6px rgba(63, 169, 245, 0.3);
+}

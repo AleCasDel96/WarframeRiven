@@ -30,6 +30,7 @@
         </td>
         <td>
           <button *ngIf="o.disponibilidad" (click)="cerrar(o.id!)">Cerrar</button>
+          <button *ngIf="puedeEditarPuja(oferta)" (click)="abrirPuja(oferta)">Modificar Puja</button>
           <button *ngIf="!o.disponibilidad && !o.partida" (click)="confirmarVenta(o.id!)">Confirmar venta</button>
           <button *ngIf="o.partida && o.destino" (click)="transpaso(o.id!)">Traspaso</button>
           <button (click)="eliminar(o.id!)">Eliminar</button>
@@ -41,5 +42,25 @@
 
   <pagination-controls (pageChange)="p = +$event"></pagination-controls>
 
+  <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
+    <strong>{{ rivenSeleccionado.nombre }}</strong><br>
+    {{ rivenSeleccionado.arma }}<br><br>
+    <div *ngIf="rivenSeleccionado.stat1">{{ rivenSeleccionado.stat1 }}: {{ rivenSeleccionado.valor1 }}</div>
+    <div *ngIf="rivenSeleccionado.stat2">{{ rivenSeleccionado.stat2 }}: {{ rivenSeleccionado.valor2 }}</div>
+    <div *ngIf="rivenSeleccionado.stat3">{{ rivenSeleccionado.stat3 }}: {{ rivenSeleccionado.valor3 }}</div>
+    <div *ngIf="rivenSeleccionado.stat4">{{ rivenSeleccionado.stat4 }}: {{ rivenSeleccionado.valor4 }}</div>
+  </div>
 
+  <div *ngIf="pujaOferta" class="puja-modal">
+    <h3>Modificar puja para: {{ pujaOferta.nombreRiven }}</h3>
+    <p>Precio actual: {{ pujaOferta.precioVenta }}p</p>
+
+    <label>Nueva puja:</label>
+    <input type="number" [(ngModel)]="nuevaPuja" style="width: 100%; margin-bottom: 0.5rem;" />
+
+    <div *ngIf="errorPuja" style="color: red; margin-bottom: 0.5rem;">{{ errorPuja }}</div>
+
+    <button (click)="confirmarPuja()" style="margin-right: 1rem;">Confirmar</button>
+    <button (click)="cerrarPuja()">Cancelar</button>
+  </div>
 </div>

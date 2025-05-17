@@ -23,11 +23,15 @@
         <td>{{ o.precioVenta }}</td>
         <td>
           <span *ngIf="!o.partida && !o.destino" style="color: red;">❌ Ninguna confirmación</span>
-          <span *ngIf="(o.partida && !o.destino) || (!o.partida && o.destino)" style="color: orange;">🟡 Confirmación parcial</span>
+          <span *ngIf="(o.partida && !o.destino) || (!o.partida && o.destino)" style="color: orange;">🟡 Confirmación
+            parcial</span>
           <span *ngIf="o.partida && o.destino" style="color: green;">✅ Lista para traspaso</span>
         </td>
         <td>
           <button *ngIf="!o.disponibilidad && !o.destino" (click)="confirmarCompra(o.id!)">Confirmar compra</button>
+          <img *ngIf="!oferta.disponibilidad" src="/assets/chat-icon.png" alt="Copiar mensaje"
+            style="width: 24px; cursor: pointer;" (click)="copiarMensaje(oferta)" title="Copiar mensaje para el chat" />
+
         </td>
       </tr>
     </tbody>

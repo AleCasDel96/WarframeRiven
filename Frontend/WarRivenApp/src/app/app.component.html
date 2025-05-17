@@ -23,5 +23,14 @@
     </div>
   </ng-template>
 </nav>
+<div *ngIf="mensaje" 
+     (click)="mensaje = null"
+     style="background: #ffc; color: #333; padding: 0.5rem; border: 1px solid #cc0; cursor: pointer;">
+  {{ mensaje }}
+</div>
 
 <router-outlet></router-outlet>
+
+<footer style="background: rgba(0,0,0,0.8); color: white; padding: 1rem; text-align: center; position: fixed; bottom: 0; width: 100%;">
+  WarRiven © 2025 - Todos los derechos reservados
+</footer>
