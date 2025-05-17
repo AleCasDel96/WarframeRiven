@@ -5,10 +5,12 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WarframeRivensAPI.Data;
 using WarframeRivensAPI.Models;
+
 
 namespace WarframeRivensAPI.Controllers
 {
@@ -16,23 +18,25 @@ namespace WarframeRivensAPI.Controllers
     [ApiController]
     public class OfertasController : ControllerBase
     {
+        #region
+        #endregion
+
+        #region Config
         private readonly WarRivenContext _context;
-
-        public OfertasController(WarRivenContext context)
-        {
-            _context = context;
+        private readonly UserManager<WarUser> _userManager;
+        public OfertasController(WarRivenContext context, UserManager<WarUser> userManager) 
+        { 
+                _context = context;
+                _userManager = userManager;
         }
+        #endregion
 
+        #region DTO
         public class OfertaDTO
         {
-            public string Id { get; set; }
-            public decimal PrecioVenta { get; set; }
-            public bool Disponibilidad { get; set; }
-            public string NombreRiven { get; set; }
-            public string Arma { get; set; }
-            public string NickUsuario { get; set; }
+            public string IdRiven { get; set; }
+            public int PrecioVenta { get; set; }
         }
-
         public class OfertaUsuarioDTO
         {
             public string Id { get; set; }
@@ -44,36 +48,41 @@ namespace WarframeRivensAPI.Controllers
             public string NombreRiven { get; set; }
             public string Arma { get; set; }
         }
+        #endregion
 
-        // GET: api/Ofertas
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<OfertaDTO>>> GetOfertas()
+        #region Ver ofertas
+        [HttpGet("VerOfertas")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)] 
+        public async Task<ActionResult<IEnumerable<Oferta>>> GetOfertas()
         {
             var ofertas = await _context.Ofertas
                 .Where(o => o.Disponibilidad)
                 .Include(o => o.Riven)
-                .Include(o => o.Comprador) 
-                .Select(o => new OfertaDTO
-                {
-                    Id = o.Id,
-                    PrecioVenta = o.PrecioVenta,
-                    Disponibilidad = o.Disponibilidad,
-                    NombreRiven = o.Riven.Nombre,
-                    Arma = o.Riven.Arma,
-                    NickUsuario = string.IsNullOrEmpty(o.Comprador.WarframeNick) ? o.Comprador.Nickname : o.Comprador.WarframeNick
-                })
+                .Include(o => o.Vendedor)
                 .ToListAsync();
-
             return Ok(ofertas);
         }
 
-        // GET: api/Ofertas/mias
-        [HttpGet("mias")]
+        [HttpGet("Oferta/{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)] //Devuelve el riven
+        [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
+        public async Task<ActionResult<Oferta>> GetOferta(string id)
+        {
+            var oferta = await _context.Ofertas.FindAsync(id);
+            if (oferta == null) { return NotFound(); }
+            return Ok(oferta);
+        }
+        #endregion
+
+        #region Mis Pujas/ofertas
+        [HttpGet("MisOfertas")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<OfertaUsuarioDTO>>> GetMisOfertas()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             var ofertas = await _context.Ofertas
                 .Include(o => o.Riven)
                 .Where(o => o.Riven.IdPropietario == userId)
@@ -82,209 +91,63 @@ namespace WarframeRivensAPI.Controllers
                     Id = o.Id,
                     PrecioVenta = o.PrecioVenta,
                     Disponibilidad = o.Disponibilidad,
-                    Partida = o.Partida,
-                    Destino = o.Destino,
                     NombreRiven = o.Riven.Nombre,
                     Arma = o.Riven.Arma
-                })
-                .ToListAsync();
-
+                }).ToListAsync();
             return Ok(ofertas);
         }
 
-        [HttpGet("mispujas")]
+        [HttpGet("Disponibilidad/{id}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<OfertaUsuarioDTO>>> GetMisPujas()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Oferta>>> SetDisponible(string rivenID)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var ofertas = await _context.Ofertas
-                .Include(o => o.Riven)
-                .Where(o => o.IdComprador == userId)
-                .Select(o => new OfertaUsuarioDTO
-                {
-                    Id = o.Id,
-                    PrecioVenta = o.PrecioVenta,
-                    Disponibilidad = o.Disponibilidad,
-                    Partida = o.Partida,
-                    Destino = o.Destino,
-                    NombreRiven = o.Riven.Nombre,
-                    Arma = o.Riven.Arma
-                })
-                .ToListAsync();
-
-            return Ok(ofertas);
-        }
-
-        // GET: api/Ofertas/mias/5
-        [HttpGet("open/{id}")]
-        [Authorize]
-        public async Task<IActionResult> CerrarOferta( string id)
-        {
-            // cambia el valor de disponivilidad a false de la oferta del usuario logueado
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var oferta = await _context.Ofertas.FindAsync(id);
-
-            if (oferta == null || oferta.IdComprador != userId)
-                return Unauthorized();
-
-            oferta.Disponibilidad = false;
-            await _context.SaveChangesAsync();
-
-            return Ok(oferta);
-        }
-
-        // PUT: api/Ofertas/mias/5
-        [HttpPut("open/{id}")]
-        [Authorize]
-        public async Task<IActionResult> OpenOferta(string id)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var oferta = await _context.Ofertas.FindAsync(id);
-
-            if (oferta == null || oferta.IdComprador != userId)
-                return Unauthorized();
-
-            if (oferta.Destino || oferta.Partida)
-                return BadRequest("No se puede editar una oferta ya en proceso.");
-
-            oferta.Disponibilidad = true;
-            await _context.SaveChangesAsync();
-
-            return Ok("Oferta abierta.");
-        }
-
-        [HttpGet("ComfirVen/{id}")]
-        [Authorize]
-        public async Task<IActionResult> ComfirVenta(string id)
-        {
-            // cambia el valor de partida a true de la oferta del usuario logueado
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var oferta = await _context.Ofertas.FindAsync(id);
-
-            if (oferta == null || oferta.IdComprador != userId)
-                return Unauthorized();
-
-            if (oferta.Disponibilidad != false)
-                return BadRequest("La oferta debe estar cerrada para confirmar.");
-
-            oferta.Partida = true;
-            await _context.SaveChangesAsync();
-
-            return Ok(oferta);
-        }
-
-        [HttpGet("ComfirCom/{id}")]
-        [Authorize]
-        public async Task<ActionResult<Oferta>> ComfirCompra(string id)
-        {
-            // cambia el valor de Destino a true de la oferta en curso
-            var oferta = await _context.Ofertas.FindAsync(id);
-
-            if (oferta == null)
-                return Unauthorized();
-
-            if (oferta.Disponibilidad != false)
-                return BadRequest("La oferta debe estar cerrada para confirmar.");
-
-            oferta.Destino = true;
-            await _context.SaveChangesAsync();
-
-            return Ok(oferta);
-        }
-
-        [HttpGet("Transpaso/{id}")]
-        [Authorize]
-        public async Task<IActionResult> Transpaso(string id)
-        {
-            //comfirma que destino y partida estan a true
-            //prepara la info de venta
-            //cambia el propietario de el riven por el idComprador
-            //hace post de venta y borra la oferta
-            var oferta = await _context.Ofertas.FindAsync(id);
-            if (oferta == null || !(oferta.Partida && oferta.Destino))
-                return BadRequest("Faltan confirmaciones");
-
-            var riven = await _context.Rivens.FindAsync(oferta.IdRiven);
-            if (riven == null)
-                return NotFound("Riven no encontrado");
-
-            var vendedorOriginal = riven.IdPropietario;
-            riven.IdPropietario = oferta.IdComprador;
-
-            var venta = new Venta
-            {
-                Id = Guid.NewGuid().ToString(),
-                IdRiven = riven.Id,
-                IdComprador = oferta.IdComprador,
-                IdVendedor = vendedorOriginal,
-                PrecioVenta = oferta.PrecioVenta,
-                FechaVenta = DateTime.Now
-            };
-
-            _context.Ventas.Add(venta);
-            _context.Ofertas.Remove(oferta);
-            await _context.SaveChangesAsync();
-
-            return Ok(venta);
-        }
-
-        // GET: api/Ofertas/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Oferta>> GetOferta(string id)
-        {
-            var oferta = await _context.Ofertas.FindAsync(id);
-
-            if (oferta == null)
-            {
-                return NotFound();
-            }
-
-            return oferta;
-        }
-
-        // PUT: api/Ofertas/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        [Authorize]
-        public async Task<IActionResult> PutOferta(string id, Oferta oferta)
-        {
-            if (id != oferta.Id)
-                return BadRequest();
-
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var ofertaOriginal = await _context.Ofertas.AsNoTracking().FirstOrDefaultAsync(o => o.Id == id);
-
-            if (ofertaOriginal == null)
-                return NotFound();
-
-            if (ofertaOriginal.Destino || ofertaOriginal.Partida || !ofertaOriginal.Disponibilidad)
-                return BadRequest("No se puede editar una oferta ya en proceso o cerrada.");
-
-            // Buscar el riven asociado para obtener el propietario
-            var riven = await _context.Rivens.FindAsync(ofertaOriginal.IdRiven);
-            if (riven == null)
-                return NotFound("El riven asociado a la oferta no existe.");
-
-            // Validar que el nuevo precio sea mayor al actual
-            if (oferta.PrecioVenta <= ofertaOriginal.PrecioVenta && userId != riven.IdPropietario)
-            {
-                return BadRequest("Solo el propietario del Riven puede reducir el precio de la oferta.");
-            }
-
-            // Mantener valores que no deben cambiar
-            oferta.IdComprador = ofertaOriginal.IdComprador;
-            oferta.IdRiven = ofertaOriginal.IdRiven;
-
-            _context.Entry(oferta).State = EntityState.Modified;
-
+            var ofertas = await _context.Ofertas.Where(o => o.IdRiven == rivenID).FirstAsync();
+            if (ofertas == null) { return NotFound(); }
+            if (ofertas.IdVendedor != userId) { return Unauthorized(); }
+            ofertas.Disponibilidad = !ofertas.Disponibilidad;
             try
             {
+                _context.Entry(ofertas).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+                return Ok(ofertas);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!OfertaExists(id))
+                throw;
+            }
+        }
+        #endregion
+
+        #region Añadir/Editar/Eliminar
+        [HttpPost("Crear")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se actualiza
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede actualizar, devuelve 400
+        [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
+        public async Task<IActionResult> CrearOferta(string RivenId, OfertaDTO oferta)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var riven = await _context.Rivens.FindAsync(RivenId);
+            if (riven == null) { return NotFound("El riven no existe."); }
+            Oferta nuevaOferta = new Oferta
+            {
+                Id = Guid.NewGuid().ToString(),
+                IdRiven = RivenId,
+                IdVendedor = userId,
+                PrecioVenta = oferta.PrecioVenta,
+                Disponibilidad = true,
+            };
+            try
+            {
+                _context.Entry(oferta).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OfertaExists(RivenId))
                 {
                     return NotFound();
                 }
@@ -293,70 +156,54 @@ namespace WarframeRivensAPI.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
-
-        // POST: api/Ofertas
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPut("Editar/{id}")]
         [Authorize]
-        public async Task<ActionResult<Oferta>> PostOferta(Oferta oferta)
+        public async Task<ActionResult<Oferta>> EditarOferta(Oferta nuevo)
         {
-            //tiene que ser del usuario logueado
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            oferta.IdComprador = userId;
-            oferta.Disponibilidad = false;
-            oferta.Destino = false;
-            oferta.Partida = false;
-
-            bool yaOfertado = await _context.Ofertas.AnyAsync(o => o.IdRiven == oferta.IdRiven && o.Disponibilidad);
-
-            if (yaOfertado)
+            var antiguo = await _context.Ofertas.Where(o => o.IdRiven == nuevo.IdRiven && o.Disponibilidad) .FirstOrDefaultAsync();
+            if (!antiguo.Disponibilidad)
             {
-                return BadRequest("Ya existe una oferta activa para este Riven.");
+                return BadRequest("La oferta no está activa.");
             }
-
-            _context.Ofertas.Add(oferta);
             try
             {
+                _context.Ofertas.Update(nuevo);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (OfertaExists(oferta.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return CreatedAtAction("GetOferta", new { id = oferta.Id }, oferta);
+            return CreatedAtAction("GetOferta", new { id = nuevo.Id }, nuevo);
         }
 
-        // DELETE: api/Ofertas/5
-        [HttpDelete("{id}")]
+        [HttpDelete("Eliminar/{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se elimina
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede eliminar, devuelve 400
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)] //Si no es el dueño, devuelve 401
+        [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<IActionResult> DeleteOferta(string id)
         {
-            //tiene que ser del usuario logueado
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var oferta = await _context.Ofertas.FindAsync(id);
-            if (oferta == null)
+            if (oferta == null) { return NotFound(); }
+            if (oferta.IdVendedor != userId) { return Unauthorized(); }
+            try
             {
-                return NotFound();
+                _context.Ofertas.Remove(oferta);
+                await _context.SaveChangesAsync();
+                return NoContent();
             }
-            if (oferta.IdComprador != userId)
-                return Unauthorized();
-
-            _context.Ofertas.Remove(oferta);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            catch
+            {
+                return BadRequest("No se puede eliminar la oferta.");
+            }
         }
+        #endregion
 
         private bool OfertaExists(string id)
         {

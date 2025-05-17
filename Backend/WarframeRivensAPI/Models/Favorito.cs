@@ -6,7 +6,6 @@ namespace WarframeRivensAPI.Models
     {
         [Key]
         public string Id { get; set; }
-
         [Required]
         public string IdRiven { get; set; }
         public Riven Riven { get; set; }

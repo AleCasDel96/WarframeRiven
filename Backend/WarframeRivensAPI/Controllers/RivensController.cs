@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WarframeRivensAPI.Data;
@@ -15,97 +17,84 @@ namespace WarframeRivensAPI.Controllers
     [ApiController]
     public class RivensController : ControllerBase
     {
+        #region Config
         private readonly WarRivenContext _context;
-
-        public RivensController(WarRivenContext context)
-        {
+        private readonly UserManager<WarUser> _userManager;
+        public RivensController(
+            WarRivenContext context,
+            UserManager<WarUser> userManager) { 
             _context = context;
+            _userManager = userManager;
         }
+        #endregion
 
-        // GET: api/Rivens
+        #region Inventario
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Riven>>> GetRivens()
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Riven>>> Inventario()
         {
-            //solo los del usuario logueado
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return await _context.Rivens.Where(r=>r.IdPropietario==userId).ToListAsync();
+            return await _context.Rivens.Where(r => r.IdPropietario == userId).ToListAsync();
         }
+        #endregion
 
-        // GET: api/Rivens/5
+        #region Ver Riven
         [HttpGet("{id}")]
-        public async Task<ActionResult<Riven>> GetRiven(string id)
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)] //Devuelve el riven
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)] //Si no es del usuario, devuelve 401
+        [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
+        public async Task<ActionResult<Riven>> VerRiven(string id)
         {
-            //tiene que ser del usuario logueado
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var riven = await _context.Rivens.FindAsync(id);
-
-            if (riven == null)
-            {
-                return NotFound();
-            }
-            if (riven.IdPropietario != userId)
-            {
-                return Unauthorized();
-            }
-
-
-            return riven;
+            if (riven == null) {  return NotFound(); }
+            if (riven.IdPropietario != userId) { return Unauthorized(); }
+            return Ok(riven);
         }
+        #endregion
 
-        // PUT: api/Rivens/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        #region Editar Riven
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se actualiza
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede actualizar, devuelve 400
+        [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRiven(string id, Riven riven)
         {
-            //tiene que ser del usuario logueado
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (riven == null)
-            {
-                return NotFound();
-            }
-            if (riven.IdPropietario != userId)
-            {
-                return Unauthorized();
-            }
-
-            if (id != riven.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(riven).State = EntityState.Modified;
-
+            if (riven == null) { return NotFound(); }
+            if (riven.IdPropietario != userId) { return Unauthorized(); }
+            if (id != riven.Id) { return BadRequest(); }
             try
             {
+                _context.Entry(riven).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RivenExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                if (!RivenExists(id)) { return NotFound(); }
+                else { throw; }
             }
-
             return NoContent();
         }
+        #endregion
 
-        // POST: api/Rivens
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        #region Añadir Riven
         [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status201Created)] //Devuelve 201 si se crea con éxito
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede crear, devuelve 400
+        [ProducesResponseType(StatusCodes.Status409Conflict)] //Si ya existe, devuelve 409
         public async Task<ActionResult<Riven>> PostRiven(Riven riven)
         {
-            //tiene que ser para el usuario logueado
+            if (riven == null) { return BadRequest(); }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             riven.IdPropietario = userId;
-            _context.Rivens.Add(riven);
             try
             {
+                _context.Rivens.Add(riven);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
@@ -119,44 +108,37 @@ namespace WarframeRivensAPI.Controllers
                     throw;
                 }
             }
-
             return CreatedAtAction("GetRiven", new { id = riven.Id }, riven);
         }
+        #endregion
 
-        // DELETE: api/Rivens/5
+        #region Eliminar Riven
         [HttpDelete("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se elimina
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)] //Si no es del usuario, devuelve 401
+        [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<IActionResult> DeleteRiven(string id)
         {
-            //tiene que ser del usuario logueado
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             var riven = await _context.Rivens.FindAsync(id);
-
-            if (riven == null)
+            if (riven == null) { return NotFound(); }
+            if (riven.IdPropietario != userId) { return Unauthorized(); }
+            var ofertas = await _context.Ofertas.Where(o => o.IdRiven == riven.Id) .ToListAsync();
+            try
             {
-                return NotFound();
+                _context.Ofertas.RemoveRange(ofertas);
+                _context.Rivens.Remove(riven);
+                await _context.SaveChangesAsync();
             }
-
-            if (riven.IdPropietario != userId)
+            catch (DbUpdateException)
             {
-                return Unauthorized();
+                return Conflict();
             }
-
-            var ofertas = await _context.Ofertas
-                .Where(o => o.IdRiven == riven.Id)
-                .ToListAsync();
-
-            _context.Ofertas.RemoveRange(ofertas);
-
-            _context.Rivens.Remove(riven);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
+        #endregion
 
-        private bool RivenExists(string id)
-        {
-            return _context.Rivens.Any(e => e.Id == id);
-        }
+        private bool RivenExists(string id) { return _context.Rivens.Any(e => e.Id == id); }
     }
 }
