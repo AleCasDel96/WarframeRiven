@@ -25,13 +25,7 @@
                   | filterBy: ['arma']: filtroArma 
                   | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
                   | paginate: { itemsPerPage: 12, currentPage: p }">
-        <td>
-          <span class="nombre-hover" 
-                (mouseenter)="mostrarRiven(v.idRiven, $event)" 
-                (mouseleave)="ocultarRiven()">
-            {{ v.nombreRiven }}
-          </span>
-        </td>
+        <td>{{ v.nombreRiven }}</td>
         <td>{{ v.precioVenta }} <img src="assets/platino-icon.png" alt="p" class="icono-inline" /></td>
         <td>{{ v.fechaVenta | date: 'short' }}</td>
         <td>{{ v.nickVendedor }}</td>
@@ -42,12 +36,5 @@
 
   <pagination-controls (pageChange)="p = +$event"></pagination-controls>
 
-  <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
-    <strong>{{ rivenSeleccionado.nombre }}</strong><br />
-    {{ rivenSeleccionado.arma }}<br /><br />
-    <div *ngIf="rivenSeleccionado.stat1">{{ rivenSeleccionado.stat1 }}: {{ rivenSeleccionado.valor1 }}</div>
-    <div *ngIf="rivenSeleccionado.stat2">{{ rivenSeleccionado.stat2 }}: {{ rivenSeleccionado.valor2 }}</div>
-    <div *ngIf="rivenSeleccionado.stat3">{{ rivenSeleccionado.stat3 }}: {{ rivenSeleccionado.valor3 }}</div>
-    <div *ngIf="rivenSeleccionado.stat4">{{ rivenSeleccionado.stat4 }}: {{ rivenSeleccionado.valor4 }}</div>
-  </div>
+  
 </div>

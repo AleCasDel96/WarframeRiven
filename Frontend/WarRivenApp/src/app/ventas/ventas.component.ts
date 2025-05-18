@@ -58,19 +58,5 @@ export class VentasComponent implements OnInit {
     }
   }
 
-  mostrarRiven(idRiven: string, event: MouseEvent): void {
-    this.popupX = event.clientX;
-    this.popupY = event.clientY;
-    this.rivenService.getPorId(idRiven).subscribe({
-      next: (r: Riven) => {
-        this.rivenSeleccionado = r;
-        this.showPopup = true;
-      },
-      error: () => this.rivenSeleccionado = null
-    });
-  }
-
-  ocultarRiven(): void {
-    this.showPopup = false;
-  }
+  
 }
