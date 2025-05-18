@@ -1,0 +1,29 @@
+<div class="contenedor">
+  <h2 class="titulo">Registro</h2>
+
+  <form (ngSubmit)="registrar()">
+    <div class="campo-formulario">
+      <label for="nick">Nickname:</label>
+      <input [(ngModel)]="nickNuevo" name="nick" required />
+    </div>
+
+    <div class="campo-formulario">
+      <label for="emailNuevo">Email:</label>
+      <input [(ngModel)]="emailNuevo" name="emailNuevo" type="email" required />
+    </div>
+
+    <div class="campo-formulario">
+      <label for="passNuevo">Contraseña:</label>
+      <input [(ngModel)]="passNuevo" name="passNuevo" type="password" required />
+    </div>
+
+    <div class="campo-formulario">
+      <label for="confirmPass">Confirmar contraseña:</label>
+      <input [(ngModel)]="confirmPass" name="confirmPass" type="password" required />
+    </div>
+
+    <button type="submit">Registrarme</button>
+
+    <p *ngIf="mensajeRegistro" class="mensaje-exito">{{ mensajeRegistro }}</p>
+  </form>
+</div>

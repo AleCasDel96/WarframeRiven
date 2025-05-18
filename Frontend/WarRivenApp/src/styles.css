@@ -1,6 +1,7 @@
 /* ===== General ===== */
 body {
   margin: 0;
+  /*margin-left: 240px;*/
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-image: url('assets/background.jpg');
   background-size: cover;

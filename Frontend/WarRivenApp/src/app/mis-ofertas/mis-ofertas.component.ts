@@ -4,7 +4,7 @@ import { OfertaService } from '../services/oferta.service';
 import { RivenService } from '../services/riven.service';
 import { Oferta } from '../models/oferta.model';
 import { Riven } from '../models/riven.model';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgPipesModule } from 'ngx-pipes';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
@@ -16,7 +16,8 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     FormsModule,
     NgxPaginationModule,
-    NgPipesModule
+    NgPipesModule,
+    RouterModule
   ],
   templateUrl: './mis-ofertas.component.html',
   styleUrls: ['./mis-ofertas.component.css']

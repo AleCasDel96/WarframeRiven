@@ -24,14 +24,14 @@
     <input [(ngModel)]="nuevaPassword" name="password" type="password" />
     <button (click)="cambiar('ChangePass', nuevaPassword)">Cambiar</button>
   </div>
-
+<!--
   <div class="campo-formulario">
     <p>Vincular cuenta de Steam:</p>
     <button (click)="irASteam()">
       <img src="https://community.cloudflare.steamstatic.com/public/images/signinthroughsteam/sits_small.png" alt="Login with Steam">
     </button>
   </div>
-
+-->
   <p *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</p>
 </div>
 

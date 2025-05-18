@@ -1,0 +1,54 @@
+.sidebar-alertas {
+  position: fixed;
+  left: 0;
+  top: 64px; /* ajusta según el alto del navbar si lo tienes */
+  width: 240px;
+  height: calc(100% - 64px);
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 1rem;
+  overflow-y: auto;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.sidebar-alertas h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  text-align: center;
+  border-bottom: 1px solid #555;
+  padding-bottom: 0.5rem;
+}
+
+.sidebar-alertas ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-alertas li {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.sidebar-alertas .tiempo {
+  display: block;
+  font-size: 0.8rem;
+  color: #ccc;
+  margin-top: 0.25rem;
+}
+
+.toggle-btn {
+  position: absolute;
+  right: -20px;
+  top: 10px;
+  background: #444;
+  color: white;
+  border-radius: 50%;
+  border: none;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}

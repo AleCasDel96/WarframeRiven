@@ -3,7 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 
 export const noAuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const token = localStorage.getItem('jwt');
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
   if (token) {
     router.navigate(['/']);

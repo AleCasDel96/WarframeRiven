@@ -3,11 +3,17 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { MensajeService } from './services/mensaje.service';
 import { CommonModule, NgIf } from '@angular/common';
+import { SidebarAlertasComponent } from './sidebar-alertas/sidebar-alertas.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, NgIf],
+  imports: [
+    CommonModule,
+    RouterModule,
+    NgIf,
+    //SidebarAlertasComponent,
+  ],
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
@@ -17,15 +23,15 @@ export class AppComponent implements OnInit {
     public auth: AuthService,
     private router: Router,
     private mensajeService: MensajeService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.mensaje = this.mensajeService.get();
   }
 
-  logout(): void {
+  forzarLogout() {
+    sessionStorage.setItem('forceLogout', '1');
     this.auth.logout();
-    this.router.navigate(['/login']);
   }
 
   get nickname(): string | null {

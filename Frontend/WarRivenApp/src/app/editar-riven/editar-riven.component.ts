@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { RivenService } from '../services/riven.service';
 import { Riven } from '../models/riven.model';
@@ -9,7 +9,7 @@ import { Riven } from '../models/riven.model';
 @Component({
   selector: 'app-editar-riven',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './editar-riven.component.html'
 })
 export class EditarRivenComponent implements OnInit {

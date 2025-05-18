@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WarframeRivensAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3ed3c36ad0159a3594d14a5d70ee2eac3b034ab0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e19da85b0dbf99c8ae4e0b955ca562f27333f45f")]
 [assembly: System.Reflection.AssemblyProductAttribute("WarframeRivensAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WarframeRivensAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

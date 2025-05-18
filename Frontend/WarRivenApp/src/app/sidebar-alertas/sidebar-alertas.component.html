@@ -1,0 +1,11 @@
+<button class="toggle-btn" (click)="oculto = !oculto">⏪</button>
+
+<div *ngIf="!oculto" class="sidebar-alertas">
+  <h3>Alertas activas</h3>
+  <ul>
+    <li *ngFor="let alerta of alertas">
+      <strong>{{ alerta.fuente }}</strong>: {{ alerta.mensaje }}
+      <span *ngIf="alerta.expiraEn">({{ alerta.expiraEn }})</span>
+    </li>
+  </ul>
+</div>

@@ -14,7 +14,7 @@
 
     <div class="usuario">
       <a routerLink="/perfil" class="perfil">{{ nickname }}</a>
-      <button (click)="logout()" class="boton-cerrar">Cerrar sesión</button>
+      <button (click)="forzarLogout()" class="boton-cerrar">Cerrar sesión</button>
     </div>
   </ng-template>
 </nav>
@@ -23,9 +23,17 @@
 <div *ngIf="mensaje" class="mensaje-alerta" (click)="mensaje = null">
   {{ mensaje }}
 </div>
+<!-- <app-sidebar-alertas></app-sidebar-alertas> -->
 
 <router-outlet></router-outlet>
 
 <footer class="footer">
+  <p>
+    <span>Otras páginas:</span>
+    <a class="enlace" href="https://warframe.market/">Warframe Market</a>
+    <a class="enlace" href="https://rivenmarket.com/">Riven Market</a>
+    <a class="enlace" href="https://overframe.gg/">Overframe</a>
+    <a class="enlace" href="https://warframe.fandom.com/">Wikia</a>
+  </p>
   WarRiven © 2025 - Todos los derechos reservados
 </footer>
