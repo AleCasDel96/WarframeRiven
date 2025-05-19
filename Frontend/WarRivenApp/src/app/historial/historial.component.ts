@@ -11,12 +11,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgPipesModule } from 'ngx-pipes';
 
 @Component({
-  selector: 'app-ventas',
+  selector: 'app-historial',
   standalone: true,
   imports: [CommonModule, FormsModule, NgxPaginationModule, NgPipesModule],
-  templateUrl: './ventas.component.html'
+  templateUrl: './historial.component.html'
 })
-export class VentasComponent implements OnInit {
+export class HistorialComponent implements OnInit {
   ventas: Venta[] = [];
   searchText = '';
   sortColumn = 'fechaVenta';

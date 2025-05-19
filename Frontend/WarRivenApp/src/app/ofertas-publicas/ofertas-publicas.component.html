@@ -14,7 +14,6 @@
     <thead>
       <tr>
         <th (click)="ordenarPor('nombreRiven')" style="cursor: pointer;">Nombre</th>
-        <th>Actual pujador</th>
         <th (click)="ordenarPor('precioVenta')" style="cursor: pointer;">Precio</th>
         <th>Estado</th>
         <th>Acción</th>
@@ -32,15 +31,17 @@
             {{ oferta.nombreRiven }}
           </span>
         </td>
-        <td>{{ oferta.nickUsuario || 'Sin pujas' }}</td>
         <td>{{ oferta.precioVenta }} <img src="assets/platino-icon.png" alt="p" class="icono-inline" /></td>
         <td>
           <span [ngClass]="oferta.disponibilidad ? 'verde' : 'rojo'">
             {{ oferta.disponibilidad ? 'Abierta' : 'Cerrada' }}
           </span>
         </td>
-        <td>
-          <button *ngIf="puedePujar(oferta)">Pujar</button>
+        <td *ngIf="puedeComprar(oferta)">
+          <button (click)="copiarMensaje(oferta)" title="Copiar mensaje">
+            <img src="assets/chat-icon.png" alt="copiar" style="width: 20px;" />
+          </button>
+          <button (click)="iniciarCompra(oferta)">Comprar</button>
         </td>
       </tr>
     </tbody>
@@ -58,20 +59,5 @@
     <div *ngIf="rivenSeleccionado.stat4">{{ rivenSeleccionado.stat4 }}: {{ rivenSeleccionado.valor4 }}</div>
   </div>
 
-  <!-- Modal de puja -->
-  <div *ngIf="pujaOferta" class="puja-modal">
-    <h3>Pujar por: {{ pujaOferta.nombreRiven }}</h3>
-    <p>Precio actual: {{ pujaOferta.precioVenta }} <img src="/assets/platino-icon.png" alt="p" class="icono-inline" />
-    </p>
-
-    <div *ngIf="errorPuja" class="error">{{ errorPuja }}</div>
-
-    <label>Nueva puja:</label>
-    <input type="number" [(ngModel)]="nuevaPuja" min="0" />
-
-    <div *ngIf="errorPuja" class="error">{{ errorPuja }}</div>
-
-    <button (click)="confirmarPuja()">Confirmar</button>
-    <button (click)="cerrarPuja()">Cancelar</button>
-  </div>
+  
 </div>

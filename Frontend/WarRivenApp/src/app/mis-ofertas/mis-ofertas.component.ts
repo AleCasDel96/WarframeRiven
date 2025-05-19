@@ -8,6 +8,7 @@ import { Router, RouterModule } from '@angular/router';
 import { NgPipesModule } from 'ngx-pipes';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-mis-ofertas',
@@ -39,26 +40,30 @@ export class MisOfertasComponent implements OnInit {
   popupY = 0;
   showPopup = false;
 
-  pujaOferta: Oferta | null = null;
-  nuevaPuja = 0;
-  errorPuja = '';
+  ofertaEditando: Oferta | null = null;
+  nuevoPrecio: number = 0;
+  errorEdicion: string = '';
 
   constructor(
     private ofertaService: OfertaService,
     private rivenService: RivenService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient,
   ) { }
 
   ngOnInit(): void {
+    this.obtenerOfertas();
+  }
+
+  obtenerOfertas(): void {
     this.ofertaService.getMisOfertas().subscribe({
       next: data => {
         this.ofertas = data;
 
-        // Extrae armas únicas para el filtro
         const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
         this.armasDisponibles = Array.from(armasSet) as string[];
       },
-      error: () => this.error = 'No se pudieron cargar tus ofertas.'
+      error: () => alert('Error al cargar tus ofertas')
     });
   }
 
@@ -72,59 +77,38 @@ export class MisOfertasComponent implements OnInit {
   }
 
   cerrar(id: string): void {
-    this.ofertaService.cerrar(id).subscribe(() => this.ngOnInit());
-  }
-
-  abrir(id: string): void {
-    this.ofertaService.abrir(id).subscribe(() => this.ngOnInit());
-  }
-
-  confirmarVenta(id: string): void {
-    this.ofertaService.confirmarVenta(id).subscribe(() => this.ngOnInit());
-  }
-
-  confirmarCompra(id: string): void {
-    this.ofertaService.confirmarCompra(id).subscribe(() => this.ngOnInit());
-  }
-
-  transpaso(id: string): void {
-    this.ofertaService.transpaso(id).subscribe({
-      next: () => this.ngOnInit(),
-      error: () => this.error = 'No se pudo completar el traspaso.'
+    this.ofertaService.cambiarDisponibilidad(id).subscribe({
+      next: () => this.obtenerOfertas(),
+      error: () => alert('Error al cambiar disponibilidad')
     });
   }
+
+  confirmarVenta(ofertaId: string): void {
+    const confirmar = confirm('¿Deseas confirmar esta venta y traspasar el Riven al comprador?');
+    if (!confirmar) return;
+
+    this.http.get(`/api/Ventas/Venta/${ofertaId}`).subscribe({
+      next: (venta: any) => {
+        this.http.post('/api/Ventas/Confirmar', venta).subscribe({
+          next: () => {
+            alert('Venta confirmada y Riven traspasado.');
+            this.obtenerOfertas(); // vuelve a cargar la lista
+          },
+          error: () => alert('Error al confirmar la venta.')
+        });
+      },
+      error: () => alert('No se pudo obtener la venta.')
+    });
+  }
+
 
   eliminar(id: string): void {
-    if (confirm('¿Estás seguro de eliminar esta oferta?')) {
-      this.ofertaService.eliminar(id).subscribe(() => this.ngOnInit());
-    }
-  }
+    if (!confirm('¿Eliminar esta oferta?')) return;
 
-  abrirPuja(oferta: Oferta): void {
-    this.pujaOferta = oferta;
-    this.nuevaPuja = oferta.precioVenta || 0;
-    this.errorPuja = '';
-  }
-
-  cerrarPuja(): void {
-    this.pujaOferta = null;
-  }
-
-  confirmarPuja(): void {
-    if (!this.pujaOferta) return;
-
-    const id = this.pujaOferta.id!;
-    this.ofertaService.editar(id, { precioVenta: this.nuevaPuja }).subscribe({
-      next: () => {
-        this.pujaOferta = null;
-        this.ngOnInit();
-      },
-      error: () => this.errorPuja = 'No se pudo modificar la puja.'
+    this.ofertaService.eliminar(id).subscribe({
+      next: () => this.obtenerOfertas(),
+      error: () => alert('Error al eliminar la oferta')
     });
-  }
-
-  puedeEditarPuja(oferta: Oferta): boolean {
-    return !!oferta.disponibilidad && !oferta.partida && !oferta.destino;
   }
 
   mostrarRiven(id: string, event: MouseEvent): void {
@@ -141,5 +125,44 @@ export class MisOfertasComponent implements OnInit {
 
   ocultarRiven(): void {
     this.showPopup = false;
+  }
+
+  puedeEditar(oferta: Oferta): boolean {
+    return oferta.disponibilidad!;
+  }
+
+  abrirEdicion(oferta: Oferta): void {
+    this.ofertaEditando = oferta;
+    this.nuevoPrecio = oferta.precioVenta;
+    this.errorEdicion = '';
+  }
+
+  cerrarEdicion(): void {
+    this.ofertaEditando = null;
+    this.nuevoPrecio = 0;
+    this.errorEdicion = '';
+  }
+
+  confirmarEdicion(): void {
+    if (this.nuevoPrecio <= 0) {
+      this.errorEdicion = 'El precio debe ser mayor a 0';
+      return;
+    }
+
+    const nuevaOferta: Oferta = {
+      ...this.ofertaEditando!,
+      precioVenta: this.nuevoPrecio
+    };
+
+    this.ofertaService.editar(nuevaOferta).subscribe({
+      next: () => {
+        alert('Oferta actualizada con éxito.');
+        this.cerrarEdicion();
+        this.obtenerOfertas();
+      },
+      error: () => {
+        this.errorEdicion = 'Error al editar la oferta';
+      }
+    });
   }
 }

@@ -15,4 +15,20 @@ export class VentaService {
   getMisVentas(): Observable<Venta[]> {
     return this.http.get<Venta[]>(`${this.apiUrl}/MisVentas`);
   }
+
+  getMisVentasActivas(): Observable<any[]> {
+  return this.http.get<any[]>('/api/Ventas/MisVentasActivas');
+}
+
+  obtenerVenta(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/Venta/${id}`);
+  }
+
+  confirmarVenta(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/Confirmar/${id}`);
+  }
+
+  confirmarCompra(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/Vendido/${id}`);
+  }
 }

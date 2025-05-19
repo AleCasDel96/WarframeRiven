@@ -11,47 +11,27 @@ export class OfertaService {
 
   constructor(private http: HttpClient) { }
 
-  getMisOfertas(): Observable<Oferta[]> {
-    return this.http.get<Oferta[]>(`${this.apiUrl}/MisOfertas`);
-  }
-
-  getMisPujas(): Observable<Oferta[]> {
-    return this.http.get<Oferta[]>(`${this.apiUrl}/MisPujas`);
+  getMisOfertas(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/MisOfertas`);
   }
 
   getPublicas(): Observable<Oferta[]> {
-    return this.http.get<Oferta[]>(`${this.apiUrl}/Publicas`);
+    return this.http.get<Oferta[]>(`${this.apiUrl}/VerOfertas`);
   }
 
-  editar(id: string, cambios: Partial<Oferta>): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, cambios);
+  editar(oferta: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/Editar/${oferta.id}`, oferta);
   }
 
   crear(oferta: Partial<Oferta>): Observable<any> {
     return this.http.post(this.apiUrl, oferta);
   }
 
-  cerrar(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/Cerrar/${id}`);
-  }
-
-  abrir(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/Open/${id}`); // ✅ NUEVO MÉTODO
-  }
-
-  confirmarVenta(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/ComfirVen/${id}`);
-  }
-
-  confirmarCompra(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/ComfirCom/${id}`);
-  }
-
-  transpaso(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/Traspaso/${id}`);
+  cambiarDisponibilidad(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/Disponibilidad/${id}`);
   }
 
   eliminar(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/Eliminar/${id}`);
   }
 }

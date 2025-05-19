@@ -7,6 +7,8 @@ import { Oferta } from '../models/oferta.model';
 import { Riven } from '../models/riven.model';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgPipesModule } from 'ngx-pipes';
+import { HttpClient } from '@angular/common/http';
+import { MensajeService } from '../services/mensaje.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -40,7 +42,9 @@ export class OfertasPublicasComponent implements OnInit {
   constructor(
     private ofertaService: OfertaService,
     private rivenService: RivenService,
-    private auth: AuthService
+    private auth: AuthService,
+    private mensajeService: MensajeService,
+    private http: HttpClient,
   ) { }
 
   ngOnInit(): void {
@@ -56,66 +60,40 @@ export class OfertasPublicasComponent implements OnInit {
     });
   }
 
-  abrirPuja(oferta: Oferta): void {
-    if (!this.nicknameActual) return;
+  copiarMensaje(oferta: Oferta): void {
+    if (oferta.disponibilidad) return;
 
-    this.rivenService.getPorId(oferta.idRiven).subscribe({
-      next: (riven: Riven) => {
-        const esDueño = riven.idUsuario === this.nicknameActual;
-        const yaEsPujador = oferta.nickUsuario === this.nicknameActual;
+    if (!oferta.nickUsuario || !oferta.arma || !oferta.nombreRiven) {
+      this.mensajeService.set('Faltan datos para generar el mensaje.');
+      return;
+    }
 
-        if (!esDueño && yaEsPujador) {
-          this.error = 'No puedes pujar de nuevo si ya eres el pujador actual.';
-          return;
-        }
-
-        this.pujaOferta = oferta;
-        this.nuevaPuja = oferta.precioVenta || 0;
-        this.errorPuja = '';
-      },
-      error: () => this.error = 'No se pudo verificar el propietario del Riven.'
+    const mensaje = `/w ${oferta.nickUsuario} he visto tu riven ${oferta.arma} ${oferta.nombreRiven} en WarframeRivens`;
+    navigator.clipboard.writeText(mensaje).then(() => {
+      this.mensajeService.set('Mensaje copiado al portapapeles.');
+    }).catch(() => {
+      this.mensajeService.set('No se pudo copiar el mensaje.');
     });
   }
 
-  cerrarPuja(): void {
-    this.pujaOferta = null;
-    this.errorPuja = '';
+  puedeComprar(oferta: any): boolean {
+    return oferta.disponibilidad && oferta.idVendedor !== this.nicknameActual;
   }
 
-  confirmarPuja(): void {
-    if (!this.pujaOferta || !this.nicknameActual) return;
+  iniciarCompra(oferta: any): void {
+    const confirmar = confirm(`¿Deseas comprar "${oferta.nombreRiven}" por ${oferta.precioVenta}p? Esto cerrará la oferta.`);
+    if (!confirmar) return;
 
-    const id = this.pujaOferta?.id;
-    if (!id) return;
-    const precioActual = this.pujaOferta.precioVenta ?? 0;
-
-    this.rivenService.getPorId(this.pujaOferta.idRiven).subscribe({
-      next: (riven: Riven) => {
-        const esDueño = riven.idUsuario === this.nicknameActual;
-
-        if (!esDueño && this.nuevaPuja <= precioActual) {
-          this.errorPuja = 'La puja debe ser mayor que el precio actual.';
-          return;
+    this.http.post(`/api/Ventas/Vendido?ofertaId=${oferta.id}`, {})
+      .subscribe({
+        next: () => {
+          alert('Compra registrada. Esperando confirmación del vendedor.');
+          oferta.disponibilidad = false;
+        },
+        error: () => {
+          alert('Error al registrar la compra.');
         }
-
-        this.ofertaService.editar(id, { precioVenta: this.nuevaPuja }).subscribe({
-          next: () => {
-            this.pujaOferta = null;
-            this.ngOnInit();
-          },
-          error: () => this.errorPuja = 'No se pudo realizar la puja.'
-        });
-      },
-      error: () => this.errorPuja = 'No se pudo validar el propietario del Riven.'
-    });
-  }
-
-  puedePujar(oferta: Oferta): boolean {
-    return (
-      !!this.nicknameActual &&
-      oferta.disponibilidad === true &&
-      oferta.nickUsuario !== this.nicknameActual
-    );
+      });
   }
 
   ordenarPor(col: string): void {

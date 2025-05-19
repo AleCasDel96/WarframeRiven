@@ -26,22 +26,24 @@
                   | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
                   | paginate: { itemsPerPage: 12, currentPage: p }">
 
-        <td><span (mouseenter)="mostrarRiven(o.idRiven, $event)" (mouseleave)="ocultarRiven()"
-            style="cursor: pointer; text-decoration: underline;">
+        <td>
+          <span (mouseenter)="mostrarRiven(o.idRiven, $event)" (mouseleave)="ocultarRiven()"
+                style="cursor: pointer; text-decoration: underline;">
             {{ o.nombreRiven }}
-          </span></td>
+          </span>
+        </td>
         <td>{{ o.nickUsuario || 'Sin pujas' }}</td>
         <td>{{ o.precioVenta }} <img src="assets/platino-icon.png" alt="p" class="icono-inline" /></td>
         <td>
-          <span *ngIf="!o.partida && !o.destino" class="estado rojo">Ninguna confirmación</span>
-          <span *ngIf="(o.partida && !o.destino) || (!o.partida && o.destino)" class="estado naranja">Confirmación parcial</span>
-          <span *ngIf="o.partida && o.destino" class="estado verde">Lista para traspasar</span>
+          <span [ngClass]="o.disponibilidad ? 'verde' : 'rojo'">
+            {{ o.disponibilidad ? 'Abierta' : 'Cerrada' }}
+          </span>
         </td>
+
         <td class="acciones">
           <button *ngIf="o.disponibilidad" (click)="cerrar(o.id!)">Cerrar</button>
-          <button *ngIf="puedeEditarPuja(o)" (click)="abrirPuja(o)">Modificar Puja</button>
-          <button *ngIf="!o.disponibilidad && !o.partida" (click)="confirmarVenta(o.id!)">Confirmar venta</button>
-          <button *ngIf="o.partida && o.destino" (click)="transpaso(o.id!)">Traspaso</button>
+          <button *ngIf="puedeEditar(o)" (click)="abrirEdicion(o)">Editar oferta</button>
+          <button *ngIf="!o.disponibilidad" (click)="confirmarVenta(o.id!)">Confirmar venta</button>
           <button (click)="eliminar(o.id!)">Eliminar</button>
         </td>
       </tr>
@@ -59,16 +61,17 @@
     <div *ngIf="rivenSeleccionado.stat4">{{ rivenSeleccionado.stat4 }}: {{ rivenSeleccionado.valor4 }}</div>
   </div>
 
-  <div *ngIf="pujaOferta" class="puja-modal">
-    <h3>Modificar puja para: {{ pujaOferta.nombreRiven }}</h3>
-    <p>Precio actual: {{ pujaOferta.precioVenta }}p</p>
+  <!-- Modal edición -->
+  <div *ngIf="ofertaEditando" class="puja-modal">
+    <h3>Editar oferta: {{ ofertaEditando.nombreRiven }}</h3>
+    <p>Precio actual: {{ ofertaEditando.precioVenta }}p</p>
 
-    <label>Nueva puja:</label>
-    <input type="number" [(ngModel)]="nuevaPuja" style="width: 100%; margin-bottom: 0.5rem;" />
+    <label>Nuevo precio:</label>
+    <input type="number" [(ngModel)]="nuevoPrecio" style="width: 100%; margin-bottom: 0.5rem;" />
 
-    <div *ngIf="errorPuja" style="color: red; margin-bottom: 0.5rem;">{{ errorPuja }}</div>
+    <div *ngIf="errorEdicion" style="color: red; margin-bottom: 0.5rem;">{{ errorEdicion }}</div>
 
-    <button (click)="confirmarPuja()" style="margin-right: 1rem;">Confirmar</button>
-    <button (click)="cerrarPuja()">Cancelar</button>
+    <button (click)="confirmarEdicion()" style="margin-right: 1rem;">Confirmar</button>
+    <button (click)="cerrarEdicion()">Cancelar</button>
   </div>
 </div>

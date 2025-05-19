@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { OfertaService } from '../services/oferta.service';
+import { VentaService } from '../services/venta.service';
 import { RivenService } from '../services/riven.service';
 import { Oferta } from '../models/oferta.model';
 import { Riven } from '../models/riven.model';
@@ -10,12 +10,12 @@ import { NgPipesModule } from 'ngx-pipes';
 import { MensajeService } from '../services/mensaje.service';
 
 @Component({
-  selector: 'app-mis-pujas',
+  selector: 'app-mis-ventas',
   standalone: true,
   imports: [CommonModule, FormsModule, NgxPaginationModule, NgPipesModule],
-  templateUrl: './mis-pujas.component.html'
+  templateUrl: './mis-ventas.component.html'
 })
-export class MisPujasComponent implements OnInit {
+export class MisVentasComponent implements OnInit {
   ofertas: Oferta[] = [];
   searchText = '';
   sortColumn = 'nombreRiven';
@@ -32,13 +32,13 @@ export class MisPujasComponent implements OnInit {
   showPopup = false;
 
   constructor(
-    private ofertaService: OfertaService,
+    private ventaService: VentaService,
     private rivenService: RivenService,
     private mensajeService: MensajeService
   ) { }
 
   ngOnInit(): void {
-    this.ofertaService.getMisPujas().subscribe({
+    this.ventaService.getMisVentasActivas().subscribe({
       next: data => {
         this.ofertas = data;
 
@@ -59,7 +59,7 @@ export class MisPujasComponent implements OnInit {
   }
 
   confirmarCompra(id: string): void {
-    this.ofertaService.confirmarCompra(id).subscribe(() => this.ngOnInit());
+    this.ventaService.confirmarCompra(id).subscribe(() => this.ngOnInit());
   }
 
   copiarMensaje(oferta: Oferta): void {
