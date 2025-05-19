@@ -46,7 +46,7 @@ namespace WarframeRivensAPI.Controllers
             public string Password { get; set; }
 
             [Required]
-            [MinLength(10, ErrorMessage = "El Nickname debe tener al menos 4 caracteres.")]
+            [MinLength(4, ErrorMessage = "El Nickname debe tener al menos 4 caracteres.")]
             public string Nickname { get; set; }
         }
 

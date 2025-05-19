@@ -19,5 +19,6 @@ namespace WarframeRivensAPI.Models
         public int PrecioVenta { get; set; }
         [Required]
         public DateTime FechaVenta { get; set; }
+        public bool Finalizado { get; set; }
     }
 }

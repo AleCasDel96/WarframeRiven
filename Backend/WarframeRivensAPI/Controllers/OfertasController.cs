@@ -16,6 +16,7 @@ namespace WarframeRivensAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "confirmado, admin")]
     public class OfertasController : ControllerBase
     {
         #region Config
@@ -73,7 +74,7 @@ namespace WarframeRivensAPI.Controllers
         }
         #endregion
 
-        #region Mis Pujas/ofertas
+        #region Mis ofertas
         [HttpGet("MisOfertas")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -138,7 +139,7 @@ namespace WarframeRivensAPI.Controllers
             };
             try
             {
-                _context.Entry(oferta).State = EntityState.Modified;
+                _context.Ofertas.Add(nuevaOferta);
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
@@ -157,10 +158,15 @@ namespace WarframeRivensAPI.Controllers
 
         [HttpPut("Editar/{id}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status201Created)] //Devuelve 201 si se crea
+        [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede crear, devuelve 400
+        [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<ActionResult<Oferta>> EditarOferta(Oferta nuevo)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var antiguo = await _context.Ofertas.Where(o => o.IdRiven == nuevo.IdRiven && o.Disponibilidad) .FirstOrDefaultAsync();
+            if (antiguo == null) { return NotFound("La oferta no existe."); }
+            if (antiguo.IdVendedor != userId) { return Unauthorized(); }
             if (!antiguo.Disponibilidad)
             {
                 return BadRequest("La oferta no está activa.");
@@ -170,7 +176,7 @@ namespace WarframeRivensAPI.Controllers
                 _context.Ofertas.Update(nuevo);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException)
+            catch
             {
                 throw;
             }
@@ -202,9 +208,6 @@ namespace WarframeRivensAPI.Controllers
         }
         #endregion
 
-        private bool OfertaExists(string id)
-        {
-            return _context.Ofertas.Any(e => e.Id == id);
-        }
+        private bool OfertaExists(string id) { return _context.Ofertas.Any(e => e.Id == id); }
     }
 }

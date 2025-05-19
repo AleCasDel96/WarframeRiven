@@ -63,14 +63,51 @@ namespace WarframeRivensAPI.Controllers
 
         #region Añadir ventas
         [HttpPost("Vendido")]
-        public async Task<ActionResult<Venta>> VentaTerminada(Venta venta, string email)
+        public async Task<IActionResult> RealizarVenta(string ofertaId, string compradorId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var comprador = await _userManager.FindByEmailAsync(email);
-            venta.IdComprador = comprador.Id;
+            var oferta = await _context.Ofertas
+                .Include(o => o.Riven)
+                .Include(o => o.Vendedor)
+                .FirstOrDefaultAsync(o => o.Id == ofertaId);
+            if (oferta == null || !oferta.Disponibilidad) { return NotFound(); }
+            var venta = new Venta
+            {
+                Id = Guid.NewGuid().ToString(),
+                IdRiven = oferta.IdRiven,
+                Riven = oferta.Riven,
+                IdVendedor = oferta.IdVendedor,
+                Vendedor = oferta.Vendedor,
+                IdComprador = compradorId,
+                Comprador = await _context.Users.FirstOrDefaultAsync(o => o.Id == compradorId),
+                PrecioVenta = oferta.PrecioVenta,
+                FechaVenta = DateTime.UtcNow,
+                Finalizado = false
+            };
+            oferta.Disponibilidad = false;
             try
             {
                 _context.Ventas.Add(venta);
+                _context.Ofertas.Update(oferta);
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                throw;
+            }
+            return NoContent();
+        }
+
+        [HttpPost("Confirmar")]
+        public async Task<ActionResult<Venta>> ConfirmarVenta(Venta venta)
+        {
+            var riven = await _context.Rivens.FindAsync(venta.IdRiven);
+            if (riven == null) { return NotFound(); }
+            riven.IdPropietario = venta.IdComprador;
+            venta.Finalizado = true;
+            try
+            {
+                _context.Ventas.Update(venta);
+                _context.Rivens.Update(riven);
                 await _context.SaveChangesAsync();
             }
             catch
@@ -80,5 +117,7 @@ namespace WarframeRivensAPI.Controllers
             return CreatedAtAction("GetVenta", new { id = venta.Id }, venta);
         }
         #endregion
+
+
     }
 }
