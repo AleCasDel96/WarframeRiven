@@ -1,5 +1,5 @@
 export interface Riven {
-  id: string;
+  id?: string;
   nombre: string;
   arma: string;
   idUsuario?: string;
