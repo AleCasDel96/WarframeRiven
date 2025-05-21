@@ -3,6 +3,8 @@ export interface Riven {
   nombre: string;
   arma: string;
   idUsuario?: string;
+  polaridad: string; 
+  maestria: number;
 
   stat1: string;
   valor1: number;

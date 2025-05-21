@@ -8,31 +8,41 @@
     <label class="campo-label">Arma:</label>
     <input [(ngModel)]="riven.arma" name="arma" required />
 
+    <label for="polaridad">Polaridad:</label>
+    <select id="polaridad" [(ngModel)]="riven.polaridad" name="polaridad" required>
+      <option value="Vazarin">Vazarin</option>
+      <option value="Naramon">Naramon</option>
+      <option value="Madurai">Madurai</option>
+    </select>
+
+    <label for="maestria">Maestría:</label>
+    <input id="maestria" type="number" min="8" max="34" [(ngModel)]="riven.maestria" name="maestria" required />
+
     <h4 class="subtitulo">Estadísticas</h4>
 
     <label class="campo-label">Stat 1:</label>
     <input [(ngModel)]="riven.stat1" name="stat1" required />
 
     <label class="campo-label">Valor 1:</label>
-    <input type="number" [(ngModel)]="riven.valor1" name="valor1" required />
+    <input type="number" step="0.01" [(ngModel)]="riven.valor1" name="valor1" required />
 
     <label class="campo-label">Stat 2:</label>
     <input [(ngModel)]="riven.stat2" name="stat2" />
 
     <label class="campo-label">Valor 2:</label>
-    <input type="number" [(ngModel)]="riven.valor2" name="valor2" />
+    <input type="number" step="0.01" [(ngModel)]="riven.valor2" name="valor2" />
 
     <label class="campo-label">Stat 3:</label>
     <input [(ngModel)]="riven.stat3" name="stat3" />
 
     <label class="campo-label">Valor 3:</label>
-    <input type="number" [(ngModel)]="riven.valor3" name="valor3" />
+    <input type="number" step="0.01" [(ngModel)]="riven.valor3" name="valor3" />
 
     <label class="campo-label">Stat 4:</label>
     <input [(ngModel)]="riven.stat4" name="stat4" />
 
     <label class="campo-label">Valor 4:</label>
-    <input type="number" [(ngModel)]="riven.valor4" name="valor4" />
+    <input type="number" step="0.01" [(ngModel)]="riven.valor4" name="valor4" />
 
     <button type="submit" class="boton">Crear</button>
   </form>
