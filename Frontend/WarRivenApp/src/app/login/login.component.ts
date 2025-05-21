@@ -36,7 +36,7 @@ export class LoginComponent {
     this.auth.login(this.email, this.password).subscribe({
       next: (token) => {
         this.auth.saveToken(token);
-        this.router.navigate(['/rivens']);
+        this.router.navigate(['/']);
       },
       error: () => {
         this.mensajeError = 'Credenciales incorrectas.';

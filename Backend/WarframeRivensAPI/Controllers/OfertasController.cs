@@ -196,9 +196,10 @@ namespace WarframeRivensAPI.Controllers
             {
                 return BadRequest("La oferta no está activa.");
             }
+            oferta.PrecioVenta = nuevo.PrecioVenta;
             try
             {
-                oferta.PrecioVenta = nuevo.PrecioVenta;
+                
 
                 _context.Ofertas.Update(oferta);
                 await _context.SaveChangesAsync();

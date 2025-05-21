@@ -1,7 +1,7 @@
 <div class="contenedor">
   <h2 class="titulo">Registro</h2>
 
-  <form (ngSubmit)="registrar()">
+  <form (ngSubmit)="registrar()"  #form="ngForm">
     <div class="campo-formulario">
       <label for="nick">Nickname:</label>
       <input [(ngModel)]="nickNuevo" name="nick" required />

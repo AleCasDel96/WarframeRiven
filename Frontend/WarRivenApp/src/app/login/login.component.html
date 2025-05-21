@@ -2,8 +2,8 @@
   <h2 class="titulo" *ngIf="!mostrarRegistro">Iniciar sesión</h2>
   <h2 class="titulo" *ngIf="mostrarRegistro">Registro</h2>
 
-  <!-- LOGIN -->
-  <form *ngIf="!mostrarRegistro" (ngSubmit)="login()">
+ 
+  <form (ngSubmit)="login()" #form="ngForm">
     <div class="campo-formulario">
       <label for="email">Email:</label>
       <input [(ngModel)]="email" name="email" type="email" required />

@@ -20,22 +20,17 @@ export class RegistroComponent {
   constructor(private auth: AuthService, private router: Router) { }
 
   registrar() {
-    this.mensajeRegistro = '';
-
     if (this.passNuevo !== this.confirmPass) {
-      this.mensajeRegistro = 'Las contraseñas no coinciden.';
+      this.mensajeRegistro = 'Las contraseñas no coinciden';
       return;
     }
 
     this.auth.register(this.emailNuevo, this.passNuevo, this.nickNuevo).subscribe({
       next: () => {
-        this.mensajeRegistro = 'Usuario registrado correctamente. Ahora puedes iniciar sesión.';
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 1500);
+        this.mensajeRegistro = 'Registro exitoso';
       },
-      error: err => {
-        this.mensajeRegistro = err.error || 'Error al registrar usuario.';
+      error: () => {
+        this.mensajeRegistro = 'Error al registrar';
       }
     });
   }

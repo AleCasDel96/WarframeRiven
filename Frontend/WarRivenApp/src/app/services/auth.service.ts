@@ -15,7 +15,11 @@ export class AuthService {
   }
 
   register(email: string, password: string, nickname: string): Observable<any> {
-    return this.http.post(this.apiUrl + '/Register', { email, password, nickname });
+    return this.http.post(this.apiUrl + '/Register', {
+    email: email,
+    password: password,
+    nickname: nickname
+  });
   }
 
   saveToken(token: string): void {
