@@ -4,20 +4,6 @@
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup>
-<<<<<<< Updated upstream
     <ActiveDebugProfile>WarframeRivensAPI</ActiveDebugProfile>
-=======
-    <ActiveDebugProfile>https</ActiveDebugProfile>
-    <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
-    <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
-    <WebStackScaffolding_ControllerDialogWidth>650,4</WebStackScaffolding_ControllerDialogWidth>
-    <WebStackScaffolding_IsLayoutPageSelected>True</WebStackScaffolding_IsLayoutPageSelected>
-    <WebStackScaffolding_IsPartialViewSelected>False</WebStackScaffolding_IsPartialViewSelected>
-    <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
-    <WebStackScaffolding_LayoutPageFile />
-    <WebStackScaffolding_DbContextTypeFullName>WarframeRivensAPI.Data.WarRivenContext</WebStackScaffolding_DbContextTypeFullName>
-    <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
-    <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
->>>>>>> Stashed changes
   </PropertyGroup>
 </Project>
