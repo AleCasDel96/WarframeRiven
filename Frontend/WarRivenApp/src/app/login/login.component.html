@@ -3,7 +3,7 @@
   <h2 class="titulo" *ngIf="mostrarRegistro">Registro</h2>
 
  
-  <form (ngSubmit)="login()" #form="ngForm">
+  <form (ngSubmit)="login($event)" #form="ngForm">
     <div class="campo-formulario">
       <label for="email">Email:</label>
       <input [(ngModel)]="email" name="email" type="email" required />
