@@ -38,7 +38,7 @@ export class HistorialComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.ventaService.getMisVentas().subscribe({
+    this.ventaService.getHistorial().subscribe({
       next: data => {
         this.ventas = data;
 

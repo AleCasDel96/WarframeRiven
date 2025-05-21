@@ -13,36 +13,27 @@
     <thead>
       <tr>
         <th (click)="ordenarPor('nombreRiven')" style="cursor: pointer;">Nombre</th>
+        <th>Comprador</th>
         <th (click)="ordenarPor('precioVenta')" style="cursor: pointer;">Precio</th>
-        <th>Estado</th>
         <th>Acción</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let o of ofertas 
+      <tr *ngFor="let v of Ventas 
                   | filterBy: ['nombreRiven']: searchText 
                   | filterBy: ['arma']: filtroArma 
                   | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
                   | paginate: { itemsPerPage: 12, currentPage: p }">
         <td>
-          <span class="nombre-hover" 
-                (mouseenter)="mostrarRiven(o.idRiven, $event)" 
-                (mouseleave)="ocultarRiven()">
-            {{ o.nombreRiven }}
+
+          {{ v.nombreRiven }}
           </span>
         </td>
-        <td>{{ o.precioVenta }} <img src="assets/platino-icon.png" alt="p" class="icono-inline" /></td>
+        <th>{{ v.nickComprador }}</th>
+        <td>{{ v.precioVenta }} <img src="assets/platino-icon.png" alt="p" class="icono-inline" /></td>
         <td>
-          <span *ngIf="!o.partida && !o.destino" class="estado rojo">Ninguna confirmación</span>
-          <span *ngIf="(o.partida && !o.destino) || (!o.partida && o.destino)" class="estado naranja">Confirmación
-            parcial</span>
-          <span *ngIf="o.partida && o.destino" class="estado verde">Lista para traspaso</span>
-        </td>
-        <td>
-          <button *ngIf="!o.disponibilidad && !o.destino" (click)="confirmarCompra(o.id!)">Confirmar compra</button>
-          <img *ngIf="!o.disponibilidad" src="assets/chat-icon.png" alt="Copiar mensaje"
-            style="width: 24px; cursor: pointer;" (click)="copiarMensaje(o)" title="Copiar mensaje para el chat" />
-
+          <button (click)="confirmarVenta(v.id!)">Confirmar venta</button>
+          <button (click)="eliminar(v.id!)">Eliminar venta</button>
         </td>
       </tr>
     </tbody>

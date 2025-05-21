@@ -12,12 +12,12 @@ export class VentaService {
   constructor(private http: HttpClient) {}
 
   // Obtener historial de ventas del usuario logueado
-  getMisVentas(): Observable<Venta[]> {
-    return this.http.get<Venta[]>(`${this.apiUrl}/MisVentas`);
+  getHistorial(): Observable<Venta[]> {
+    return this.http.get<Venta[]>(`${this.apiUrl}/Historial`);
   }
 
-  getMisVentasActivas(): Observable<any[]> {
-  return this.http.get<any[]>('/api/Ventas/MisVentasActivas');
+  getMisVentas(): Observable<any[]> {
+  return this.http.get<any[]>('/api/Ventas/MisVentas');
 }
 
   obtenerVenta(id: string): Observable<any> {
@@ -30,5 +30,9 @@ export class VentaService {
 
   confirmarCompra(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/Vendido/${id}`);
+  }
+
+  eliminarVenta(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/eliminar/${id}`);
   }
 }

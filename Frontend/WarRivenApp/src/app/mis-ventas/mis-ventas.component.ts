@@ -38,7 +38,7 @@ export class MisVentasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.ventaService.getMisVentasActivas().subscribe({
+    this.ventaService.getMisVentas().subscribe({
       next: data => {
         this.ofertas = data;
 
@@ -62,20 +62,8 @@ export class MisVentasComponent implements OnInit {
     this.ventaService.confirmarCompra(id).subscribe(() => this.ngOnInit());
   }
 
-  copiarMensaje(oferta: Oferta): void {
-    if (oferta.disponibilidad) return;
-
-    if (!oferta.nickUsuario || !oferta.arma || !oferta.nombreRiven) {
-      this.mensajeService.set('Faltan datos para generar el mensaje.');
-      return;
-    }
-
-    const mensaje = `/w ${oferta.nickUsuario} he visto tu riven ${oferta.arma} ${oferta.nombreRiven} en WarframeRivens`;
-    navigator.clipboard.writeText(mensaje).then(() => {
-      this.mensajeService.set('Mensaje copiado al portapapeles.');
-    }).catch(() => {
-      this.mensajeService.set('No se pudo copiar el mensaje.');
-    });
+  eliminar(id: string): void {
+    this.ventaService.eliminarVenta(id).subscribe(()=> this.ngOnInit())
   }
 
   mostrarRiven(idRiven: string, e: MouseEvent): void {
