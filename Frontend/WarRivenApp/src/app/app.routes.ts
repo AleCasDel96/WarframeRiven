@@ -14,6 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./registro/registro.component').then(m => m.RegistroComponent)
   },
   {
+    path: 'perfil',
+    loadComponent: () => import('./perfil/perfil.component').then(m => m.PerfilComponent)
+  },
+  {
     path: 'crear-riven',
     loadComponent: () => import('./crear-riven/crear-riven.component').then(m => m.CrearRivenComponent)
   },
@@ -36,6 +40,14 @@ export const routes: Routes = [
   {
     path: 'mis-ventas',
     loadComponent: () => import('./mis-ventas/mis-ventas.component').then(m => m.MisVentasComponent)
+  },
+  {
+    path: 'historial',
+    loadComponent: () => import('./historial/historial.component').then(m => m.HistorialComponent)
+  },
+  {
+    path: 'mis-rivens',
+    loadComponent: () => import('./rivens/rivens.component').then(m => m.RivensComponent)
   },
   {
     path: '**',
