@@ -55,10 +55,10 @@
   <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
     <strong>{{ rivenSeleccionado.nombre }}</strong><br />
     {{ rivenSeleccionado.arma }}<br /><br />
-    <div *ngIf="rivenSeleccionado.stat1">{{ rivenSeleccionado.stat1 }}: {{ rivenSeleccionado.valor1 }}</div>
-    <div *ngIf="rivenSeleccionado.stat2">{{ rivenSeleccionado.stat2 }}: {{ rivenSeleccionado.valor2 }}</div>
-    <div *ngIf="rivenSeleccionado.stat3">{{ rivenSeleccionado.stat3 }}: {{ rivenSeleccionado.valor3 }}</div>
-    <div *ngIf="rivenSeleccionado.stat4">{{ rivenSeleccionado.stat4 }}: {{ rivenSeleccionado.valor4 }}</div>
+    <div *ngIf="rivenSeleccionado.Atrib1">{{ rivenSeleccionado.Atrib1 }}: {{ rivenSeleccionado.valor1 }}</div>
+    <div *ngIf="rivenSeleccionado.Atrib2">{{ rivenSeleccionado.Atrib2 }}: {{ rivenSeleccionado.valor2 }}</div>
+    <div *ngIf="rivenSeleccionado.Atrib3">{{ rivenSeleccionado.Atrib3 }}: {{ rivenSeleccionado.valor3 }}</div>
+    <div *ngIf="rivenSeleccionado.DAtrib">{{ rivenSeleccionado.DAtrib }}: {{ rivenSeleccionado.DValor }}</div>
   </div>
 
   <!-- Modal edición -->

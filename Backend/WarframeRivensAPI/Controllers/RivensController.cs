@@ -188,10 +188,6 @@ namespace WarframeRivensAPI.Controllers
         public string? DAtrib { get; set; } = null;
 
         public decimal? DValor { get; set; } = null;
-<<<<<<< HEAD
         public string? IdPropietario { get; set; } = null;
-=======
-        public string IdPropietario { get; set; } = null;
->>>>>>> f6c493da7e15e7398dcbc3a9963aa89a89046d83
     }
 }

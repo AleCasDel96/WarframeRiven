@@ -34,7 +34,7 @@ export class EditarRivenComponent implements OnInit {
   }
 
   actualizar(): void {
-    if (!this.riven.nombre || !this.riven.arma || !this.riven.stat1 || this.riven.valor1 === null) {
+    if (!this.riven.nombre || !this.riven.arma || !this.riven.Atrib1 || this.riven.valor1 === null) {
       this.error = 'Debes introducir nombre, arma y al menos una estadística válida.';
       return;
     }
