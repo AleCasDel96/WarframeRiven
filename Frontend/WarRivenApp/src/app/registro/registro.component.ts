@@ -19,7 +19,8 @@ export class RegistroComponent {
 
   constructor(private auth: AuthService, private router: Router) { }
 
-  registrar() {
+  registrar(event: Event) {
+    event.preventDefault();
     if (this.passNuevo !== this.confirmPass) {
       this.mensajeRegistro = 'Las contraseñas no coinciden';
       return;

@@ -1,7 +1,7 @@
 <div class="contenedor">
   <h2 class="titulo">Crear nuevo Riven</h2>
 
-  <form (ngSubmit)="crear()" class="formulario">
+  <form (ngSubmit)="crear($event)" class="formulario">
     <label class="campo-label">Nombre del Riven:</label>
     <input [(ngModel)]="riven.nombre" name="nombre" required />
 

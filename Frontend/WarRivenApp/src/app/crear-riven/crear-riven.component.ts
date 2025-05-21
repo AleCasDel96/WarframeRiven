@@ -24,7 +24,8 @@ export class CrearRivenComponent {
 
   constructor(private rivenService: RivenService, private router: Router) {}
 
-  crear() {
+  crear(event: Event) {
+    event.preventDefault();
     if (!this.riven.nombre || !this.riven.arma || !this.riven.stat1 || this.riven.valor1 === undefined) {
       this.error = 'Debes completar al menos la estadística principal.';
       return;

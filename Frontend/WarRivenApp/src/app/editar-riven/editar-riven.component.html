@@ -1,7 +1,7 @@
 <div class="contenedor">
   <h2 class="titulo">Editar Riven</h2>
 
-  <form (ngSubmit)="actualizar()" class="formulario">
+  <form (ngSubmit)="actualizar($event)" class="formulario">
     <label class="campo-label">Nombre del Riven:</label>
     <input [(ngModel)]="riven.nombre" name="nombre" required />
 

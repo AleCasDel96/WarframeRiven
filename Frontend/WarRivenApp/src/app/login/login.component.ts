@@ -31,8 +31,12 @@ export class LoginComponent {
     }
   }
 
+  goToRegistro() {
+    this.router.navigate(['/registro']);
+  }
 
-  login() {
+  login(event: Event) {
+    event.preventDefault();
     this.auth.login(this.email, this.password).subscribe({
       next: (token) => {
         this.auth.saveToken(token);
