@@ -62,7 +62,7 @@ export class EditarRivenComponent implements OnInit {
     }
 
     this.rivenService.editar(this.id, cuerpo).subscribe({
-      next: () => this.router.navigate(['/mis-rivens']),
+      next: () => this.router.navigate(['/rivens']),
       error: () => this.error = 'Error al actualizar el Riven.'
     });
   }

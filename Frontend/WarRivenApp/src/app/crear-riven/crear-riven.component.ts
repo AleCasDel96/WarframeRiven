@@ -34,7 +34,7 @@ export class CrearRivenComponent {
     console.log('🛠 Enviando Riven:', this.riven);
 
     this.rivenService.crear(this.riven).subscribe({
-      next: () => this.router.navigate(['/mis-rivens']),
+      next: () => this.router.navigate(['/rivens']),
       error: () => this.error = 'No se pudo crear el Riven.'
     });
   }

@@ -46,7 +46,7 @@ export const routes: Routes = [
     loadComponent: () => import('./historial/historial.component').then(m => m.HistorialComponent)
   },
   {
-    path: 'mis-rivens',
+    path: 'rivens',
     loadComponent: () => import('./rivens/rivens.component').then(m => m.RivensComponent)
   },
   {
