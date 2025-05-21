@@ -31,7 +31,7 @@ namespace WarframeRivensAPI.Controllers
         #endregion
 
         #region Inventario
-        [HttpGet]
+        [HttpGet("/Inventario")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Riven>>> Inventario()
@@ -92,8 +92,8 @@ namespace WarframeRivensAPI.Controllers
         public async Task<ActionResult<Riven>> PostRiven(RivenDTO riven)
         {
             if (riven == null) { return BadRequest(); }
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            riven.IdPropietario = userId;
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             Riven newRiven = new Riven
             {
                 Id = Guid.NewGuid().ToString(),
@@ -109,7 +109,7 @@ namespace WarframeRivensAPI.Controllers
                 Valor3 = riven.Valor3,
                 DAtrib = riven.DAtrib,
                 DValor = riven.DValor,
-                IdPropietario = userId
+                IdPropietario = user.Id
             };
             try
             {
@@ -153,12 +153,6 @@ namespace WarframeRivensAPI.Controllers
 
         private bool RivenExists(string id) { return _context.Rivens.Any(e => e.Id == id); }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Riven>>> TestRivens()
-        {
-            return await _context.Rivens.ToListAsync();
-        }
     }
     public class RivenDTO
     {
