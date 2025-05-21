@@ -4,39 +4,39 @@
   <div class="inicio-opciones">
     <ng-container *ngIf="!estaLogueado; else logueado">
       <a routerLink="/login" class="inicio-card">
-        <img src="assets/login-key.png" alt="Login" />
+        <img src="assets/login-key-white.png" alt="Login" />
         <span>Iniciar sesión</span>
       </a>
 
       <a routerLink="/ofertas" class="inicio-card">
-        <img src="assets/market.png" alt="Mercado" />
+        <img src="assets/market-white.png" alt="Mercado" />
         <span>Ofertas Públicas</span>
       </a>
     </ng-container>
 
     <ng-template #logueado>
       <a routerLink="/rivens" class="inicio-card">
-        <img src="assets/inventory.png" alt="Inventario" />
+        <img src="assets/inventory-white.png" alt="Inventario" />
         <span>Mis Rivens</span>
       </a>
 
       <a routerLink="/crear-riven" class="inicio-card">
-        <img src="assets/plus.png" alt="nuevo riven" />
+        <img src="assets/plus-white.png" alt="nuevo riven" />
         <span>Nuevo Riven</span>
       </a>
 
       <a routerLink="/mis-ofertas" class="inicio-card">
-        <img src="assets/mis-ofertas.png" alt="Mis Ofertas" />
+        <img src="assets/mis-ofertas-white.png" alt="Mis Ofertas" />
         <span>Mis Ofertas</span>
       </a>
 
       <a routerLink="/ofertas" class="inicio-card">
-        <img src="assets/market.png" alt="Mercado" />
+        <img src="assets/market-white.png" alt="Mercado" />
         <span>Mercado</span>
       </a>
 
       <a routerLink="/perfil" class="inicio-card">
-        <img src="assets/config.png" alt="configurar perfil" />
+        <img src="assets/config-white.png" alt="configurar perfil" />
         <span>Configurar Perfil</span>
       </a>
     </ng-template>

@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './registro.component.html'
+  imports: [CommonModule, FormsModule],
+  templateUrl: './registro.component.html',
+  styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
   nickNuevo = '';
@@ -17,10 +17,10 @@ export class RegistroComponent {
   confirmPass = '';
   mensajeRegistro = '';
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AuthService) {}
 
-  registrar(event: Event) {
-    event.preventDefault();
+  registrar() {
+  console.log('🔥 Angular interceptó el submit');
     if (this.passNuevo !== this.confirmPass) {
       this.mensajeRegistro = 'Las contraseñas no coinciden';
       return;
@@ -31,7 +31,7 @@ export class RegistroComponent {
         this.mensajeRegistro = 'Registro exitoso';
       },
       error: () => {
-        this.mensajeRegistro = 'Error al registrar';
+        this.mensajeRegistro = 'Error en el registro';
       }
     });
   }
