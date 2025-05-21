@@ -30,10 +30,14 @@ namespace WarframeRivensAPI.Controllers
         #region DTO
         public class VentaDTO
         {
-            public string IdVendedor { get; set; }
-            public string IdComprador { get; set; }
-            public decimal PrecioVenta { get; set; }
+            public string Id { get; set; }
+            public string NombreRiven { get; set; }
+            public string Arma { get; set; }
+            public string NickComprador { get; set; }
+            public string NickVendedor { get; set; }
+            public int PrecioVenta { get; set; }
             public DateTime FechaVenta { get; set; }
+            public bool Finalizado { get; set; }
         }
         #endregion
 
@@ -44,11 +48,22 @@ namespace WarframeRivensAPI.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var ventas = await _context.Ventas
-                .Include(v => v.Riven)
-                .Include(v => v.Vendedor)
-                .Include(v => v.Comprador)
-                .Where(v => v.Finalizado == true)
-                .Where(v => (v.IdVendedor==userId||v.IdComprador==userId))
+        .Include(v => v.Riven)
+        .Include(v => v.Vendedor)
+        .Include(v => v.Comprador)
+        .Where(v => v.Finalizado == true)
+        .Where(v => v.IdVendedor == userId || v.IdComprador == userId)
+                .Select(v => new VentaDTO
+                {
+                    Id = v.Id,
+                    NombreRiven = v.Riven.Nombre,
+                    Arma = v.Riven.Arma,
+                    NickComprador = v.Comprador.Nickname,
+                    NickVendedor = v.Vendedor.Nickname,
+                    PrecioVenta = v.PrecioVenta,
+                    FechaVenta = v.FechaVenta,
+                    Finalizado = v.Finalizado
+                })
                 .ToListAsync();
             return Ok(ventas);
         }
@@ -58,10 +73,22 @@ namespace WarframeRivensAPI.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var ventas = await _context.Ventas
-                .Include(v => v.Riven)
-                .Include(v => v.Vendedor)
-                .Where(v => v.Finalizado == false)
-                .Where(v => v.IdVendedor == userId)
+        .Include(v => v.Riven)
+        .Include(v => v.Comprador)
+        .Include(v => v.Vendedor)
+        .Where(v => v.Finalizado == false)
+        .Where(v => v.IdVendedor == userId)
+        .Select(v => new VentaDTO
+        {
+            Id = v.Id,
+            NombreRiven = v.Riven.Nombre,
+            Arma = v.Riven.Arma,
+            NickComprador = v.Comprador.Nickname,
+            NickVendedor = v.Vendedor.Nickname,
+            PrecioVenta = v.PrecioVenta,
+            FechaVenta = v.FechaVenta,
+            Finalizado = v.Finalizado
+        })
                 .ToListAsync();
             return Ok(ventas);
         }
@@ -74,14 +101,27 @@ namespace WarframeRivensAPI.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var venta = await _context.Ventas
-                .Where(v => v.Id == id)
-                .Include(v => v.Riven)
-                .Include(v => v.Vendedor)
-                .Include(v => v.Comprador)
+        .Include(v => v.Riven)
+        .Include(v => v.Vendedor)
+        .Include(v => v.Comprador)
+        .Where(v => v.Id == id)
                 .FirstOrDefaultAsync();
             if (venta == null) { return NotFound(); }
             if (venta.IdVendedor != userId && venta.IdComprador != userId) { return Unauthorized(); }
-            return Ok(venta);
+
+            var dto = new VentaDTO
+            {
+                Id = venta.Id,
+                NombreRiven = venta.Riven.Nombre,
+                Arma = venta.Riven.Arma,
+                NickComprador = venta.Comprador?.Nickname ?? "(desconocido)",
+                NickVendedor = venta.Vendedor?.Nickname ?? "(desconocido)",
+                PrecioVenta = venta.PrecioVenta,
+                FechaVenta = venta.FechaVenta,
+                Finalizado = venta.Finalizado
+            };
+
+            return Ok(dto);
         }
         #endregion
 

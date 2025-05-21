@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-perfil',
@@ -17,14 +16,24 @@ export class PerfilComponent {
   nuevaPassword = '';
   mensaje = '';
 
-  private apiUrl = 'https://localhost:5001/api/UserConf';
+  constructor(private auth: AuthService) { }
 
-  constructor(private http: HttpClient, private auth: AuthService) {}
-
-  cambiar(field: 'ChangeNick' | 'ChangeWarNick' | 'ChangeIcon' | 'ChangePass', value: string) {
-    this.http.put(`${this.apiUrl}/${field}`, value, { responseType: 'text' }).subscribe({
-      next: () => this.mensaje = `${field} actualizado correctamente.`,
-      error: () => this.mensaje = `Error al actualizar ${field}.`
+  cambiar(tipo: string, valor: string) {
+    this.auth.update(tipo, valor).subscribe({
+      next: () => {
+        // Si el cambio fue de warframe nick, también realiza el upgrade
+        if (tipo === 'ChangeWarNick') {
+          this.auth.update('Upgrade', '').subscribe({
+            next: () => this.mensaje = 'Warframe Nick y rol actualizados.',
+            error: err => this.mensaje = 'Warframe Nick cambiado, pero fallo al actualizar el rol.'
+          });
+        } else {
+          this.mensaje = 'Cambio realizado con éxito.';
+        }
+      },
+      error: () => {
+        this.mensaje = 'Error al realizar el cambio.';
+      }
     });
   }
 

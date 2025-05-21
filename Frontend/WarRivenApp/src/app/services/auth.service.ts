@@ -24,6 +24,15 @@ export class AuthService {
     }
   }
 
+  update(tipo: string, valor: string) {
+  if (tipo === 'Upgrade') {
+    return this.http.get('api/UserConf/Upgrade');
+  }
+  return this.http.put(`api/UserConf/${tipo}`, valor, {
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+
   getToken(): string | null {
     if (typeof window === 'undefined') return null;
     return localStorage.getItem('jwt');

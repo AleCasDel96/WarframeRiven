@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { VentaService } from '../services/venta.service';
 import { RivenService } from '../services/riven.service';
-import { Oferta } from '../models/oferta.model';
 import { Riven } from '../models/riven.model';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgPipesModule } from 'ngx-pipes';
 import { MensajeService } from '../services/mensaje.service';
+import { Venta } from '../models/venta.model';
 
 @Component({
   selector: 'app-mis-ventas',
@@ -16,7 +16,7 @@ import { MensajeService } from '../services/mensaje.service';
   templateUrl: './mis-ventas.component.html'
 })
 export class MisVentasComponent implements OnInit {
-  ofertas: Oferta[] = [];
+  Ventas: Venta[] = [];
   searchText = '';
   sortColumn = 'nombreRiven';
   sortAsc = true;
@@ -40,7 +40,7 @@ export class MisVentasComponent implements OnInit {
   ngOnInit(): void {
     this.ventaService.getMisVentas().subscribe({
       next: data => {
-        this.ofertas = data;
+        this.Ventas = data;
 
         const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
         this.armasDisponibles = Array.from(armasSet) as string[];
@@ -58,8 +58,8 @@ export class MisVentasComponent implements OnInit {
     }
   }
 
-  confirmarCompra(id: string): void {
-    this.ventaService.confirmarCompra(id).subscribe(() => this.ngOnInit());
+  confirmarVenta(id: string): void {
+    this.ventaService.confirmarVenta(id).subscribe(() => this.ngOnInit());
   }
 
   eliminar(id: string): void {
