@@ -33,33 +33,7 @@ namespace WarframeRivensAPI.Controllers
             _configuration = configuration;
         }
         #endregion
-        
-        #region DTO
-        public class RegisterDTO
-        {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
-
-            [Required]
-            [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
-            public string Password { get; set; }
-
-            [Required]
-            [MinLength(4, ErrorMessage = "El Nickname debe tener al menos 4 caracteres.")]
-            public string Nickname { get; set; }
-        }
-
-        public class LoginDTO
-        {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
-            [Required]
-            public string Password { get; set; }
-        }
-        #endregion
-
+    
         #region Register
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status201Created)] //Si se registra, devuelve 201, el front muestra un mensaje de éxito
@@ -137,4 +111,29 @@ namespace WarframeRivensAPI.Controllers
         }
         #endregion
     }
+    #region DTO
+        public class RegisterDTO
+        {
+            [Required]
+            [EmailAddress]
+            public string Email { get; set; }
+
+            [Required]
+            [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
+            public string Password { get; set; }
+
+            [Required]
+            [MinLength(4, ErrorMessage = "El Nickname debe tener al menos 4 caracteres.")]
+            public string Nickname { get; set; }
+        }
+
+        public class LoginDTO
+        {
+            [Required]
+            [EmailAddress]
+            public string Email { get; set; }
+            [Required]
+            public string Password { get; set; }
+        }
+        #endregion
 }

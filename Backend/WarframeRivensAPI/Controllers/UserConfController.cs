@@ -20,10 +20,7 @@ namespace WarframeRivensAPI.Controllers
     {
         private readonly UserManager<WarUser> _userManager;
 
-        public UserConfController(UserManager<WarUser> userManager)
-        {
-            _userManager = userManager;
-        }
+        public UserConfController(UserManager<WarUser> userManager) { _userManager = userManager; }
 
         [HttpPut("ChangePass")]
         public async Task<IActionResult> CambiarPassword([FromBody] string newPassword)

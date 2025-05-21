@@ -45,12 +45,14 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 );
 
 builder.Services.AddEndpointsApiExplorer();
+
+// Configuración de Swagger
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v0.5", new OpenApiInfo
+    c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "API de WarframeRiven",
-        Version = "v0.5",
+        Version = "v1",
         Description = "Documentación de la API de WarframeRiven con autenticación JWT",
         Contact = new OpenApiContact
         {
@@ -67,7 +69,6 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Description = "Introduce tu token JWT en el siguiente formato: **Bearer {token}**"
     });
-
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -84,6 +85,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+//Angular CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularClient",

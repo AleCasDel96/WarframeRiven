@@ -22,7 +22,7 @@ namespace WarframeRivensAPI.Controllers
         private readonly UserManager<WarUser> _userManager;
         public RivensController(
             WarRivenContext context,
-            UserManager<WarUser> userManager) { 
+            UserManager<WarUser> userManager) {
             _context = context;
             _userManager = userManager;
         }
@@ -49,18 +49,18 @@ namespace WarframeRivensAPI.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var riven = await _context.Rivens.FindAsync(id);
-            if (riven == null) {  return NotFound(); }
+            if (riven == null) { return NotFound(); }
             if (riven.IdPropietario != userId) { return Unauthorized(); }
             return Ok(riven);
         }
         #endregion
 
         #region Editar Riven
+        [HttpPut("{id}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se actualiza
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede actualizar, devuelve 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
-        [HttpPut("{id}")]
         public async Task<IActionResult> PutRiven(string id, Riven riven)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -124,7 +124,7 @@ namespace WarframeRivensAPI.Controllers
             var riven = await _context.Rivens.FindAsync(id);
             if (riven == null) { return NotFound(); }
             if (riven.IdPropietario != userId) { return Unauthorized(); }
-            var ofertas = await _context.Ofertas.Where(o => o.IdRiven == riven.Id) .ToListAsync();
+            var ofertas = await _context.Ofertas.Where(o => o.IdRiven == riven.Id).ToListAsync();
             try
             {
                 _context.Ofertas.RemoveRange(ofertas);
@@ -140,5 +140,12 @@ namespace WarframeRivensAPI.Controllers
         #endregion
 
         private bool RivenExists(string id) { return _context.Rivens.Any(e => e.Id == id); }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Riven>>> TestRivens()
+        {
+            return await _context.Rivens.ToListAsync();
+        }
     }
 }

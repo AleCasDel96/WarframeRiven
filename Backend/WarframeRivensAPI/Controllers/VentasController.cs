@@ -27,20 +27,6 @@ namespace WarframeRivensAPI.Controllers
         }
         #endregion
 
-        #region DTO
-        public class VentaDTO
-        {
-            public string Id { get; set; }
-            public string NombreRiven { get; set; }
-            public string Arma { get; set; }
-            public string NickComprador { get; set; }
-            public string NickVendedor { get; set; }
-            public int PrecioVenta { get; set; }
-            public DateTime FechaVenta { get; set; }
-            public bool Finalizado { get; set; }
-        }
-        #endregion
-
         #region Ver Ventas
         [HttpGet("Historial")]
         [Authorize]
@@ -204,7 +190,18 @@ namespace WarframeRivensAPI.Controllers
             return NoContent();
         }
         #endregion
-
-
     }
+    #region DTO
+        public class VentaDTO
+        {
+            public string Id { get; set; }
+            public string NombreRiven { get; set; }
+            public string Arma { get; set; }
+            public string NickComprador { get; set; }
+            public string NickVendedor { get; set; }
+            public int PrecioVenta { get; set; }
+            public DateTime FechaVenta { get; set; }
+            public bool Finalizado { get; set; }
+        }
+        #endregion
 }

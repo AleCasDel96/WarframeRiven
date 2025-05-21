@@ -30,19 +30,6 @@ namespace WarframeRivensAPI.Controllers
         }
         #endregion
 
-        #region DTO
-        public class OfertaDTO
-        {
-            public string Id { get; set; }
-            public string IdRiven { get; set; }
-            public string NombreRiven { get; set; }
-            public string Arma { get; set; }
-            public string NickUsuario { get; set; } // WarframeNick del propietario
-            public int PrecioVenta { get; set; }
-            public bool Disponibilidad { get; set; }
-        }
-        #endregion
-
         #region Ver ofertas
         [HttpGet("VerOfertas")]
         [Authorize]
@@ -50,20 +37,20 @@ namespace WarframeRivensAPI.Controllers
         public async Task<ActionResult<IEnumerable<OfertaDTO>>> GetOfertas()
         {
             var ofertas = await _context.Ofertas
-        .Where(o => o.Disponibilidad)
-        .Include(o => o.Riven)
-        .ThenInclude(r => r.Propietario)
-        .Select(o => new OfertaDTO
-        {
-            Id = o.Id,
-            IdRiven = o.IdRiven,
-            NombreRiven = o.Riven.Nombre,
-            Arma = o.Riven.Arma,
-            NickUsuario = o.Riven.Propietario.WarframeNick,
-            PrecioVenta = o.PrecioVenta,
-            Disponibilidad = o.Disponibilidad
-        })
-        .ToListAsync();
+                .Where(o => o.Disponibilidad)
+                .Include(o => o.Riven)
+                .ThenInclude(r => r.Propietario)
+                .Select(o => new OfertaDTO
+                {
+                    Id = o.Id,
+                    IdRiven = o.IdRiven,
+                    NombreRiven = o.Riven.Nombre,
+                    Arma = o.Riven.Arma,
+                    NickUsuario = o.Riven.Propietario.WarframeNick,
+                    PrecioVenta = o.PrecioVenta,
+                    Disponibilidad = o.Disponibilidad
+                })
+                .ToListAsync();
             return Ok(ofertas);
         }
 
@@ -74,20 +61,20 @@ namespace WarframeRivensAPI.Controllers
         public async Task<ActionResult<OfertaDTO>> GetOferta(string id)
         {
             var oferta = await _context.Ofertas
-        .Include(o => o.Riven)
-        .ThenInclude(r => r.Propietario)
-        .Where(o => o.Id == id)
-        .Select(o => new OfertaDTO
-        {
-            Id = o.Id,
-            IdRiven = o.IdRiven,
-            NombreRiven = o.Riven.Nombre,
-            Arma = o.Riven.Arma,
-            NickUsuario = o.Riven.Propietario.WarframeNick,
-            PrecioVenta = o.PrecioVenta,
-            Disponibilidad = o.Disponibilidad
-        })
-        .FirstOrDefaultAsync(); ;
+                .Include(o => o.Riven)
+                .ThenInclude(r => r.Propietario)
+                .Where(o => o.Id == id)
+                .Select(o => new OfertaDTO
+                {
+                    Id = o.Id,
+                    IdRiven = o.IdRiven,
+                    NombreRiven = o.Riven.Nombre,
+                    Arma = o.Riven.Arma,
+                    NickUsuario = o.Riven.Propietario.WarframeNick,
+                    PrecioVenta = o.PrecioVenta,
+                    Disponibilidad = o.Disponibilidad
+                })
+                .FirstOrDefaultAsync();
             if (oferta == null) { return NotFound(); }
             return Ok(oferta);
         }
@@ -101,20 +88,20 @@ namespace WarframeRivensAPI.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var ofertas = await _context.Ofertas
-        .Include(o => o.Riven)
-        .ThenInclude(r => r.Propietario)
-        .Where(o => o.Riven.IdPropietario == userId)
-        .Select(o => new OfertaDTO
-        {
-            Id = o.Id,
-            IdRiven = o.IdRiven,
-            NombreRiven = o.Riven.Nombre,
-            Arma = o.Riven.Arma,
-            NickUsuario = o.Riven.Propietario.WarframeNick,
-            PrecioVenta = o.PrecioVenta,
-            Disponibilidad = o.Disponibilidad
-        })
-        .ToListAsync();
+                .Include(o => o.Riven)
+                .ThenInclude(r => r.Propietario)
+                .Where(o => o.Riven.IdPropietario == userId)
+                .Select(o => new OfertaDTO
+                {
+                    Id = o.Id,
+                    IdRiven = o.IdRiven,
+                    NombreRiven = o.Riven.Nombre,
+                    Arma = o.Riven.Arma,
+                    NickUsuario = o.Riven.Propietario.WarframeNick,
+                    PrecioVenta = o.PrecioVenta,
+                    Disponibilidad = o.Disponibilidad
+                })
+                .ToListAsync();
             return Ok(ofertas);
         }
 
@@ -235,7 +222,18 @@ namespace WarframeRivensAPI.Controllers
             }
         }
         #endregion
-
         private bool OfertaExists(string id) { return _context.Ofertas.Any(e => e.Id == id); }
     }
+    #region DTO
+        public class OfertaDTO
+        {
+            public string Id { get; set; }
+            public string IdRiven { get; set; }
+            public string NombreRiven { get; set; }
+            public string Arma { get; set; }
+            public string NickUsuario { get; set; } // WarframeNick del propietario
+            public int PrecioVenta { get; set; }
+            public bool Disponibilidad { get; set; }
+        }
+        #endregion
 }
