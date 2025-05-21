@@ -154,7 +154,7 @@ export class MisOfertasComponent implements OnInit {
       precioVenta: this.nuevoPrecio
     };
 
-    this.ofertaService.editar(nuevaOferta).subscribe({
+    this.ofertaService.editar(this.ofertaEditando?.id!, { precioVenta: this.nuevoPrecio }).subscribe({
       next: () => {
         alert('Oferta actualizada con éxito.');
         this.cerrarEdicion();
