@@ -34,14 +34,14 @@
         <td>{{ r.polaridad }}</td>
         <td>{{ r.maestria }}</td>
         <td>
-          <div *ngIf="r.stat1">{{ r.stat1 }}: {{ r.valor1 }}</div>
-          <div *ngIf="r.stat2">{{ r.stat2 }}: {{ r.valor2 }}</div>
-          <div *ngIf="r.stat3">{{ r.stat3 }}: {{ r.valor3 }}</div>
-          <div *ngIf="r.stat4">{{ r.stat4 }}: {{ r.valor4 }}</div>
+          <div *ngIf="r.Atrib1">{{ r.Atrib1 }}: {{ r.valor1 }}</div>
+          <div *ngIf="r.Atrib2">{{ r.Atrib2 }}: {{ r.valor2 }}</div>
+          <div *ngIf="r.Atrib3">{{ r.Atrib3 }}: {{ r.valor3 }}</div>
+          <div *ngIf="r.DAtrib">{{ r.DAtrib }}: {{ r.DValor }}</div>
         </td>
         <td>
-          <button (click)="editar(r.id)">Editar</button>
-          <button (click)="eliminar(r.id)">Eliminar</button>
+          <button (click)="editar(r.id ?? '')">Editar</button>
+          <button (click)="eliminar(r.id ?? '')">Eliminar</button>
           <button (click)="crearOferta(r)">Crear Oferta</button>
         </td>
       </tr>
