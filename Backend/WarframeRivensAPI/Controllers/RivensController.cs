@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -87,28 +89,38 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)] //Devuelve 201 si se crea con éxito
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede crear, devuelve 400
         [ProducesResponseType(StatusCodes.Status409Conflict)] //Si ya existe, devuelve 409
-        public async Task<ActionResult<Riven>> PostRiven(Riven riven)
+        public async Task<ActionResult<Riven>> PostRiven(RivenDTO riven)
         {
             if (riven == null) { return BadRequest(); }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             riven.IdPropietario = userId;
+            Riven newRiven = new Riven
+            {
+                Id = Guid.NewGuid().ToString(),
+                Arma = riven.Arma,
+                Nombre = riven.Nombre,
+                Polaridad = riven.Polaridad,
+                Maestria = riven.Maestria,
+                Atrib1 = riven.Atrib1,
+                Valor1 = riven.Valor1,
+                Atrib2 = riven.Atrib2,
+                Valor2 = riven.Valor2,
+                Atrib3 = riven.Atrib3,
+                Valor3 = riven.Valor3,
+                DAtrib = riven.DAtrib,
+                DValor = riven.DValor,
+                IdPropietario = userId
+            };
             try
             {
-                _context.Rivens.Add(riven);
+                _context.Rivens.Add(newRiven);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (RivenExists(riven.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-            return CreatedAtAction("GetRiven", new { id = riven.Id }, riven);
+            return CreatedAtAction("GetRiven", new { id = newRiven.Id }, newRiven);
         }
         #endregion
 
@@ -147,5 +159,35 @@ namespace WarframeRivensAPI.Controllers
         {
             return await _context.Rivens.ToListAsync();
         }
+    }
+    public class RivenDTO
+    {
+
+        [Required]
+        public string Arma { get; set; }
+
+        [Required]
+        public string Nombre { get; set; }
+        public string Polaridad { get; set; }
+        public int Maestria { get; set; }
+
+        [Required]
+        public string Atrib1 { get; set; }
+
+        [Required]
+        public decimal Valor1 { get; set; }
+
+        public string? Atrib2 { get; set; } = null;
+
+        public decimal? Valor2 { get; set; } = null;
+
+        public string? Atrib3 { get; set; } = null;
+
+        public decimal? Valor3 { get; set; } = null;
+
+        public string? DAtrib { get; set; } = null;
+
+        public decimal? DValor { get; set; } = null;
+        public string IdPropietario { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace WarframeRivensAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         #region Config

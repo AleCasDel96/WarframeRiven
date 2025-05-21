@@ -22,17 +22,17 @@ namespace WarframeRivensAPI.Models
         [Required]
         public decimal Valor1 { get; set; }
 
-        public string? Atrib2 { get; set; }
+        public string? Atrib2 { get; set; } = null;
 
-        public decimal? Valor2 { get; set; }
+        public decimal? Valor2 { get; set; } = null;
 
-        public string? Atrib3 { get; set; }
+        public string? Atrib3 { get; set; } = null;
 
-        public decimal? Valor3 { get; set; }
+        public decimal? Valor3 { get; set; } = null;
 
-        public string? DAtrib { get; set; }
+        public string? DAtrib { get; set; } = null;
 
-        public decimal? DValor { get; set; }
+        public decimal? DValor { get; set; } = null;
 
         [Required]
         [ForeignKey("AspNetUsers")]
