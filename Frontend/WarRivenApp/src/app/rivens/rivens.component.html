@@ -17,6 +17,8 @@
       <tr>
         <th (click)="ordenarPor('nombre')" style="cursor: pointer;">Nombre</th>
         <th (click)="ordenarPor('arma')" style="cursor: pointer;">Arma</th>
+        <th>Polaridad</th>
+        <th>Maestria</th>
         <th>Estadísticas</th>
         <th>Acciones</th>
       </tr>
@@ -29,6 +31,8 @@
                   | paginate: { itemsPerPage: 5, currentPage: p }">
         <td>{{ r.nombre }}</td>
         <td>{{ r.arma }}</td>
+        <td>{{ r.polaridad }}</td>
+        <td>{{ r.maestria }}</td>
         <td>
           <div *ngIf="r.stat1">{{ r.stat1 }}: {{ r.valor1 }}</div>
           <div *ngIf="r.stat2">{{ r.stat2 }}: {{ r.valor2 }}</div>
