@@ -31,7 +31,7 @@ namespace WarframeRivensAPI.Controllers
         #endregion
 
         #region Ver ofertas
-        [HttpGet("VerOfertas")]
+        [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<OfertaDTO>>> GetOfertas()
@@ -54,7 +54,7 @@ namespace WarframeRivensAPI.Controllers
             return Ok(ofertas);
         }
 
-        [HttpGet("Oferta/{id}")]
+        [HttpGet("{id}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)] //Devuelve el riven
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
@@ -129,21 +129,22 @@ namespace WarframeRivensAPI.Controllers
         #endregion
 
         #region Añadir/Editar/Eliminar
-        [HttpPost("Crear")]
+        [HttpPost]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se actualiza
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede actualizar, devuelve 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<IActionResult> CrearOferta(string RivenId, OfertaDTO oferta)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             var riven = await _context.Rivens.FindAsync(RivenId);
             if (riven == null) { return NotFound("El riven no existe."); }
             Oferta nuevaOferta = new Oferta
             {
                 Id = Guid.NewGuid().ToString(),
                 IdRiven = RivenId,
-                IdVendedor = userId,
+                IdVendedor = user.Id,
                 PrecioVenta = oferta.PrecioVenta,
                 Disponibilidad = true,
             };
@@ -173,12 +174,13 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<ActionResult<Oferta>> EditarOferta(string id,OfertaDTO nuevo)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             var oferta = await _context.Ofertas
                 .Where(o => o.IdRiven == nuevo.IdRiven && o.Disponibilidad)
                 .FirstOrDefaultAsync(o => o.Id == id);
             if (oferta == null) { return NotFound("La oferta no existe."); }
-            if (oferta.IdVendedor != userId) { return Unauthorized(); }
+            if (oferta.IdVendedor != user.Id) { return Unauthorized(); }
             if (!oferta.Disponibilidad)
             {
                 return BadRequest("La oferta no está activa.");
@@ -186,8 +188,6 @@ namespace WarframeRivensAPI.Controllers
             oferta.PrecioVenta = nuevo.PrecioVenta;
             try
             {
-                
-
                 _context.Ofertas.Update(oferta);
                 await _context.SaveChangesAsync();
             }
@@ -206,10 +206,11 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<IActionResult> DeleteOferta(string id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             var oferta = await _context.Ofertas.FindAsync(id);
             if (oferta == null) { return NotFound(); }
-            if (oferta.IdVendedor != userId) { return Unauthorized(); }
+            if (oferta.IdVendedor != user.Id) { return Unauthorized(); }
             try
             {
                 _context.Ofertas.Remove(oferta);

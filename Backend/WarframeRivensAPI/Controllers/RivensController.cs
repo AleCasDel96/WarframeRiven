@@ -31,28 +31,30 @@ namespace WarframeRivensAPI.Controllers
         #endregion
 
         #region Inventario
-        [HttpGet("/Inventario")]
+        [HttpGet]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Riven>>> Inventario()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return await _context.Rivens.Where(r => r.IdPropietario == userId).ToListAsync();
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
+            return await _context.Rivens.Where(r => r.IdPropietario == user.Id).ToListAsync();
         }
         #endregion
 
         #region Ver Riven
-        [HttpGet("{id}")]
+        [HttpGet("/{id}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)] //Devuelve el riven
         [ProducesResponseType(StatusCodes.Status401Unauthorized)] //Si no es del usuario, devuelve 401
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<ActionResult<Riven>> VerRiven(string id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             var riven = await _context.Rivens.FindAsync(id);
             if (riven == null) { return NotFound(); }
-            if (riven.IdPropietario != userId) { return Unauthorized(); }
+            if (riven.IdPropietario != user.Id) { return Unauthorized(); }
             return Ok(riven);
         }
         #endregion
@@ -65,9 +67,10 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<IActionResult> PutRiven(string id, Riven riven)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             if (riven == null) { return NotFound(); }
-            if (riven.IdPropietario != userId) { return Unauthorized(); }
+            if (riven.IdPropietario != user.Id) { return Unauthorized(); }
             if (id != riven.Id) { return BadRequest(); }
             try
             {
@@ -132,10 +135,11 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<IActionResult> DeleteRiven(string id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             var riven = await _context.Rivens.FindAsync(id);
             if (riven == null) { return NotFound(); }
-            if (riven.IdPropietario != userId) { return Unauthorized(); }
+            if (riven.IdPropietario != user.Id) { return Unauthorized(); }
             var ofertas = await _context.Ofertas.Where(o => o.IdRiven == riven.Id).ToListAsync();
             try
             {

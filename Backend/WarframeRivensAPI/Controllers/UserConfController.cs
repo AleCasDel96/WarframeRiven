@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -25,8 +26,9 @@ namespace WarframeRivensAPI.Controllers
         [HttpPut("ChangePass")]
         public async Task<IActionResult> CambiarPassword([FromBody] string newPassword)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(userId);
+
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             if (user == null) return Unauthorized();
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -41,65 +43,77 @@ namespace WarframeRivensAPI.Controllers
         [HttpPut("ChangeNick")]
         public async Task<IActionResult> CambiarNickname([FromBody] string nickname)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return Unauthorized();
-
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
+            if (user == null) { return Unauthorized(); }
             user.Nickname = nickname;
-            var result = await _userManager.UpdateAsync(user);
-
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
-
-            return Ok("Nickname actualizado.");
+            try
+            {
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded) { return BadRequest(result.Errors); }
+                return Ok("Nickname actualizado.");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         [HttpPut("ChangeWarNick")]
         public async Task<IActionResult> CambiarWarframeNick([FromBody] string warframeNick)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return Unauthorized();
-
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
+            if (user == null) { return Unauthorized(); }
             user.WarframeNick = warframeNick;
-            var result = await _userManager.UpdateAsync(user);
-
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
-
-            return Ok("WarframeNick actualizado.");
+            try
+            {
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded) { return BadRequest(result.Errors); }
+                return Ok("WarframeNick actualizado.");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         [HttpPut("ChangeIcon")]
         public async Task<IActionResult> CambiarIcon([FromBody] string icon)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return Unauthorized();
-
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
+            if (user == null) { return Unauthorized(); }
             user.Icono = icon;
-            var result = await _userManager.UpdateAsync(user);
-
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
-
-            return Ok("Icono actualizado.");
+            try
+            {
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded) { return BadRequest(result.Errors); }
+                return Ok("Icono actualizado.");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         [HttpPut("ChangeSteamId")]
         public async Task<IActionResult> CambiarSteamId([FromBody] string steamId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return Unauthorized();
-
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
+            if (user == null) { return Unauthorized(); }
             user.SteamId = steamId;
-            var result = await _userManager.UpdateAsync(user);
-
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
-
-            return Ok("SteamId actualizado.");
+            try
+            {
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded) { return BadRequest(result.Errors); }
+                return Ok("SteamId actualizado.");
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         [HttpGet("Upgrade")]
@@ -108,20 +122,23 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status405MethodNotAllowed)]
         public async Task<IActionResult> Upgrade()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) return Unauthorized();
-
-            var roles = await _userManager.GetRolesAsync(user);
-            if (roles.Contains("confirmado") || roles.Contains("admin"))
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
+            if (user == null) { return Unauthorized(); }
+            try
             {
-                return StatusCode(405);
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Contains("confirmado") || roles.Contains("admin"))
+                {
+                    return Forbid();
+                }
+                await _userManager.AddToRoleAsync(user, "confirmado");
+                return NoContent();
             }
-
-            await _userManager.AddToRoleAsync(user, "confirmado");
-
-            return NoContent();
+            catch
+            {
+                throw;
+            }
         }
     }
-
 }
