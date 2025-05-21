@@ -33,8 +33,7 @@ export class EditarRivenComponent implements OnInit {
     }
   }
 
-  actualizar(event: Event): void {
-    event.preventDefault();
+  actualizar(): void {
     if (!this.riven.nombre || !this.riven.arma || !this.riven.stat1 || this.riven.valor1 === null) {
       this.error = 'Debes introducir nombre, arma y al menos una estadística válida.';
       return;

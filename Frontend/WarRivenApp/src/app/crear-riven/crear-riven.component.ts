@@ -16,20 +16,22 @@ export class CrearRivenComponent {
   riven: Partial<Riven> = {
     nombre: '',
     arma: '',
+    polaridad: 'Vazarin',
+    maestria: 8,
     stat1: '',
     valor1: 0
   };
 
   error = '';
 
-  constructor(private rivenService: RivenService, private router: Router) {}
+  constructor(private rivenService: RivenService, private router: Router) { }
 
-  crear(event: Event) {
-    event.preventDefault();
+  crear() {
     if (!this.riven.nombre || !this.riven.arma || !this.riven.stat1 || this.riven.valor1 === undefined) {
       this.error = 'Debes completar al menos la estadística principal.';
       return;
     }
+    console.log('🛠 Enviando Riven:', this.riven);
 
     this.rivenService.crear(this.riven).subscribe({
       next: () => this.router.navigate(['/mis-rivens']),

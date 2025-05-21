@@ -20,8 +20,7 @@ export class CrearOfertaComponent {
 
   constructor(private ofertaService: OfertaService, private router: Router) {}
 
-  crearOferta(event: Event) {
-    event.preventDefault();
+  crearOferta() {
     if (!this.idRivenSeleccionado) {
       this.error = 'No se ha seleccionado un Riven válido.';
       return;
