@@ -82,7 +82,7 @@ namespace WarframeRivensAPI.Controllers
 
         #region Mis ofertas
         [HttpGet("MisOfertas")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<OfertaDTO>>> GetMisOfertas()
         {
@@ -136,6 +136,7 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<IActionResult> CrearOferta(NuevaOfertaDTO oferta)
         {
+            Console.WriteLine("Crear Oferta");
             var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByEmailAsync(mail);
             var riven = await _context.Rivens.FindAsync(oferta.IdRiven);

@@ -10,7 +10,8 @@ import { Riven } from '../models/riven.model';
   selector: 'app-crear-riven',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './crear-riven.component.html'
+  templateUrl: './crear-riven.component.html',
+  styleUrls: ['./crear-riven.component.css']
 })
 export class CrearRivenComponent {
   riven: Partial<Riven> = {

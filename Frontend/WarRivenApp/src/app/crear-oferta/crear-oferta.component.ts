@@ -20,6 +20,10 @@ export class CrearOfertaComponent {
 
   constructor(private ofertaService: OfertaService, private router: Router, private route: ActivatedRoute) {}
 
+ngOnInit(): void {
+  this.idRiven =this.idRiven=this.route.snapshot.paramMap.get('idRiven') || ''
+}
+
   crearOferta() {
     this.idRiven=this.route.snapshot.paramMap.get('idRiven') || ''
     if (!this.idRiven) {
