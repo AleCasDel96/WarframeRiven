@@ -52,9 +52,9 @@ namespace WarframeRivensAPI.Controllers
         {
             var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByEmailAsync(mail);
-            var riven = await _context.Rivens.FindAsync(id);
+            var riven = await _context.Rivens.Where(r => r.Id == id).ToListAsync();
             if (riven == null) { return NotFound(); }
-            if (riven.IdPropietario != user.Id) { return Unauthorized(); }
+            if (riven[0].IdPropietario != user.Id) { return Unauthorized(); }
             return Ok(riven);
         }
         #endregion

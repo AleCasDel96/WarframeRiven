@@ -134,16 +134,16 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se actualiza
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede actualizar, devuelve 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
-        public async Task<IActionResult> CrearOferta(string RivenId, OfertaDTO oferta)
+        public async Task<IActionResult> CrearOferta(NuevaOfertaDTO oferta)
         {
             var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByEmailAsync(mail);
-            var riven = await _context.Rivens.FindAsync(RivenId);
+            var riven = await _context.Rivens.FindAsync(oferta.IdRiven);
             if (riven == null) { return NotFound("El riven no existe."); }
             Oferta nuevaOferta = new Oferta
             {
                 Id = Guid.NewGuid().ToString(),
-                IdRiven = RivenId,
+                IdRiven = oferta.IdRiven,
                 IdVendedor = user.Id,
                 PrecioVenta = oferta.PrecioVenta,
                 Disponibilidad = true,
@@ -154,16 +154,9 @@ namespace WarframeRivensAPI.Controllers
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
-            catch (DbUpdateConcurrencyException)
+            catch
             {
-                if (!OfertaExists(RivenId))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
         }
 
@@ -226,15 +219,20 @@ namespace WarframeRivensAPI.Controllers
         private bool OfertaExists(string id) { return _context.Ofertas.Any(e => e.Id == id); }
     }
     #region DTO
-        public class OfertaDTO
-        {
-            public string Id { get; set; }
-            public string IdRiven { get; set; }
-            public string NombreRiven { get; set; }
-            public string Arma { get; set; }
-            public string NickUsuario { get; set; } // WarframeNick del propietario
-            public int PrecioVenta { get; set; }
-            public bool Disponibilidad { get; set; }
-        }
-        #endregion
+    public class OfertaDTO
+    {
+        public string Id { get; set; }
+        public string IdRiven { get; set; }
+        public string NombreRiven { get; set; }
+        public string Arma { get; set; }
+        public string NickUsuario { get; set; } // WarframeNick del propietario
+        public int PrecioVenta { get; set; }
+        public bool Disponibilidad { get; set; }
+    }
+    public class NuevaOfertaDTO
+    {
+        public string IdRiven { get; set; }
+        public int PrecioVenta { get; set; }
+    }
+    #endregion
 }

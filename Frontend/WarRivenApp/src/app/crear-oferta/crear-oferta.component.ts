@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
-
+import { RouterModule, Router , ActivatedRoute} from '@angular/router';
 import { OfertaService } from '../services/oferta.service';
 import { Oferta } from '../models/oferta.model';
 
@@ -13,31 +12,24 @@ import { Oferta } from '../models/oferta.model';
   templateUrl: './crear-oferta.component.html'
 })
 export class CrearOfertaComponent {
-  @Input() idRivenSeleccionado?: string;
-
+  idRiven?: string;
   precio: number = 0;
   error = '';
-
-  constructor(private ofertaService: OfertaService, private router: Router) {}
-
+constructor(
+    private ofertaService: OfertaService,
+    private router: Router,
+    private route: ActivatedRoute // Añade esto
+  ) {
+    this.idRiven = this.route.snapshot.paramMap.get('idRiven') || '';
+  }
   crearOferta() {
-    if (!this.idRivenSeleccionado) {
-      this.error = 'No se ha seleccionado un Riven válido.';
-      return;
-    }
-
     const nuevaOferta: Partial<Oferta> = {
-      idRiven: this.idRivenSeleccionado,
-      precioVenta: this.precio,
-      disponibilidad: false,
-      partida: false,
-      destino: false
+      idRiven: this.idRiven,
+      precioVenta: this.precio
     };
-
     this.ofertaService.crear(nuevaOferta).subscribe({
       next: () => this.router.navigate(['/mis-ofertas']),
       error: () => this.error = 'No se pudo crear la oferta.'
     });
   }
 }
-

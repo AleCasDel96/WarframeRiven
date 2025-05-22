@@ -22,7 +22,6 @@ export class RivensComponent implements OnInit {
   sortAsc = true;
   p = 1;
   error = '';
-
   filtroArma: string = '';
   armasDisponibles: string[] = [];
 

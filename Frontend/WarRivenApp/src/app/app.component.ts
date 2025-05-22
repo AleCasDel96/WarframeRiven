@@ -11,8 +11,7 @@ import { SidebarAlertasComponent } from './sidebar-alertas/sidebar-alertas.compo
   imports: [
     CommonModule,
     RouterModule,
-    NgIf,
-    //SidebarAlertasComponent,
+    NgIf
   ],
   templateUrl: './app.component.html'
 })

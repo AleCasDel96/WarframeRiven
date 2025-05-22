@@ -6,15 +6,15 @@ export interface Riven {
   polaridad: string; 
   maestria: number;
 
-  Atrib1: string;
+  atrib1: string;
   valor1: number;
 
-  Atrib2?: string;
+  atrib2?: string;
   valor2?: number;
 
-  Atrib3?: string;
+  atrib3?: string;
   valor3?: number;
 
-  DAtrib?: string;
-  DValor?: number;
+  dAtrib?: string;
+  dValor?: number;
 }

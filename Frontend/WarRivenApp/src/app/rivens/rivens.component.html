@@ -24,20 +24,16 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let r of rivens 
-                  | filterBy: ['nombre']: searchText  
-                  | filterBy: ['arma']: filtroArma 
-                  | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
-                  | paginate: { itemsPerPage: 5, currentPage: p }">
-        <td>{{ r.nombre }}</td>
+      <tr *ngFor="let r of rivens">
         <td>{{ r.arma }}</td>
+        <td>{{ r.nombre }}</td>
         <td>{{ r.polaridad }}</td>
         <td>{{ r.maestria }}</td>
         <td>
-          <div *ngIf="r.Atrib1">{{ r.Atrib1 }}: {{ r.valor1 }}</div>
-          <div *ngIf="r.Atrib2">{{ r.Atrib2 }}: {{ r.valor2 }}</div>
-          <div *ngIf="r.Atrib3">{{ r.Atrib3 }}: {{ r.valor3 }}</div>
-          <div *ngIf="r.DAtrib">{{ r.DAtrib }}: {{ r.DValor }}</div>
+          <div *ngIf="r.atrib1">{{ r.atrib1 }}: {{ r.valor1 }}</div>
+          <div *ngIf="r.atrib2">{{ r.atrib2 }}: {{ r.valor2 }}</div>
+          <div *ngIf="r.atrib3">{{ r.atrib3 }}: {{ r.valor3 }}</div>
+          <div *ngIf="r.dAtrib">{{ r.dAtrib }}: {{ r.dValor }}</div>
         </td>
         <td>
           <button (click)="editar(r.id ?? '')">Editar</button>

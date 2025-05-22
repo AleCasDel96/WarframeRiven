@@ -24,17 +24,22 @@ export class EditarRivenComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log('a: ' + this.id);
     this.id = this.route.snapshot.paramMap.get('id') || '';
+    console.log('b: ' + this.id);
     if (this.id) {
       this.rivenService.getPorId(this.id).subscribe({
-        next: (r: Riven) => this.riven = r,
+        next: (r: Riven) => {
+          this.riven = r;
+          console.log(this.riven)
+        },
         error: () => this.error = 'No se pudo cargar el Riven.'
       });
     }
   }
 
   actualizar(): void {
-    if (!this.riven.nombre || !this.riven.arma || !this.riven.Atrib1 || this.riven.valor1 === null) {
+    if (!this.riven.nombre || !this.riven.arma || !this.riven.atrib1 || this.riven.valor1 === null) {
       this.error = 'Debes introducir nombre, arma y al menos una estadística válida.';
       return;
     }

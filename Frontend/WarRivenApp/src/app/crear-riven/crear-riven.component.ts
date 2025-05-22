@@ -18,7 +18,7 @@ export class CrearRivenComponent {
     arma: '',
     polaridad: 'Vazarin',
     maestria: 8,
-    Atrib1: '',
+    atrib1: '',
     valor1: 0
   };
 
@@ -27,7 +27,7 @@ export class CrearRivenComponent {
   constructor(private rivenService: RivenService, private router: Router) { }
 
   crear() {
-    if (!this.riven.nombre || !this.riven.arma || !this.riven.Atrib1 || this.riven.valor1 === undefined) {
+    if (!this.riven.nombre || !this.riven.arma || !this.riven.atrib1 || this.riven.valor1 === undefined) {
       this.error = 'Debes completar al menos la estadística principal.';
       return;
     }

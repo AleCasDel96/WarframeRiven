@@ -13,7 +13,7 @@ export class RivenService {
 
   // Obtener los rivens del usuario logueado
   getMisRivens(): Observable<Riven[]> {
-    return this.http.get<Riven[]>(this.apiUrl + '/MisRivens');
+    return this.http.get<Riven[]>(this.apiUrl + '/');
   }
 
   // Obtener un riven por su ID
