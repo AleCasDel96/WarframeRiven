@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 
 import { OfertaService } from '../services/oferta.service';
 import { Oferta } from '../models/oferta.model';
@@ -13,21 +13,22 @@ import { Oferta } from '../models/oferta.model';
   templateUrl: './crear-oferta.component.html'
 })
 export class CrearOfertaComponent {
-  @Input() idRivenSeleccionado?: string;
+   idRiven?: string;
 
   precio: number = 0;
   error = '';
 
-  constructor(private ofertaService: OfertaService, private router: Router) {}
+  constructor(private ofertaService: OfertaService, private router: Router, private route: ActivatedRoute) {}
 
   crearOferta() {
-    if (!this.idRivenSeleccionado) {
+    this.idRiven=this.route.snapshot.paramMap.get('idRiven') || ''
+    if (!this.idRiven) {
       this.error = 'No se ha seleccionado un Riven válido.';
       return;
     }
 
     const nuevaOferta: Partial<Oferta> = {
-      idRiven: this.idRivenSeleccionado,
+      idRiven: this.idRiven,
       precioVenta: this.precio,
       disponibilidad: false,
       partida: false,
