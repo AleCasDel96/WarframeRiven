@@ -10,18 +10,19 @@ import { NgPipesModule } from 'ngx-pipes';
 import { HttpClient } from '@angular/common/http';
 import { MensajeService } from '../services/mensaje.service';
 import { AuthService } from '../services/auth.service';
+import { log } from 'console';
 
 @Component({
-  selector: 'app-ofertas-publicas',
+  selector: 'app-ofertas',
   standalone: true,
   imports: [CommonModule, FormsModule, NgxPaginationModule, NgPipesModule],
-  templateUrl: './ofertas-publicas.component.html'
+  templateUrl: './ofertas.component.html'
 })
-export class OfertasPublicasComponent implements OnInit {
+export class OfertasComponent implements OnInit {
   ofertas: Oferta[] = [];
-  searchText = '';
-  sortColumn = 'precioVenta';
-  sortAsc = true;
+  // searchText = '';
+  // sortColumn = 'precioVenta';
+  // sortAsc = true;
   p = 1;
   error = '';
 
@@ -32,10 +33,6 @@ export class OfertasPublicasComponent implements OnInit {
   popupX = 0;
   popupY = 0;
   showPopup = false;
-
-  pujaOferta: Oferta | null = null;
-  nuevaPuja = 0;
-  errorPuja = '';
 
   nicknameActual: string | null = null;
 
@@ -48,11 +45,12 @@ export class OfertasPublicasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('init');
     this.nicknameActual = this.auth.getNickname();
     this.ofertaService.getPublicas().subscribe({
       next: data => {
         this.ofertas = data;
-
+        console.log(data);
         const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
         this.armasDisponibles = Array.from(armasSet) as string[];
       },
@@ -62,13 +60,13 @@ export class OfertasPublicasComponent implements OnInit {
 
   copiarMensaje(oferta: Oferta): void {
     if (oferta.disponibilidad) return;
-
     if (!oferta.nickUsuario || !oferta.arma || !oferta.nombreRiven) {
       this.mensajeService.set('Faltan datos para generar el mensaje.');
       return;
     }
 
-    const mensaje = `/w ${oferta.nickUsuario} he visto tu riven ${oferta.arma} ${oferta.nombreRiven} en WarframeRivens`;
+    const mensaje = `/w ${oferta.nickUsuario} he visto tu riven ${oferta.nombreRiven} en WarframeRivens`;
+    console.log(mensaje);
     navigator.clipboard.writeText(mensaje).then(() => {
       this.mensajeService.set('Mensaje copiado al portapapeles.');
     }).catch(() => {
@@ -96,14 +94,14 @@ export class OfertasPublicasComponent implements OnInit {
       });
   }
 
-  ordenarPor(col: string): void {
-    if (this.sortColumn === col) {
-      this.sortAsc = !this.sortAsc;
-    } else {
-      this.sortColumn = col;
-      this.sortAsc = true;
-    }
-  }
+  // ordenarPor(col: string): void {
+  //   if (this.sortColumn === col) {
+  //     this.sortAsc = !this.sortAsc;
+  //   } else {
+  //     this.sortColumn = col;
+  //     this.sortAsc = true;
+  //   }
+  // }
 
   mostrarRiven(idRiven: string, e: MouseEvent): void {
     this.popupX = e.clientX;

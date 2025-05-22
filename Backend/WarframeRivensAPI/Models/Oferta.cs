@@ -8,9 +8,9 @@ namespace WarframeRivensAPI.Models
         public string Id { get; set; }
         [Required]
         public string IdRiven { get; set; }
-        public string Nombre { get; set; }
         public Riven Riven { get; set; }
         [Required]
+        public string Nombre { get; set; }
         public string IdVendedor { get; set; }
         public WarUser Vendedor { get; set; }
         [Required]

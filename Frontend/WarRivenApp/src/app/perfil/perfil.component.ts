@@ -7,7 +7,8 @@ import { AuthService } from '../services/auth.service';
   selector: 'app-perfil',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './perfil.component.html'
+  templateUrl: './perfil.component.html',
+  styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent {
   nickname = '';

@@ -50,7 +50,6 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<ActionResult<Riven>> VerRiven(string id)
         {
-            Console.WriteLine("VerRiven");
             var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByEmailAsync(mail);
             var riven = await _context.Rivens.Where(r => r.Id == id).ToListAsync();

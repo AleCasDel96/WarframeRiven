@@ -31,10 +31,10 @@ namespace WarframeRivensAPI.Controllers
         #endregion
 
         #region Ver ofertas
-        [HttpGet]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
+        [HttpGet("VerOfertas")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<OfertaDTO>>> GetOfertas()
+        public async Task<ActionResult<IEnumerable<OfertaDTO>>> VerOfertas()
         {
             var ofertas = await _context.Ofertas
                 .Where(o => o.Disponibilidad)
@@ -44,7 +44,7 @@ namespace WarframeRivensAPI.Controllers
                 {
                     Id = o.Id,
                     IdRiven = o.IdRiven,
-                    NombreRiven = o.Riven.Nombre,
+                    NombreRiven = o.Nombre,
                     Arma = o.Riven.Arma,
                     NickUsuario = o.Riven.Propietario.WarframeNick,
                     PrecioVenta = o.PrecioVenta,
@@ -55,7 +55,7 @@ namespace WarframeRivensAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(StatusCodes.Status200OK)] //Devuelve el riven
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<ActionResult<OfertaDTO>> GetOferta(string id)
@@ -86,16 +86,17 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<OfertaDTO>>> GetMisOfertas()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             var ofertas = await _context.Ofertas
                 .Include(o => o.Riven)
                 .ThenInclude(r => r.Propietario)
-                .Where(o => o.Riven.IdPropietario == userId)
+                .Where(o => o.IdVendedor == user.Id)
                 .Select(o => new OfertaDTO
                 {
                     Id = o.Id,
                     IdRiven = o.IdRiven,
-                    NombreRiven = o.Riven.Nombre,
+                    NombreRiven = o.Nombre,
                     Arma = o.Riven.Arma,
                     NickUsuario = o.Riven.Propietario.WarframeNick,
                     PrecioVenta = o.PrecioVenta,
@@ -106,7 +107,7 @@ namespace WarframeRivensAPI.Controllers
         }
 
         [HttpGet("Disponibilidad/{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Oferta>>> SetDisponible(string rivenID)
         {
@@ -130,7 +131,7 @@ namespace WarframeRivensAPI.Controllers
 
         #region Añadir/Editar/Eliminar
         [HttpPost]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se actualiza
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede actualizar, devuelve 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
@@ -145,6 +146,7 @@ namespace WarframeRivensAPI.Controllers
             {
                 Id = Guid.NewGuid().ToString(),
                 IdRiven = oferta.IdRiven,
+                Nombre = riven.Arma + " " + riven.Nombre,
                 IdVendedor = user.Id,
                 PrecioVenta = oferta.PrecioVenta,
                 Disponibilidad = true,
@@ -162,7 +164,7 @@ namespace WarframeRivensAPI.Controllers
         }
 
         [HttpPut("Editar/{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(StatusCodes.Status201Created)] //Devuelve 201 si se crea
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede crear, devuelve 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
@@ -193,7 +195,7 @@ namespace WarframeRivensAPI.Controllers
         }
 
         [HttpDelete("Eliminar/{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se elimina
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede eliminar, devuelve 400
         [ProducesResponseType(StatusCodes.Status401Unauthorized)] //Si no es el dueño, devuelve 401

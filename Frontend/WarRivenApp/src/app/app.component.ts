@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
   forzarLogout() {
     sessionStorage.setItem('forceLogout', '1');
     this.auth.logout();
+    this.router.navigate(['/']);
   }
 
   get nickname(): string | null {

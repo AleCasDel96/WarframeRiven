@@ -1,30 +1,26 @@
 <div class="contenedor">
-  <h2 class="titulo">Ofertas Públicas</h2>
-
+  <h2 class="titulo">Ofertas</h2>
   <!-- Filtros -->
-  <div class="filtros">
+  <!-- <div class="filtros">
     <input [(ngModel)]="searchText" placeholder="Buscar por nombre" />
     <select [(ngModel)]="filtroArma">
       <option value="">Todas las armas</option>
       <option *ngFor="let arma of armasDisponibles" [value]="arma">{{ arma }}</option>
     </select>
-  </div>
+  </div> -->
   <table class="tabla">
     <thead>
       <tr>
-        <th (click)="ordenarPor('nombreRiven')" style="cursor: pointer;">Nombre</th>
-        <th (click)="ordenarPor('precioVenta')" style="cursor: pointer;">Precio</th>
+        <!-- <th (click)="ordenarPor('nombreRiven')" style="cursor: pointer;">Nombre</th>
+        <th (click)="ordenarPor('precioVenta')" style="cursor: pointer;">Precio</th> -->
+        <th>Nombre</th>
+        <th>Precio</th>
         <th>Estado</th>
         <th>Acción</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let oferta of ofertas 
-                  | filterBy: ['nombreRiven']: searchText  
-                  | filterBy: ['arma']: filtroArma 
-                  | orderBy: [ [sortColumn, sortAsc ? 'asc' : 'desc'] ]
-                  | paginate: { itemsPerPage: 12, currentPage: p }">
-
+      <tr *ngFor="let oferta of ofertas | paginate: { itemsPerPage: 12, currentPage: p }">
         <td>
           <span class="nombre-hover" (mouseenter)="mostrarRiven(oferta.idRiven, $event)" (mouseleave)="ocultarRiven()">
             {{ oferta.nombreRiven }}
@@ -38,16 +34,14 @@
         </td>
         <td *ngIf="puedeComprar(oferta)">
           <button (click)="copiarMensaje(oferta)" title="Copiar mensaje">
-            <img src="assets/chat-icon.png" alt="copiar" style="width: 20px;" />
+            <img src="assets/chat-icon-black.png" alt="copiar" style="width: 20px;" />
           </button>
           <button (click)="iniciarCompra(oferta)">Comprar</button>
         </td>
       </tr>
     </tbody>
   </table>
-
   <pagination-controls (pageChange)="p = +$event"></pagination-controls>
-
   <!-- Popup del Riven -->
   <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
     <strong>{{ rivenSeleccionado.nombre }}</strong><br />

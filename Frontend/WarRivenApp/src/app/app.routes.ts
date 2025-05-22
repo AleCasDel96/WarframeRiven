@@ -39,8 +39,8 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: 'ofertas-publicas',
-    loadComponent: () => import('./ofertas-publicas/ofertas-publicas.component').then(m => m.OfertasPublicasComponent),
+    path: 'ofertas',
+    loadComponent: () => import('./ofertas/ofertas.component').then(m => m.OfertasComponent),
     canActivate: [authGuard]
   },
   {
@@ -51,11 +51,6 @@ export const routes: Routes = [
   {
     path: 'mis-ventas',
     loadComponent: () => import('./mis-ventas/mis-ventas.component').then(m => m.MisVentasComponent),
-    canActivate: [authGuard]
-  },
-  {
-    path: 'historial',
-    loadComponent: () => import('./historial/historial.component').then(m => m.HistorialComponent),
     canActivate: [authGuard]
   },
   {
