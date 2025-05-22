@@ -59,20 +59,20 @@ export class MercadoComponent implements OnInit {
     });
   }
 
-  copiarMensaje(oferta: Oferta): void {
-    if (oferta.disponibilidad) return;
-    if (!oferta.nickUsuario || !oferta.nombreRiven) {
-      this.mensajeService.set('Faltan datos para generar el mensaje.');
-      return;
-    }
+  // copiarMensaje(oferta: Oferta): void {
+  //   if (oferta.disponibilidad) return;
+  //   if (!oferta.nickUsuario || !oferta.nombreRiven) {
+  //     this.mensajeService.set('Faltan datos para generar el mensaje.');
+  //     return;
+  //   }
 
-    const mensaje = `/w ${oferta.nickUsuario} he visto tu riven ${oferta.nombreRiven} en WarframeRivens`;
-    navigator.clipboard.writeText(mensaje).then(() => {
-      this.mensajeService.set('Mensaje copiado al portapapeles.');
-    }).catch(() => {
-      this.mensajeService.set('No se pudo copiar el mensaje.');
-    });
-  }
+  //   const mensaje = `/w ${oferta.nickUsuario} he visto tu riven ${oferta.nombreRiven} en WarframeRivens`;
+  //   navigator.clipboard.writeText(mensaje).then(() => {
+  //     this.mensajeService.set('Mensaje copiado al portapapeles.');
+  //   }).catch(() => {
+  //     this.mensajeService.set('No se pudo copiar el mensaje.');
+  //   });
+  // }
 
   mostrarPopup(oferta: Oferta): void {
     if (!oferta.nickUsuario || !oferta.nombreRiven) {
@@ -130,7 +130,7 @@ export class MercadoComponent implements OnInit {
   //   });
   // }
 
-  ocultarRiven(): void {
-    this.showPopup = false;
-  }
+  // ocultarRiven(): void {
+  //   this.showPopup = false;
+  // }
 }
