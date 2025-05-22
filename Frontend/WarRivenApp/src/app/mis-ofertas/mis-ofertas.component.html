@@ -37,7 +37,7 @@
         </td>
         <td></td>
         <td class="acciones">
-          <button *ngIf="o.disponibilidad" (click)="cerrar(o.idRiven)">Disponibilidad</button>
+          <button (click)="cerrar(o.idRiven)">Disponibilidad</button>
           <button *ngIf="puedeEditar(o)" (click)="abrirEdicion(o)">Editar oferta</button>
           <button *ngIf="!o.disponibilidad" (click)="confirmarVenta(o.id!)">Confirmar venta</button>
           <button class="delete-button" (click)="eliminar(o.id!)">Eliminar</button>

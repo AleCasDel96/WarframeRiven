@@ -34,6 +34,9 @@ export class MercadoComponent implements OnInit {
   popupY = 0;
   showPopup = false;
 
+  popupVisible = false;
+  mensajeGenerado = '';
+
   nicknameActual: string | null = null;
 
   constructor(
@@ -58,7 +61,7 @@ export class MercadoComponent implements OnInit {
 
   copiarMensaje(oferta: Oferta): void {
     if (oferta.disponibilidad) return;
-    if (!oferta.nickUsuario || !oferta.arma || !oferta.nombreRiven) {
+    if (!oferta.nickUsuario || !oferta.nombreRiven) {
       this.mensajeService.set('Faltan datos para generar el mensaje.');
       return;
     }
@@ -69,6 +72,20 @@ export class MercadoComponent implements OnInit {
     }).catch(() => {
       this.mensajeService.set('No se pudo copiar el mensaje.');
     });
+  }
+
+  mostrarPopup(oferta: Oferta): void {
+    if (!oferta.nickUsuario || !oferta.nombreRiven) {
+      this.mensajeService.set('Faltan datos para generar el mensaje.');
+      return;
+    }
+
+    this.mensajeGenerado = `/w ${oferta.nickUsuario} he visto tu riven ${oferta.nombreRiven} en WarframeRivens`;
+    this.popupVisible = true;
+  }
+
+  cerrarPopup(): void {
+    this.popupVisible = false;
   }
 
   puedeComprar(oferta: any): boolean {

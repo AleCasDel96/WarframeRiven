@@ -32,10 +32,10 @@
           </span>
         </td>
         <td *ngIf="puedeComprar(oferta)">
-          <button (click)="copiarMensaje(oferta)" title="Copiar mensaje">
+          <button type="button" (click)="mostrarPopup(oferta)" title="Copiar mensaje">
             <img src="assets/chat-icon-black.png" alt="copiar" style="width: 20px;" />
           </button>
-          <button (click)="iniciarCompra(oferta)">Comprar</button>
+          <button type="button" (click)="iniciarCompra(oferta)">Comprar</button>
         </td>
       </tr>
     </tbody>
@@ -50,6 +50,12 @@
     <div *ngIf="rivenSeleccionado.atrib3">{{ rivenSeleccionado.atrib3 }}: {{ rivenSeleccionado.valor3 }}</div>
     <div *ngIf="rivenSeleccionado.dAtrib">{{ rivenSeleccionado.dAtrib }}: {{ rivenSeleccionado.dValor }}</div>
   </div> -->
+  <div class="popup-fondo" *ngIf="popupVisible">
+    <div class="popup-contenido">
+      <h3>Mensaje para copiar:</h3>
+      <textarea readonly rows="3" style="width: 100%;">{{ mensajeGenerado }}</textarea>
+      <button type="button" (click)="cerrarPopup()">Cerrar</button>
+    </div>
+  </div>
 
-  
 </div>
