@@ -19,8 +19,8 @@ builder.Services.AddIdentity<WarUser, IdentityRole>()
 
 builder.Services.AddScoped<SignInManager<WarUser>>();
 
-builder.Services.AddAuthentication(options =>
-{
+// Configuración de Autenticación
+builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
@@ -39,7 +39,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
+//Configuración de Json
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
 );
