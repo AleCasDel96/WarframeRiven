@@ -31,8 +31,6 @@ export class CrearOfertaComponent {
       idRiven: this.idRiven,
       precioVenta: this.precio,
       disponibilidad: false,
-      partida: false,
-      destino: false
     };
 
     this.ofertaService.crear(nuevaOferta).subscribe({
