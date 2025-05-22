@@ -39,8 +39,8 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: 'ofertas',
-    loadComponent: () => import('./ofertas/ofertas.component').then(m => m.OfertasComponent),
+    path: 'mercado',
+    loadComponent: () => import('./mercado/mercado.component').then(m => m.MercadoComponent),
     canActivate: [authGuard]
   },
   {

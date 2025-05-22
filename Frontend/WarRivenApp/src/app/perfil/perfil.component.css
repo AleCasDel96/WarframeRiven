@@ -1,4 +1,8 @@
 .campo-formulario{
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  & input {
+    width: 98%;
+  }
 }

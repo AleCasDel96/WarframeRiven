@@ -16,9 +16,9 @@ import { log } from 'console';
   selector: 'app-ofertas',
   standalone: true,
   imports: [CommonModule, FormsModule, NgxPaginationModule, NgPipesModule],
-  templateUrl: './ofertas.component.html'
+  templateUrl: './mercado.component.html'
 })
-export class OfertasComponent implements OnInit {
+export class MercadoComponent implements OnInit {
   ofertas: Oferta[] = [];
   // searchText = '';
   // sortColumn = 'precioVenta';
@@ -66,7 +66,6 @@ export class OfertasComponent implements OnInit {
     }
 
     const mensaje = `/w ${oferta.nickUsuario} he visto tu riven ${oferta.nombreRiven} en WarframeRivens`;
-    console.log(mensaje);
     navigator.clipboard.writeText(mensaje).then(() => {
       this.mensajeService.set('Mensaje copiado al portapapeles.');
     }).catch(() => {
@@ -108,6 +107,7 @@ export class OfertasComponent implements OnInit {
     this.popupY = e.clientY;
     this.rivenService.getPorId(idRiven).subscribe({
       next: (r: Riven) => {
+        console.log(r);
         this.rivenSeleccionado = r;
         this.showPopup = true;
       },

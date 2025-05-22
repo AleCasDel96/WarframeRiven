@@ -1,13 +1,13 @@
 <div class="contenedor">
   <h2 class="titulo">Mis Ofertas</h2>
 
-  <div class="filtros">
+  <!-- <div class="filtros">
     <input [(ngModel)]="searchText" placeholder="Buscar por nombre" />
     <select [(ngModel)]="filtroArma">
       <option value="">Todas las armas</option>
       <option *ngFor="let arma of armasDisponibles" [value]="arma">{{ arma }}</option>
     </select>
-  </div>
+  </div> -->
 
   <table class="tabla">
     <thead>
@@ -15,6 +15,7 @@
         <th (click)="ordenarPor('nombreRiven')" style="cursor: pointer;">Nombre</th>
         <th (click)="ordenarPor('precioVenta')" style="cursor: pointer;">Precio</th>
         <th>Estado</th>
+        <th></th>
         <th>Acciones</th>
       </tr>
     </thead>
@@ -34,12 +35,12 @@
             {{ o.disponibilidad ? 'Abierta' : 'Cerrada' }}
           </span>
         </td>
-
+        <td></td>
         <td class="acciones">
-          <button *ngIf="o.disponibilidad" (click)="cerrar(o.id!)">Cerrar</button>
+          <button *ngIf="o.disponibilidad" (click)="cerrar(o.id!)">Disponibilidad</button>
           <button *ngIf="puedeEditar(o)" (click)="abrirEdicion(o)">Editar oferta</button>
           <button *ngIf="!o.disponibilidad" (click)="confirmarVenta(o.id!)">Confirmar venta</button>
-          <button (click)="eliminar(o.id!)">Eliminar</button>
+          <button class="delete-button" (click)="eliminar(o.id!)">Eliminar</button>
         </td>
       </tr>
     </tbody>

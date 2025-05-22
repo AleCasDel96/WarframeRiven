@@ -43,7 +43,7 @@ namespace WarframeRivensAPI.Controllers
         #endregion
 
         #region Ver Riven
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)] //Devuelve el riven
         [ProducesResponseType(StatusCodes.Status401Unauthorized)] //Si no es del usuario, devuelve 401
@@ -54,7 +54,6 @@ namespace WarframeRivensAPI.Controllers
             var user = await _userManager.FindByEmailAsync(mail);
             var riven = await _context.Rivens.Where(r => r.Id == id).ToListAsync();
             if (riven == null) { return NotFound(); }
-            if (riven[0].IdPropietario != user.Id) { return Unauthorized(); }
             return Ok(riven);
         }
         #endregion

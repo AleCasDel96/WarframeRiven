@@ -43,6 +43,9 @@ button:hover {
   padding: 2rem;
   border-radius: 10px;
   color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .titulo {
@@ -53,7 +56,6 @@ button:hover {
 /* ===== Formularios ===== */
 .campo-formulario {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
   flex-wrap: wrap;
@@ -293,4 +295,8 @@ tr:nth-child(even) {
   position: fixed;
   width: 100%;
   font-size: 0.9rem;
+}
+
+.delete-button{
+  background-color: #f44336;
 }
