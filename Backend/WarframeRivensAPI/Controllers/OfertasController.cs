@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,7 +18,6 @@ namespace WarframeRivensAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "confirmado, admin")]
     public class OfertasController : ControllerBase
     {
         #region Config
@@ -32,7 +32,7 @@ namespace WarframeRivensAPI.Controllers
 
         #region Ver ofertas
         [HttpGet]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<OfertaDTO>>> GetOfertas()
         {
@@ -55,7 +55,7 @@ namespace WarframeRivensAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
         [ProducesResponseType(StatusCodes.Status200OK)] //Devuelve el riven
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<ActionResult<OfertaDTO>> GetOferta(string id)
@@ -106,7 +106,7 @@ namespace WarframeRivensAPI.Controllers
         }
 
         [HttpGet("Disponibilidad/{id}")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Oferta>>> SetDisponible(string rivenID)
         {
@@ -130,7 +130,7 @@ namespace WarframeRivensAPI.Controllers
 
         #region Añadir/Editar/Eliminar
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se actualiza
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede actualizar, devuelve 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
@@ -162,7 +162,7 @@ namespace WarframeRivensAPI.Controllers
         }
 
         [HttpPut("Editar/{id}")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
         [ProducesResponseType(StatusCodes.Status201Created)] //Devuelve 201 si se crea
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede crear, devuelve 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
@@ -193,7 +193,7 @@ namespace WarframeRivensAPI.Controllers
         }
 
         [HttpDelete("Eliminar/{id}")]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "confirmado, admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)] //Devuelve 204 si se elimina
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede eliminar, devuelve 400
         [ProducesResponseType(StatusCodes.Status401Unauthorized)] //Si no es el dueño, devuelve 401
@@ -217,7 +217,6 @@ namespace WarframeRivensAPI.Controllers
             }
         }
         #endregion
-        private bool OfertaExists(string id) { return _context.Ofertas.Any(e => e.Id == id); }
     }
     #region DTO
     public class OfertaDTO

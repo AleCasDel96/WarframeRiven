@@ -20,26 +20,17 @@ namespace WarframeRivensAPI.Controllers
         }
         [HttpGet("/")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Riven>>> Test()
+        public async Task<ActionResult<IEnumerable<TestDTO>>> Test()
         {
-            var user = await _userManager.FindByEmailAsync("admin@warriven.com");
-            Riven riven = new Riven
+            TestDTO texto = new TestDTO
             {
-                Arma = "Arma de prueba",
-                Nombre = "Nombre de prueba",
-                Polaridad = "Polaridad de prueba",
-                Maestria = 10,
-                Atrib1 = "Atributo 1 de prueba",
-                Valor1 = 1.0m,
-                Atrib2 = "Atributo 2 de prueba",
-                Valor2 = 2.0m,
-                Atrib3 = "Atributo 3 de prueba",
-                Valor3 = 3.0m,
-                DAtrib = "DAtributo de prueba",
-                DValor = 4.0m,
-                IdPropietario = user.Id
+                Mensaje = "La aplicación funciona, procede"
             };
-            return Ok(riven);
+            return Ok(texto);
         }
+    }
+    public class TestDTO
+    {
+        public string Mensaje { get; set; }
     }
 }
