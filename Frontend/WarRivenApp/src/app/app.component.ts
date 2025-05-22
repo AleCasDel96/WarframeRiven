@@ -3,7 +3,6 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { MensajeService } from './services/mensaje.service';
 import { CommonModule, NgIf } from '@angular/common';
-import { SidebarAlertasComponent } from './sidebar-alertas/sidebar-alertas.component';
 
 @Component({
   selector: 'app-root',
