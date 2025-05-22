@@ -58,7 +58,6 @@ export class MisOfertasComponent implements OnInit {
   obtenerOfertas(): void {
     this.ofertaService.getMisOfertas().subscribe({
       next: data => {
-        console.log(data);
         this.ofertas = data;
         const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
         this.armasDisponibles = Array.from(armasSet) as string[];

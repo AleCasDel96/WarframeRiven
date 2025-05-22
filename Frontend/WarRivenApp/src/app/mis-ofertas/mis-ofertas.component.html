@@ -24,10 +24,10 @@
                   | paginate: { itemsPerPage: 12, currentPage: p }">
 
         <td>
-          <span (mouseenter)="mostrarRiven(o.idRiven, $event)" (mouseleave)="ocultarRiven()"
+          <!-- <span (mouseenter)="mostrarRiven(o.idRiven, $event)" (mouseleave)="ocultarRiven()"
                 style="cursor: pointer; text-decoration: underline;">
+              </span> -->
             {{ o.nombreRiven }}
-          </span>
         </td>
         <td>{{ o.precioVenta }} <img src="assets/platino-icon.png" alt="p" class="icono-inline" /></td>
         <td>
@@ -37,7 +37,7 @@
         </td>
         <td></td>
         <td class="acciones">
-          <button *ngIf="o.disponibilidad" (click)="cerrar(o.id!)">Disponibilidad</button>
+          <button *ngIf="o.disponibilidad" (click)="cerrar(o.idRiven)">Disponibilidad</button>
           <button *ngIf="puedeEditar(o)" (click)="abrirEdicion(o)">Editar oferta</button>
           <button *ngIf="!o.disponibilidad" (click)="confirmarVenta(o.id!)">Confirmar venta</button>
           <button class="delete-button" (click)="eliminar(o.id!)">Eliminar</button>

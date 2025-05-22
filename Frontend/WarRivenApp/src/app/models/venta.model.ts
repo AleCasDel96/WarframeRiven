@@ -1,9 +1,9 @@
 export interface Venta {
   id: string;
+  idRiven: string;
+  IdVendedor: string;
+  IdComprador: string;
   precioVenta: number;
   fechaVenta: string;
-  nombreRiven: string;
-  arma: string;
-  nickVendedor: string;
-  nickComprador: string;
+  Finalizado: boolean;
 }

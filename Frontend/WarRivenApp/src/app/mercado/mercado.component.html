@@ -22,9 +22,8 @@
     <tbody>
       <tr *ngFor="let oferta of ofertas | paginate: { itemsPerPage: 12, currentPage: p }">
         <td>
-          <span class="nombre-hover" (mouseenter)="mostrarRiven(oferta.idRiven, $event)" (mouseleave)="ocultarRiven()">
-            {{ oferta.nombreRiven }}
-          </span>
+          <!-- <span class="nombre-hover" (mouseenter)="mostrarRiven(oferta.idRiven, $event)" (mouseleave)="ocultarRiven()"></span> -->
+          {{ oferta.nombreRiven }}
         </td>
         <td>{{ oferta.precioVenta }} <img src="assets/platino-icon.png" alt="p" class="icono-inline" /></td>
         <td>
@@ -43,14 +42,14 @@
   </table>
   <pagination-controls (pageChange)="p = +$event"></pagination-controls>
   <!-- Popup del Riven -->
-  <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
+  <!-- <div class="popup" *ngIf="showPopup && rivenSeleccionado" [style.top.px]="popupY + 10" [style.left.px]="popupX + 10">
     <strong>{{ rivenSeleccionado.nombre }}</strong><br />
     {{ rivenSeleccionado.arma }}<br /><br />
     <div *ngIf="rivenSeleccionado.atrib1">{{ rivenSeleccionado.atrib1 }}: {{ rivenSeleccionado.valor1 }}</div>
     <div *ngIf="rivenSeleccionado.atrib2">{{ rivenSeleccionado.atrib2 }}: {{ rivenSeleccionado.valor2 }}</div>
     <div *ngIf="rivenSeleccionado.atrib3">{{ rivenSeleccionado.atrib3 }}: {{ rivenSeleccionado.valor3 }}</div>
     <div *ngIf="rivenSeleccionado.dAtrib">{{ rivenSeleccionado.dAtrib }}: {{ rivenSeleccionado.dValor }}</div>
-  </div>
+  </div> -->
 
   
 </div>

@@ -109,16 +109,17 @@ namespace WarframeRivensAPI.Controllers
         [HttpGet("Disponibilidad/{id}")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Oferta>>> SetDisponible(string rivenID)
+        public async Task<ActionResult<IEnumerable<Oferta>>> SetDisponible(string id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var ofertas = await _context.Ofertas.Where(o => o.IdRiven == rivenID).FirstAsync();
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
+            var ofertas = await _context.Ofertas.Where(o => o.IdRiven == id).FirstAsync();
             if (ofertas == null) { return NotFound(); }
-            if (ofertas.IdVendedor != userId) { return Unauthorized(); }
+            if (ofertas.IdVendedor != user.Id) { return Unauthorized(); }
             ofertas.Disponibilidad = !ofertas.Disponibilidad;
             try
             {
-                _context.Entry(ofertas).State = EntityState.Modified;
+                _context.Ofertas.Update(ofertas);
                 await _context.SaveChangesAsync();
                 return Ok(ofertas);
             }

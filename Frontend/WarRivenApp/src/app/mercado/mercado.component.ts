@@ -45,12 +45,10 @@ export class MercadoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('init');
     this.nicknameActual = this.auth.getNickname();
     this.ofertaService.getPublicas().subscribe({
       next: data => {
         this.ofertas = data;
-        console.log(data);
         const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
         this.armasDisponibles = Array.from(armasSet) as string[];
       },
@@ -80,7 +78,7 @@ export class MercadoComponent implements OnInit {
   iniciarCompra(oferta: any): void {
     const confirmar = confirm(`¿Deseas comprar "${oferta.nombreRiven}" por ${oferta.precioVenta}p? Esto cerrará la oferta.`);
     if (!confirmar) return;
-
+    console.log(oferta);
     this.http.post(`/api/Ventas/Vendido?ofertaId=${oferta.id}`, {})
       .subscribe({
         next: () => {
@@ -102,18 +100,18 @@ export class MercadoComponent implements OnInit {
   //   }
   // }
 
-  mostrarRiven(idRiven: string, e: MouseEvent): void {
-    this.popupX = e.clientX;
-    this.popupY = e.clientY;
-    this.rivenService.getPorId(idRiven).subscribe({
-      next: (r: Riven) => {
-        console.log(r);
-        this.rivenSeleccionado = r;
-        this.showPopup = true;
-      },
-      error: () => this.rivenSeleccionado = null
-    });
-  }
+  // mostrarRiven(idRiven: string, e: MouseEvent): void {
+  //   this.popupX = e.clientX;
+  //   this.popupY = e.clientY;
+  //   this.rivenService.getPorId(idRiven).subscribe({
+  //     next: (r: Riven) => {
+  //       console.log(r);
+  //       this.rivenSeleccionado = r;
+  //       this.showPopup = true;
+  //     },
+  //     error: () => this.rivenSeleccionado = null
+  //   });
+  // }
 
   ocultarRiven(): void {
     this.showPopup = false;
