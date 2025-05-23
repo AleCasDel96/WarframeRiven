@@ -6,9 +6,10 @@ namespace WarframeRivensAPI.Models
     {
         [Key]
         public string Id { get; set; }
+        public string IdOferta { get; set; }
         [Required]
         public string IdRiven { get; set; }
-        public Riven Riven { get; set; }
+        public Riven Riven { get; set; } = null;
         [Required]
         public string IdVendedor { get; set; }
         public WarUser Vendedor { get; set; }

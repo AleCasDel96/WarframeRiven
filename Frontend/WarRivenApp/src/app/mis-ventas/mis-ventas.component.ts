@@ -8,6 +8,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgPipesModule } from 'ngx-pipes';
 import { MensajeService } from '../services/mensaje.service';
 import { Venta } from '../models/venta.model';
+import { VentaDTO } from '../models/ventaDTO.model';
 
 @Component({
   selector: 'app-mis-ventas',
@@ -16,7 +17,7 @@ import { Venta } from '../models/venta.model';
   templateUrl: './mis-ventas.component.html'
 })
 export class MisVentasComponent implements OnInit {
-  Ventas: Venta[] = [];
+  Ventas: VentaDTO[] = [];
   searchText = '';
   sortColumn = 'nombreRiven';
   sortAsc = true;
@@ -41,9 +42,7 @@ export class MisVentasComponent implements OnInit {
     this.ventaService.getMisVentas().subscribe({
       next: data => {
         this.Ventas = data;
-
-        const armasSet = new Set(data.map(o => o.arma).filter(Boolean));
-        this.armasDisponibles = Array.from(armasSet) as string[];
+        console.log(this.Ventas);
       },
       error: () => this.error = 'No se pudieron cargar tus pujas.'
     });

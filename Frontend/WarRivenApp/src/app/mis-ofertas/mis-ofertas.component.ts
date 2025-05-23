@@ -9,6 +9,7 @@ import { NgPipesModule } from 'ngx-pipes';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { VentaService } from '../services/venta.service';
 
 @Component({
   selector: 'app-mis-ofertas',
@@ -49,6 +50,7 @@ export class MisOfertasComponent implements OnInit {
     private rivenService: RivenService,
     private router: Router,
     private http: HttpClient,
+    private ventaService: VentaService
   ) { }
 
   ngOnInit(): void {
@@ -82,22 +84,10 @@ export class MisOfertasComponent implements OnInit {
     });
   }
 
-  confirmarVenta(ofertaId: string): void {
+  confirmarVenta(id: string): void {
     const confirmar = confirm('¿Deseas confirmar esta venta y traspasar el Riven al comprador?');
     if (!confirmar) return;
-
-    this.http.get(`/api/Ventas/Venta/${ofertaId}`).subscribe({
-      next: (venta: any) => {
-        this.http.post('/api/Ventas/Confirmar', venta).subscribe({
-          next: () => {
-            alert('Venta confirmada y Riven traspasado.');
-            this.obtenerOfertas(); // vuelve a cargar la lista
-          },
-          error: () => alert('Error al confirmar la venta.')
-        });
-      },
-      error: () => alert('No se pudo obtener la venta.')
-    });
+    this.ventaService.confirmarVenta(id).subscribe(() => this.ngOnInit());
   }
 
 

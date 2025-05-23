@@ -11,7 +11,6 @@ namespace WarframeRivensAPI.Data
         public virtual DbSet<Riven> Rivens { get; set; }
         public virtual DbSet<Oferta> Ofertas { get; set; }
         public virtual DbSet<Venta> Ventas { get; set; }
-        public virtual DbSet<Favorito> Favoritos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -75,7 +74,6 @@ namespace WarframeRivensAPI.Data
             modelBuilder.Entity<Venta>().HasOne(v => v.Comprador).WithMany().HasForeignKey(v => v.IdComprador).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Venta>().HasOne(v => v.Vendedor).WithMany().HasForeignKey(v => v.IdVendedor).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Oferta>().HasOne(o => o.Vendedor).WithMany().HasForeignKey(o => o.IdVendedor);
-            modelBuilder.Entity<Favorito>().HasOne(f => f.User).WithMany().HasForeignKey(f => f.IdUser);
             OnModelCreatingPartial(modelBuilder);
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

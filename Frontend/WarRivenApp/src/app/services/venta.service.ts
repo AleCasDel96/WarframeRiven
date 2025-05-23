@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Venta } from '../models/venta.model';
 import { Observable } from 'rxjs';
+import { log } from 'node:console';
+import { VentaDTO } from '../models/ventaDTO.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,27 +14,23 @@ export class VentaService {
   constructor(private http: HttpClient) { }
 
   // Obtener historial de ventas del usuario logueado
-  getHistorial(): Observable<Venta[]> {
-    return this.http.get<Venta[]>(`${this.apiUrl}/Historial`);
-  }
 
-  getMisVentas(): Observable<any[]> {
-    return this.http.get<any[]>('/api/Ventas/MisVentas');
+  getMisVentas(): Observable<VentaDTO[]>{
+    return this.http.get<VentaDTO[]>(`${this.apiUrl}/MisVentas/`);
   }
 
   obtenerVenta(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/Venta/${id}`);
   }
 
-  confirmarVenta(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/Confirmar/${id}`);
-  }
-
   confirmarCompra(id: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/Vendido/${id}`, {});
+    return this.http.post(`${this.apiUrl}/${id}`, {});
+  }
+  confirmarVenta(id: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/Confirmar/${id}`, {});
   }
 
   eliminarVenta(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/eliminar/${id}`);
+    return this.http.delete(`${this.apiUrl}/eliminar/${id}`);
   }
 }

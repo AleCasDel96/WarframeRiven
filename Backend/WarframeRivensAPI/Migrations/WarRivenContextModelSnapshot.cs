@@ -51,19 +51,19 @@ namespace WarframeRivensAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "857386d0-7bf6-421a-8d93-fcf566089fc9",
+                            Id = "1a3f39fb-b0db-4c77-acee-5dc313fde69a",
                             Name = "basic",
                             NormalizedName = "BASIC"
                         },
                         new
                         {
-                            Id = "3b9b4d06-155b-4bc1-8f84-16844712cbdb",
+                            Id = "42bb912a-9e7f-462b-bde1-ee14ddac9e32",
                             Name = "confirmado",
                             NormalizedName = "CONFIRMADO"
                         },
                         new
                         {
-                            Id = "fdb47132-4b6c-44e1-94d9-5188a7d3b6ba",
+                            Id = "bd305fdc-9f92-42ab-9954-d8d593814e1c",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         });
@@ -158,18 +158,18 @@ namespace WarframeRivensAPI.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "39d6cfde-e971-499a-acb1-88c61bf8655b",
-                            RoleId = "857386d0-7bf6-421a-8d93-fcf566089fc9"
+                            UserId = "9875403d-08ad-4f90-b8bf-5eb560ca128f",
+                            RoleId = "1a3f39fb-b0db-4c77-acee-5dc313fde69a"
                         },
                         new
                         {
-                            UserId = "a3bf9d97-4643-4c82-8112-043b547bfeab",
-                            RoleId = "3b9b4d06-155b-4bc1-8f84-16844712cbdb"
+                            UserId = "3e4b6234-c1e6-47d4-ae5f-9373e40576ff",
+                            RoleId = "42bb912a-9e7f-462b-bde1-ee14ddac9e32"
                         },
                         new
                         {
-                            UserId = "87c31868-6577-4930-98f6-b61e8d6d01ab",
-                            RoleId = "fdb47132-4b6c-44e1-94d9-5188a7d3b6ba"
+                            UserId = "13ebb16b-3761-44b7-9a60-148f0c20e616",
+                            RoleId = "bd305fdc-9f92-42ab-9954-d8d593814e1c"
                         });
                 });
 
@@ -190,31 +190,6 @@ namespace WarframeRivensAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("WarframeRivensAPI.Models.Favorito", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("IdRiven")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IdUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RivenId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdUser");
-
-                    b.HasIndex("RivenId");
-
-                    b.ToTable("Favoritos");
                 });
 
             modelBuilder.Entity("WarframeRivensAPI.Models.Oferta", b =>
@@ -328,9 +303,16 @@ namespace WarframeRivensAPI.Migrations
                     b.Property<DateTime>("FechaVenta")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Finalizado")
+                        .HasColumnType("bit");
+
                     b.Property<string>("IdComprador")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IdOferta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdRiven")
                         .IsRequired()
@@ -439,52 +421,52 @@ namespace WarframeRivensAPI.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "39d6cfde-e971-499a-acb1-88c61bf8655b",
+                            Id = "9875403d-08ad-4f90-b8bf-5eb560ca128f",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7a5c0832-d185-4998-9dcd-c5193b1af9f9",
+                            ConcurrencyStamp = "e5cb5180-be2b-410d-8713-ada6bf010c8c",
                             Email = "visitante@warriven.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Nickname = "Usuario Visitante",
                             NormalizedEmail = "VISITANTE@WARRIVEN.COM",
                             NormalizedUserName = "VISITANTE@WARRIVEN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOGKwKpToXEgbmJGe3vZbH8DLSMo8DAR8Ko+mnzgmlojYb1WPbSNB71BgYuMluc11g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBRh1OoUQ2dM0jGFYpfQhQzhn7XBjw6VW3cHkcj0Brs4+DotIjliMXPnP9PW66z87Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "38b7a1f5-509c-43eb-94e3-a5ed5f568ccf",
+                            SecurityStamp = "4806ea6e-2fc2-428e-98b2-58ca57663a21",
                             TwoFactorEnabled = false,
                             UserName = "visitante@warriven.com"
                         },
                         new
                         {
-                            Id = "a3bf9d97-4643-4c82-8112-043b547bfeab",
+                            Id = "3e4b6234-c1e6-47d4-ae5f-9373e40576ff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bbfffbd2-88e1-4239-8226-141741eba2fc",
+                            ConcurrencyStamp = "06a431fe-ff20-48e0-920e-f738211eb395",
                             Email = "confirmado@warriven.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Nickname = "Usuario confirmado",
                             NormalizedEmail = "CONFIRMADO@WARRIVEN.COM",
                             NormalizedUserName = "CONFIRMADO@WARRIVEN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGbdd0NuvBVSuT0D08Y4X+rWU6fIBIGG7NxKiaEmpr4CsMmHK2LruP9GFRXY6YoS0Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAHmY34KJC7nKGie/lJo+Ql5PtGiNBNs3nWSQgGjViNbZlOzuZBzpXf+6USGyafF2A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6c463d86-de4f-4afa-8661-c47fd0e1f1b0",
+                            SecurityStamp = "2cf59bbe-a007-46aa-a7b9-c6b5e996b97a",
                             TwoFactorEnabled = false,
                             UserName = "confirmado@warriven.com"
                         },
                         new
                         {
-                            Id = "87c31868-6577-4930-98f6-b61e8d6d01ab",
+                            Id = "13ebb16b-3761-44b7-9a60-148f0c20e616",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b2083ddd-43b8-4cbf-b1ee-72b72fde26ab",
+                            ConcurrencyStamp = "36b59ace-7372-4246-b5c1-7ba5b5395d1c",
                             Email = "admin@warriven.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Nickname = "Administrador",
                             NormalizedEmail = "ADMIN@WARRIVEN.COM",
                             NormalizedUserName = "ADMIN@WARRIVEN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAG8rsfz2wGu4U3iz6vVXeUPYgv8ylsKEaSGkVqZE9PCcSIvc6iBPi1EY7M2nCDniQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEITvlAIojcppoWzI0oAEPXBIojw6aqZBrVJAEXN+xz7jO67oW3HhhZRJFoK7KmhScQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d5caa715-dd7f-4f4b-a2b0-dbdad9af1aec",
+                            SecurityStamp = "daa8e4e3-b88e-4e51-9a1e-b59f7be41d2e",
                             TwoFactorEnabled = false,
                             UserName = "admin@warriven.com"
                         });
@@ -539,23 +521,6 @@ namespace WarframeRivensAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WarframeRivensAPI.Models.Favorito", b =>
-                {
-                    b.HasOne("WarframeRivensAPI.Models.WarUser", "User")
-                        .WithMany()
-                        .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WarframeRivensAPI.Models.Riven", "Riven")
-                        .WithMany()
-                        .HasForeignKey("RivenId");
-
-                    b.Navigation("Riven");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WarframeRivensAPI.Models.Oferta", b =>

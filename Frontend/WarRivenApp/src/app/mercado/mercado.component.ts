@@ -17,7 +17,8 @@ import { log } from 'console';
   selector: 'app-ofertas',
   standalone: true,
   imports: [CommonModule, FormsModule, NgxPaginationModule, NgPipesModule],
-  templateUrl: './mercado.component.html'
+  templateUrl: './mercado.component.html',
+  styleUrls:['./mercado.component.css']
 })
 export class MercadoComponent implements OnInit {
   ofertas: Oferta[] = [];
@@ -50,6 +51,9 @@ export class MercadoComponent implements OnInit {
 
   ngOnInit(): void {
     this.nicknameActual = this.auth.getNickname();
+    this.cargarOfertas();
+  }
+  cargarOfertas(): void {
     this.ofertaService.getPublicas().subscribe({
       next: data => {
         this.ofertas = data;
@@ -96,12 +100,11 @@ export class MercadoComponent implements OnInit {
   iniciarCompra(oferta: any): void {
     const confirmar = confirm(`¿Deseas comprar "${oferta.nombreRiven}" por ${oferta.precioVenta}p? Esto cerrará la oferta.`);
     if (!confirmar) return;
-    console.log(oferta);
     this.ventaService.confirmarCompra(oferta.id)
       .subscribe({
         next: () => {
           alert('Compra registrada. Esperando confirmación del vendedor.');
-          oferta.disponibilidad = false;
+          this.cargarOfertas();
         },
         error: () => {
           alert('Error al registrar la compra.');

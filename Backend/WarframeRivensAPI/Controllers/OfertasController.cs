@@ -36,8 +36,10 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<OfertaDTO>>> VerOfertas()
         {
+            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByEmailAsync(mail);
             var ofertas = await _context.Ofertas
-                .Where(o => o.Disponibilidad)
+                .Where(o => o.Disponibilidad && o.IdVendedor != user.Id)
                 .Include(o => o.Riven)
                 .ThenInclude(r => r.Propietario)
                 .Select(o => new OfertaDTO
@@ -138,7 +140,6 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
         public async Task<IActionResult> CrearOferta(NuevaOfertaDTO oferta)
         {
-            Console.WriteLine("Crear Oferta");
             var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByEmailAsync(mail);
             var riven = await _context.Rivens.FindAsync(oferta.IdRiven);

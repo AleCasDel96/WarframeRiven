@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WarframeRivensAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class DockerDB : Migration
+    public partial class DockerSQL : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -199,38 +199,13 @@ namespace WarframeRivensAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Favoritos",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    IdRiven = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RivenId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    IdUser = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Favoritos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Favoritos_AspNetUsers_IdUser",
-                        column: x => x.IdUser,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Favoritos_Rivens_RivenId",
-                        column: x => x.RivenId,
-                        principalTable: "Rivens",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Ofertas",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdRiven = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RivenId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdVendedor = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PrecioVenta = table.Column<int>(type: "int", nullable: false),
                     FechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -257,12 +232,14 @@ namespace WarframeRivensAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdOferta = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdRiven = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RivenId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdVendedor = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IdComprador = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PrecioVenta = table.Column<int>(type: "int", nullable: false),
-                    FechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    FechaVenta = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Finalizado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,9 +269,9 @@ namespace WarframeRivensAPI.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "3b9b4d06-155b-4bc1-8f84-16844712cbdb", null, "confirmado", "CONFIRMADO" },
-                    { "857386d0-7bf6-421a-8d93-fcf566089fc9", null, "basic", "BASIC" },
-                    { "fdb47132-4b6c-44e1-94d9-5188a7d3b6ba", null, "admin", "ADMIN" }
+                    { "1a3f39fb-b0db-4c77-acee-5dc313fde69a", null, "basic", "BASIC" },
+                    { "42bb912a-9e7f-462b-bde1-ee14ddac9e32", null, "confirmado", "CONFIRMADO" },
+                    { "bd305fdc-9f92-42ab-9954-d8d593814e1c", null, "admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -302,9 +279,9 @@ namespace WarframeRivensAPI.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "Icono", "LockoutEnabled", "LockoutEnd", "Nickname", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "SteamId", "TwoFactorEnabled", "UserName", "WarframeNick" },
                 values: new object[,]
                 {
-                    { "39d6cfde-e971-499a-acb1-88c61bf8655b", 0, "7a5c0832-d185-4998-9dcd-c5193b1af9f9", "visitante@warriven.com", true, null, false, null, "Usuario Visitante", "VISITANTE@WARRIVEN.COM", "VISITANTE@WARRIVEN.COM", "AQAAAAIAAYagAAAAEOGKwKpToXEgbmJGe3vZbH8DLSMo8DAR8Ko+mnzgmlojYb1WPbSNB71BgYuMluc11g==", null, false, "38b7a1f5-509c-43eb-94e3-a5ed5f568ccf", null, false, "visitante@warriven.com", null },
-                    { "87c31868-6577-4930-98f6-b61e8d6d01ab", 0, "b2083ddd-43b8-4cbf-b1ee-72b72fde26ab", "admin@warriven.com", true, null, false, null, "Administrador", "ADMIN@WARRIVEN.COM", "ADMIN@WARRIVEN.COM", "AQAAAAIAAYagAAAAEAG8rsfz2wGu4U3iz6vVXeUPYgv8ylsKEaSGkVqZE9PCcSIvc6iBPi1EY7M2nCDniQ==", null, false, "d5caa715-dd7f-4f4b-a2b0-dbdad9af1aec", null, false, "admin@warriven.com", null },
-                    { "a3bf9d97-4643-4c82-8112-043b547bfeab", 0, "bbfffbd2-88e1-4239-8226-141741eba2fc", "confirmado@warriven.com", true, null, false, null, "Usuario confirmado", "CONFIRMADO@WARRIVEN.COM", "CONFIRMADO@WARRIVEN.COM", "AQAAAAIAAYagAAAAEGbdd0NuvBVSuT0D08Y4X+rWU6fIBIGG7NxKiaEmpr4CsMmHK2LruP9GFRXY6YoS0Q==", null, false, "6c463d86-de4f-4afa-8661-c47fd0e1f1b0", null, false, "confirmado@warriven.com", null }
+                    { "13ebb16b-3761-44b7-9a60-148f0c20e616", 0, "36b59ace-7372-4246-b5c1-7ba5b5395d1c", "admin@warriven.com", true, null, false, null, "Administrador", "ADMIN@WARRIVEN.COM", "ADMIN@WARRIVEN.COM", "AQAAAAIAAYagAAAAEITvlAIojcppoWzI0oAEPXBIojw6aqZBrVJAEXN+xz7jO67oW3HhhZRJFoK7KmhScQ==", null, false, "daa8e4e3-b88e-4e51-9a1e-b59f7be41d2e", null, false, "admin@warriven.com", null },
+                    { "3e4b6234-c1e6-47d4-ae5f-9373e40576ff", 0, "06a431fe-ff20-48e0-920e-f738211eb395", "confirmado@warriven.com", true, null, false, null, "Usuario confirmado", "CONFIRMADO@WARRIVEN.COM", "CONFIRMADO@WARRIVEN.COM", "AQAAAAIAAYagAAAAEAHmY34KJC7nKGie/lJo+Ql5PtGiNBNs3nWSQgGjViNbZlOzuZBzpXf+6USGyafF2A==", null, false, "2cf59bbe-a007-46aa-a7b9-c6b5e996b97a", null, false, "confirmado@warriven.com", null },
+                    { "9875403d-08ad-4f90-b8bf-5eb560ca128f", 0, "e5cb5180-be2b-410d-8713-ada6bf010c8c", "visitante@warriven.com", true, null, false, null, "Usuario Visitante", "VISITANTE@WARRIVEN.COM", "VISITANTE@WARRIVEN.COM", "AQAAAAIAAYagAAAAEBRh1OoUQ2dM0jGFYpfQhQzhn7XBjw6VW3cHkcj0Brs4+DotIjliMXPnP9PW66z87Q==", null, false, "4806ea6e-2fc2-428e-98b2-58ca57663a21", null, false, "visitante@warriven.com", null }
                 });
 
             migrationBuilder.InsertData(
@@ -312,9 +289,9 @@ namespace WarframeRivensAPI.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "857386d0-7bf6-421a-8d93-fcf566089fc9", "39d6cfde-e971-499a-acb1-88c61bf8655b" },
-                    { "fdb47132-4b6c-44e1-94d9-5188a7d3b6ba", "87c31868-6577-4930-98f6-b61e8d6d01ab" },
-                    { "3b9b4d06-155b-4bc1-8f84-16844712cbdb", "a3bf9d97-4643-4c82-8112-043b547bfeab" }
+                    { "bd305fdc-9f92-42ab-9954-d8d593814e1c", "13ebb16b-3761-44b7-9a60-148f0c20e616" },
+                    { "42bb912a-9e7f-462b-bde1-ee14ddac9e32", "3e4b6234-c1e6-47d4-ae5f-9373e40576ff" },
+                    { "1a3f39fb-b0db-4c77-acee-5dc313fde69a", "9875403d-08ad-4f90-b8bf-5eb560ca128f" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -355,16 +332,6 @@ namespace WarframeRivensAPI.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Favoritos_IdUser",
-                table: "Favoritos",
-                column: "IdUser");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Favoritos_RivenId",
-                table: "Favoritos",
-                column: "RivenId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ofertas_IdVendedor",
@@ -419,9 +386,6 @@ namespace WarframeRivensAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
-
-            migrationBuilder.DropTable(
-                name: "Favoritos");
 
             migrationBuilder.DropTable(
                 name: "Ofertas");

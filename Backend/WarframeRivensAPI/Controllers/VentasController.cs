@@ -28,32 +28,6 @@ namespace WarframeRivensAPI.Controllers
         #endregion
 
         #region Ver Ventas
-        [HttpGet("Historial")]
-        [Authorize]
-        public async Task<ActionResult<IEnumerable<VentaDTO>>> GetHistorial()
-        {
-            var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByEmailAsync(mail);
-            var ventas = await _context.Ventas
-                .Include(v => v.Riven)
-                .Include(v => v.Vendedor)
-                .Include(v => v.Comprador)
-                .Where(v => v.Finalizado == true)
-                .Where(v => v.IdVendedor == user.Id || v.IdComprador == user.Id)
-                .Select(v => new VentaDTO
-                {
-                    Id = v.Id,
-                    NombreRiven = v.Riven.Nombre,
-                    Arma = v.Riven.Arma,
-                    NickComprador = v.Comprador.Nickname,
-                    NickVendedor = v.Vendedor.Nickname,
-                    PrecioVenta = v.PrecioVenta,
-                    FechaVenta = v.FechaVenta,
-                    Finalizado = v.Finalizado
-                })
-                .ToListAsync();
-            return Ok(ventas);
-        }
         [HttpGet("MisVentas")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<VentaDTO>>> GetVentas()
@@ -64,7 +38,7 @@ namespace WarframeRivensAPI.Controllers
                 .Include(v => v.Riven)
                 .Include(v => v.Comprador)
                 .Include(v => v.Vendedor)
-                .Where(v => v.Finalizado == false)
+                .Where(v => v.Finalizado == true)
                 .Where(v => v.IdVendedor == user.Id)
                 .Select(v => new VentaDTO
                 {
@@ -113,21 +87,22 @@ namespace WarframeRivensAPI.Controllers
         #endregion
 
         #region Añadir ventas
-        [HttpPost("Vendido")]
-        public async Task<IActionResult> RealizarVenta(string ofertaId)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> RealizarVenta(string id)
         {
             var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByEmailAsync(mail);
             var oferta = await _context.Ofertas
                 .Include(o => o.Riven)
                 .Include(o => o.Vendedor)
-                .FirstOrDefaultAsync(o => o.Id == ofertaId);
+                .FirstOrDefaultAsync(o => o.Id == id);
             if (oferta == null || !oferta.Disponibilidad) { return NotFound(); }
             var venta = new Venta
             {
                 Id = Guid.NewGuid().ToString(),
+                IdOferta = id,
+                Riven = await _context.Rivens.FirstOrDefaultAsync(o => o.Id == oferta.IdRiven),
                 IdRiven = oferta.IdRiven,
-                Riven = oferta.Riven,
                 IdVendedor = oferta.IdVendedor,
                 Vendedor = oferta.Vendedor,
                 IdComprador = user.Id,
@@ -150,12 +125,18 @@ namespace WarframeRivensAPI.Controllers
             return NoContent();
         }
 
-        [HttpPut("Confirmar")]
+        [HttpPut("Confirmar/{id}")]
         public async Task<ActionResult<Venta>> ConfirmarVenta(string id)
         {
             var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByEmailAsync(mail);
-            var venta = await _context.Ventas.FirstOrDefaultAsync(v => v.Id == id);
+            var oferta = await _context.Ofertas.FirstOrDefaultAsync(v => v.Id == id);
+            var venta = await _context.Ventas
+                .Include(v => v.Riven)
+                .Include(v => v.Vendedor)
+                .Include(v => v.Comprador)
+                .Where(v => v.IdOferta == id)
+                .FirstOrDefaultAsync();
             if (venta.IdVendedor != user.Id) { return Unauthorized(); }
             var riven = await _context.Rivens.FindAsync(venta.IdRiven);
             if (riven == null) { return NotFound(); }
@@ -165,6 +146,7 @@ namespace WarframeRivensAPI.Controllers
             {
                 _context.Ventas.Update(venta);
                 _context.Rivens.Update(riven);
+                _context.Ofertas.Remove(oferta);
                 await _context.SaveChangesAsync();
             }
             catch
@@ -174,7 +156,7 @@ namespace WarframeRivensAPI.Controllers
             return CreatedAtAction("GetVenta", new { id = venta.Id }, venta);
         }
 
-        [HttpDelete("eliminar")]
+        [HttpDelete("Eliminar")]
         public async Task<ActionResult<Venta>> CancelarVenta(string id)
         {
             var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
