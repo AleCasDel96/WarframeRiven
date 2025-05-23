@@ -19,8 +19,9 @@ export class OfertaService {
     return this.http.get<Oferta[]>(`${this.apiUrl}/VerOfertas`);
   }
 
-  editar(id: string, oferta: { precioVenta: number }): Observable<any> {
-    return this.http.put(`${this.apiUrl}/Editar/${id}`, oferta);
+  editar(id: string, precio: number ): Observable<any> {
+    console.log("editar: "+ precio);
+    return this.http.put(`${this.apiUrl}/Editar/${id}`, precio);
   }
 
   crear(oferta: Partial<Oferta>): Observable<any> {

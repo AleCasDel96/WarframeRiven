@@ -169,20 +169,17 @@ namespace WarframeRivensAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)] //Devuelve 201 si se crea
         [ProducesResponseType(StatusCodes.Status400BadRequest)] //Si no se puede crear, devuelve 400
         [ProducesResponseType(StatusCodes.Status404NotFound)] //Si no existe, devuelve 404
-        public async Task<ActionResult<Oferta>> EditarOferta(string id,OfertaDTO nuevo)
+        public async Task<ActionResult<Oferta>> EditarOferta(string id, int precio)
         {
             var mail = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByEmailAsync(mail);
             var oferta = await _context.Ofertas
-                .Where(o => o.IdRiven == nuevo.IdRiven && o.Disponibilidad)
-                .FirstOrDefaultAsync(o => o.Id == id);
+                .Where(o => o.Id == id)
+                .FirstOrDefaultAsync();
             if (oferta == null) { return NotFound("La oferta no existe."); }
             if (oferta.IdVendedor != user.Id) { return Unauthorized(); }
-            if (!oferta.Disponibilidad)
-            {
-                return BadRequest("La oferta no está activa.");
-            }
-            oferta.PrecioVenta = nuevo.PrecioVenta;
+            if (precio == 0) { return BadRequest("Precio no puede ser 0"); }
+            oferta.PrecioVenta = precio;
             try
             {
                 _context.Ofertas.Update(oferta);

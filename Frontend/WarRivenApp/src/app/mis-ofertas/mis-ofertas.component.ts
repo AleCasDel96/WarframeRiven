@@ -142,19 +142,19 @@ export class MisOfertasComponent implements OnInit {
     this.errorEdicion = '';
   }
 
-  confirmarEdicion(): void {
-    if (this.nuevoPrecio <= 0) {
+  confirmarEdicion(precio: number): void {
+    if (precio <= 0) {
       this.errorEdicion = 'El precio debe ser mayor a 0';
       return;
     }
-
     const nuevaOferta: Oferta = {
       ...this.ofertaEditando!,
-      precioVenta: this.nuevoPrecio
+      precioVenta: precio
     };
 
-    this.ofertaService.editar(this.ofertaEditando?.id!, { precioVenta: this.nuevoPrecio }).subscribe({
+    this.ofertaService.editar(this.ofertaEditando?.id!, precio ).subscribe({
       next: () => {
+        console.log('next: ' + precio);
         alert('Oferta actualizada con éxito.');
         this.cerrarEdicion();
         this.obtenerOfertas();
