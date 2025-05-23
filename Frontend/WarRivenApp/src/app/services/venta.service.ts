@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class VentaService {
   private apiUrl = 'https://localhost:5001/api/Ventas';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Obtener historial de ventas del usuario logueado
   getHistorial(): Observable<Venta[]> {
@@ -17,8 +17,8 @@ export class VentaService {
   }
 
   getMisVentas(): Observable<any[]> {
-  return this.http.get<any[]>('/api/Ventas/MisVentas');
-}
+    return this.http.get<any[]>('/api/Ventas/MisVentas');
+  }
 
   obtenerVenta(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/Venta/${id}`);
@@ -29,7 +29,7 @@ export class VentaService {
   }
 
   confirmarCompra(id: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/Vendido/${id}`);
+    return this.http.post(`${this.apiUrl}/Vendido/${id}`, {});
   }
 
   eliminarVenta(id: string): Observable<any> {

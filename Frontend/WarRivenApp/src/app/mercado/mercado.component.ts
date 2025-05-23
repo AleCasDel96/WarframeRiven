@@ -10,6 +10,7 @@ import { NgPipesModule } from 'ngx-pipes';
 import { HttpClient } from '@angular/common/http';
 import { MensajeService } from '../services/mensaje.service';
 import { AuthService } from '../services/auth.service';
+import { VentaService } from '../services/venta.service';
 import { log } from 'console';
 
 @Component({
@@ -41,7 +42,7 @@ export class MercadoComponent implements OnInit {
 
   constructor(
     private ofertaService: OfertaService,
-    private rivenService: RivenService,
+    private ventaService: VentaService,
     private auth: AuthService,
     private mensajeService: MensajeService,
     private http: HttpClient,
@@ -96,7 +97,7 @@ export class MercadoComponent implements OnInit {
     const confirmar = confirm(`¿Deseas comprar "${oferta.nombreRiven}" por ${oferta.precioVenta}p? Esto cerrará la oferta.`);
     if (!confirmar) return;
     console.log(oferta);
-    this.http.post(`/api/Ventas/Vendido?ofertaId=${oferta.id}`, {})
+    this.ventaService.confirmarCompra(oferta.id)
       .subscribe({
         next: () => {
           alert('Compra registrada. Esperando confirmación del vendedor.');
