@@ -154,7 +154,6 @@ export class MisOfertasComponent implements OnInit {
 
     this.ofertaService.editar(this.ofertaEditando?.id!, precio ).subscribe({
       next: () => {
-        console.log('next: ' + precio);
         alert('Oferta actualizada con éxito.');
         this.cerrarEdicion();
         this.obtenerOfertas();

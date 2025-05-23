@@ -20,8 +20,7 @@ export class OfertaService {
   }
 
   editar(id: string, precio: number ): Observable<any> {
-    console.log("editar: "+ precio);
-    return this.http.put(`${this.apiUrl}/Editar/${id}`, precio);
+    return this.http.put(`${this.apiUrl}/Editar/${id}?precio=${precio}`, {});
   }
 
   crear(oferta: Partial<Oferta>): Observable<any> {
